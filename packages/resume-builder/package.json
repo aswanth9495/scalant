@@ -1,0 +1,17 @@
+{
+  "name": "resume-builder",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "dist/resume-builder.umd.js",
+  "module": "dist/resume-builder.mjs",
+  "exports": {
+    "import": "./dist/resume-builder.mjs",
+    "require": "./dist/resume-builder.umd.js"
+  },
+  "style": "./dist/resume-builder.css",
+  "scripts": {
+    "storybook": "storybook dev -p 6006",
+    "lint": "eslint packages/**/src",
+    "lint:styles": "stylelint \"**/*.scss\""
+  }
+}

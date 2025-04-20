@@ -1,0 +1,39 @@
+{
+  "name": "scalant",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "type": "module",
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.27.0",
+    "@storybook/addon-essentials": "^8.6.12",
+    "@storybook/react": "^8.6.12",
+    "@storybook/react-vite": "^8.6.12",
+    "@vitejs/plugin-react": "^4.4.0",
+    "eslint": "^9.24.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-import-resolver-typescript": "^4.3.2",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "lerna": "^8.2.2",
+    "prop-types": "^15.8.1",
+    "sass": "^1.86.3",
+    "storybook": "^8.6.12",
+    "stylelint": "^16.18.0",
+    "stylelint-config-standard-scss": "^14.0.0",
+    "stylelint-scss": "^6.11.1",
+    "vite": "^6.3.1"
+  },
+  "dependencies": {
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
+  "scripts": {
+    "lint": "eslint packages/**/src",
+    "lint:styles": "stylelint \"**/*.scss\""
+  }
+}
