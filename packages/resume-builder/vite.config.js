@@ -4,6 +4,13 @@ import path from 'path';
 
 export default defineConfig({
   plugins: [react()],
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@use "@components/styles/theme.scss" as *;`
+      }
+    }
+  },
   build: {
     target: 'es2015',
     minify: 'esbuild',

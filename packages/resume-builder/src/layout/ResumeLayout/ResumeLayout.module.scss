@@ -1,0 +1,31 @@
+$header-bg-color: #fff;
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background-color: $header-bg-color;
+  padding: 2.4rem 1.6rem !important;
+  border-bottom: 0.1rem solid $colors-neutral-border-color-border;
+}
+
+.logo {
+  width: 9rem;
+  height: 1.2rem;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: scroll;
+  max-height: 100vh;
+  background-color: $colors-neutral-color-bg-base;
+}
+
+.content {
+  background-color: $colors-neutral-color-bg-base;
+}

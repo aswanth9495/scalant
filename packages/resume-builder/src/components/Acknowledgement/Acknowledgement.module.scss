@@ -1,0 +1,39 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 16rem;
+}
+
+
+.title {
+  margin-bottom: 0rem !important;
+}
+
+.subtitle {
+  font-weight: 400 !important; 
+  margin: 0rem !important;
+  margin-bottom: 3.2rem !important;
+}
+
+.description {
+  margin-bottom: 0rem !important;
+}
+
+.checkbox {
+  margin-top: 0.8rem;
+}
+
+.continueBtn {
+  margin-top: 3.2rem;
+}
+
+.buttonsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.laterText {
+  margin-top: 1.2rem;
+}
