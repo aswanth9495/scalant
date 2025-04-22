@@ -13,13 +13,16 @@
     "@vitejs/plugin-react": "^4.4.0",
     "eslint": "^9.24.0",
     "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^10.1.2",
     "eslint-import-resolver-alias": "^1.1.2",
     "eslint-import-resolver-typescript": "^4.3.2",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-prettier": "^5.2.6",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "lerna": "^8.2.2",
+    "prettier": "^3.5.3",
     "prop-types": "^15.8.1",
     "sass": "^1.86.3",
     "storybook": "^8.6.12",
@@ -35,6 +38,7 @@
   },
   "scripts": {
     "lint": "eslint packages/**/src",
-    "lint:styles": "stylelint \"**/*.scss\""
+    "lint:styles": "stylelint \"**/*.scss\"",
+    "format": "prettier --write ."
   }
 }

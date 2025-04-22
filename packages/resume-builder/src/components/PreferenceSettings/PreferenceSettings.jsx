@@ -9,12 +9,17 @@ const PreferenceSettings = () => {
 
   const handleFinish = (values) => {
     // Process the form data here
+    // eslint-disable-next-line no-console, no-undef
     console.log('Submitted values:', values);
   };
 
-  return(
+  return (
     <div>
-      <PageHeader title="Set Your Job Preferences" subtitle="Your preferences help us bring relevant job opportunities for you in the future" />
+      <PageHeader
+        title="Set Your Job Preferences"
+        subtitle="Your preferences help us bring relevant job opportunities 
+        for you in the future"
+      />
       <Form
         form={form}
         layout="vertical"
@@ -29,7 +34,9 @@ const PreferenceSettings = () => {
         <Form.Item
           label="Preferred job locations?"
           name="preferredLocations"
-          rules={[{ required: true, message: 'Please select preferred location!' }]}
+          rules={[
+            { required: true, message: 'Please select preferred location!' },
+          ]}
         >
           <Select>
             <Select.Option value="All over India">All over India</Select.Option>
@@ -45,15 +52,21 @@ const PreferenceSettings = () => {
         >
           <Select mode="multiple" allowClear>
             <Select.Option value="SDE">SDE</Select.Option>
-            <Select.Option value="Backend Developer">Backend Developer</Select.Option>
-            <Select.Option value="Frontend Developer">Frontend Developer</Select.Option>
+            <Select.Option value="Backend Developer">
+              Backend Developer
+            </Select.Option>
+            <Select.Option value="Frontend Developer">
+              Frontend Developer
+            </Select.Option>
           </Select>
         </Form.Item>
 
         <Form.Item
           label="Current CTC (LPA)"
           name="ctc"
-          rules={[{ required: true, message: 'Please enter your current CTC!' }]}
+          rules={[
+            { required: true, message: 'Please enter your current CTC!' },
+          ]}
         >
           <Input placeholder="e.g., 3" />
         </Form.Item>
@@ -77,7 +90,12 @@ const PreferenceSettings = () => {
           </Radio.Group>
         </Form.Item>
         <div className={styles.buttonContainer}>
-          <Button className={styles.submitBtn} type="primary" htmlType="submit" block>
+          <Button
+            className={styles.submitBtn}
+            type="primary"
+            htmlType="submit"
+            block
+          >
             Save and Continue
           </Button>
 

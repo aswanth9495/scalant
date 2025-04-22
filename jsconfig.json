@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-     "@components": ["packages/components/src"]
+      "@components": ["packages/components/src"]
     }
   },
   "include": ["packages"]

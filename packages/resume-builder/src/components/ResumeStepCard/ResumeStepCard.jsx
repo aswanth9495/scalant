@@ -1,32 +1,37 @@
 import React from 'react';
 import { Card, Typography, Flex, Avatar, Tag } from 'antd';
-import { PlusOutlined, MinusOutlined, CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import {
+  PlusOutlined,
+  MinusOutlined,
+  CheckCircleOutlined,
+  ExclamationCircleOutlined,
+} from '@ant-design/icons';
 import styles from './ResumeStepCard.module.scss';
 
 const { Title, Text } = Typography;
 
 const STATUS_TAGS = {
   complete: (
-    <Tag
-      color="green"
-      bordered={true}
-      icon={<CheckCircleOutlined />}
-    >
+    <Tag color="green" bordered={true} icon={<CheckCircleOutlined />}>
       Complete
     </Tag>
   ),
   incomplete: (
-    <Tag
-      color="gold"
-      bordered={true}
-      icon={<ExclamationCircleOutlined />}
-    >
+    <Tag color="gold" bordered={true} icon={<ExclamationCircleOutlined />}>
       Incomplete
     </Tag>
   ),
 };
 
-const ResumeStepCard = ({ title, subtitle, icon, children, expanded, onClick, status }) => {
+const ResumeStepCard = ({
+  title,
+  subtitle,
+  icon,
+  children,
+  expanded,
+  onClick,
+  status,
+}) => {
   return (
     <Card className={styles.card} onClick={onClick}>
       <Flex justify="space-between" align="start">

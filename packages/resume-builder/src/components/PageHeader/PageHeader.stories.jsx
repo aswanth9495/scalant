@@ -7,6 +7,8 @@ export default {
 };
 
 export const Default = () => (
-    <PageHeader title="Scaler Resume Builder" subtitle="Build a Resume with ATS Compliance" />
-
+  <PageHeader
+    title="Scaler Resume Builder"
+    subtitle="Build a Resume with ATS Compliance"
+  />
 );

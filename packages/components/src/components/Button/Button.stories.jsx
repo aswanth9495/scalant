@@ -10,5 +10,5 @@ export default {
 export const Default = () => <Button>Click Me</Button>;
 
 Default.args = {
-  // args for this variation 
+  // args for this variation
 };

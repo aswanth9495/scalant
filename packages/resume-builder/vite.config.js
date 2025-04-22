@@ -7,9 +7,9 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `@use "@components/styles/theme.scss" as *;`
-      }
-    }
+        additionalData: `@use "@components/styles/theme.scss" as *;`,
+      },
+    },
   },
   build: {
     target: 'es2015',

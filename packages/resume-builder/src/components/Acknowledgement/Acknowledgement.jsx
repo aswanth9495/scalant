@@ -11,49 +11,66 @@ const Acknowledgement = () => {
 
   const handleContinue = () => {
     if (checked1 && checked2) {
-
+      // eslint-disable-next-line no-console, no-undef
+      console.log('Continue');
     }
   };
 
   const handleLater = () => {
+    // eslint-disable-next-line no-console, no-undef
     console.log('Later');
   };
 
   return (
-      <>
-        <PageHeader title="Scaler Resume Builder" subtitle="Build a Resume with ATS Compliance" />
-        <Paragraph className={styles.description}>
-          Please acknowledge the following pointers basis on which your profile will be shortlisted for Job Opportunities.
-        </Paragraph>
+    <>
+      <PageHeader
+        title="Scaler Resume Builder"
+        subtitle="Build a Resume with ATS Compliance"
+      />
+      <Paragraph className={styles.description}>
+        Please acknowledge the following pointers basis on which your profile
+        will be shortlisted for Job Opportunities.
+      </Paragraph>
 
-        <Checkbox className={styles.checkbox} checked={checked1} onChange={(e) => setChecked1(e.target.checked)}>
-          Your Job Preferences like CTC, Location, Notice Period are key points based on which Scaler will showcase relevant job opportunities
-        </Checkbox>
+      <Checkbox
+        className={styles.checkbox}
+        checked={checked1}
+        onChange={(e) => setChecked1(e.target.checked)}
+      >
+        Your Job Preferences like CTC, Location, Notice Period are key points
+        based on which Scaler will showcase relevant job opportunities
+      </Checkbox>
 
-        <Checkbox className={styles.checkbox} checked={checked2} onChange={(e) => setChecked2(e.target.checked)}>
-          Your relevant tech work experience and technical skills entered in your Scaler Resume Builder will be used for matching you with relevant job opportunities
-        </Checkbox>
+      <Checkbox
+        className={styles.checkbox}
+        checked={checked2}
+        onChange={(e) => setChecked2(e.target.checked)}
+      >
+        Your relevant tech work experience and technical skills entered in your
+        Scaler Resume Builder will be used for matching you with relevant job
+        opportunities
+      </Checkbox>
 
-        <div className={styles.buttonsContainer}>
-          <Button
-            type="primary"
-            block
-            className={styles.continueBtn}
-            disabled={!(checked1 && checked2)}
-            onClick={handleContinue}
-          >
-            I Understand, Continue
-          </Button>
-          <Button 
-            type="link" 
-            block
-            className={styles.laterText}
-            onClick={handleLater}
-          >
-            I will do this later
-          </Button>
-        </div>
-      </>
+      <div className={styles.buttonsContainer}>
+        <Button
+          type="primary"
+          block
+          className={styles.continueBtn}
+          disabled={!(checked1 && checked2)}
+          onClick={handleContinue}
+        >
+          I Understand, Continue
+        </Button>
+        <Button
+          type="link"
+          block
+          className={styles.laterText}
+          onClick={handleLater}
+        >
+          I will do this later
+        </Button>
+      </div>
+    </>
   );
 };
 

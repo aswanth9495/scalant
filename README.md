@@ -26,12 +26,14 @@ scalant/
 ## 🔧 Installation
 
 1. Clone the repository:
+
 ```bash
 git clone <repository-url>
 cd scalant
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 # or
@@ -87,10 +89,12 @@ yarn lint:styles
 ## 📚 Available Scripts
 
 ### Root Directory
+
 - `npm run lint` - Run ESLint on all packages
 - `npm run lint:styles` - Run Stylelint on all SCSS files
 
 ### Resume Builder/Components Package
+
 - `npm run storybook` - Start Storybook for the resume builder
 - `npm run lint` - Run ESLint
 - `npm run lint:styles` - Run Stylelint
@@ -106,4 +110,4 @@ yarn lint:styles
 
 ## 📝 License
 
-This project is licensed under the MIT License - see the LICENSE file for details. 
+This project is licensed under the MIT License - see the LICENSE file for details.

@@ -1,31 +1,35 @@
-import js from '@eslint/js';
-import react from 'eslint-plugin-react';
-import reactHooks from 'eslint-plugin-react-hooks';
-import jsxA11y from 'eslint-plugin-jsx-a11y';
-import eslintPluginImport from 'eslint-plugin-import';
+import js from "@eslint/js";
+import react from "eslint-plugin-react";
+import reactHooks from "eslint-plugin-react-hooks";
+import jsxA11y from "eslint-plugin-jsx-a11y";
+import eslintPluginImport from "eslint-plugin-import";
+import prettier from "eslint-plugin-prettier";
+import configPrettier from "eslint-config-prettier";
 
 export default [
   js.configs.recommended,
+  configPrettier,
   {
-    files: ['**/*.js', '**/*.jsx'],
+    files: ["**/*.js", "**/*.jsx"],
     ignores: [
-      'dist/**',
-      'build/**',
-      'packages/*/dist/**',
-      'packages/*/build/**',
-      'packages/*/.storybook/**',
-      'packages/**/*.stories.*',
-      'packages/**/*.test.*',
-      'node_modules/**',
-      'coverage/**',
-      '.next/**',
-      '.vite/**',
-      '.turbo/**',
-      'storybook-static/**',
+      "dist/**",
+      "build/**",
+      "packages/*/dist/**",
+      "packages/*/build/**",
+      "packages/*/.storybook/**",
+      "packages/**/*.stories.*",
+      "packages/**/*.test.*",
+      "node_modules/**",
+      "coverage/**",
+      ".next/**",
+      ".vite/**",
+      ".turbo/**",
+      "storybook-static/**",
+      "eslint.config.js",
     ],
     languageOptions: {
-      ecmaVersion: 'latest',
-      sourceType: 'module',
+      ecmaVersion: "latest",
+      sourceType: "module",
       parserOptions: {
         ecmaFeatures: {
           jsx: true,
@@ -34,26 +38,86 @@ export default [
     },
     plugins: {
       react,
-      'react-hooks': reactHooks,
-      'jsx-a11y': jsxA11y,
+      "react-hooks": reactHooks,
+      "jsx-a11y": jsxA11y,
       import: eslintPluginImport,
     },
     rules: {
-      'react/react-in-jsx-scope': 'off',
-      'react/prop-types': 'off',
-      'import/no-unresolved': 'error',
-      'import/named': 'error',
-      'react/jsx-uses-vars': 'error',
-      'no-unused-vars': ['error', { varsIgnorePattern: '^React$' }],
+      // Base rules
+      "array-bracket-spacing": ["error", "never"],
+      "comma-spacing": "error",
+      "default-case": "error",
+      "eol-last": "error",
+      eqeqeq: "error",
+      "func-call-spacing": "error",
+      indent: ["error", 2, { SwitchCase: 1 }],
+      "key-spacing": "error",
+      "keyword-spacing": 1,
+      "max-len": ["error", { code: 80 }],
+      "no-console": 1,
+      "no-multi-spaces": "error",
+      "no-sequences": "error",
+      "no-use-before-define": "error",
+      radix: "error",
+      semi: "error",
+
+      // React specific rules
+      "react/react-in-jsx-scope": "off",
+      "react/prop-types": "off",
+      "react/jsx-uses-vars": "error",
+      "react/jsx-filename-extension": "off",
+      "react/no-array-index-key": "off",
+      "react/jsx-props-no-spreading": "off",
+      "react/forbid-prop-types": "off",
+      "react/require-default-props": "off",
+      "react/default-props-match-prop-types": "off",
+      "react/no-unescaped-entities": "off",
+      "react/sort-comp": "off",
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
+
+      // Import rules
+      "import/no-unresolved": "off",
+      "import/named": "error",
+      "import/no-extraneous-dependencies": "off",
+      "import/order": "off",
+      "import/no-cycle": "off",
+      "import/prefer-default-export": "off",
+      "import/no-named-as-default": "off",
+
+      // Other rules
+      "no-else-return": "off",
+      "arrow-parens": "off",
+      "no-underscore-dangle": "off",
+      "no-continue": "off",
+      "func-names": "off",
+      "no-new": "off",
+
+      // Accessibility rules
+      "jsx-a11y/click-events-have-key-events": "off",
+      "jsx-a11y/label-has-associated-control": "off",
+      "jsx-a11y/no-autofocus": "off",
+      "jsx-a11y/media-has-caption": "off",
+
+      // Unused vars
+      "no-unused-vars": ["error", { varsIgnorePattern: "^(React|console)$" }],
     },
     settings: {
       react: {
-        version: 'detect',
-        jsxRuntime: 'automatic',
+        version: "detect",
+        jsxRuntime: "automatic",
       },
-      'import/resolver': {
+      "import/resolver": {
         typescript: {}, // uses jsconfig.json automatically
       },
+    },
+  },
+  {
+    plugins: {
+      prettier,
+    },
+    rules: {
+      "prettier/prettier": "error",
     },
   },
 ];

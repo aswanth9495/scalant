@@ -6,6 +6,8 @@ export default {
   component: ResumeSteps,
 };
 
-export const Default = () => <ResumeLayout>
-  <ResumeSteps />
-</ResumeLayout>;
+export const Default = () => (
+  <ResumeLayout>
+    <ResumeSteps />
+  </ResumeLayout>
+);

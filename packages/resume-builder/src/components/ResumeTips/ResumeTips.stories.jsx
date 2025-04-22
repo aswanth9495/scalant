@@ -1,4 +1,3 @@
-
 import ResumeLayout from '../../layout/ResumeLayout';
 import ResumeTips from './ResumeTips';
 
@@ -7,4 +6,9 @@ export default {
   component: ResumeTips,
 };
 
-export const Default = () => (<ResumeLayout> <ResumeTips /> </ResumeLayout>);
+export const Default = () => (
+  <ResumeLayout>
+    {' '}
+    <ResumeTips />{' '}
+  </ResumeLayout>
+);

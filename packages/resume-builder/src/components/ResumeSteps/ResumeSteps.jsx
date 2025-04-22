@@ -16,7 +16,7 @@ import styles from './ResumeSteps.module.scss';
 
 const ResumeTimeline = () => {
   const [expandedStep, setExpandedStep] = useState(0);
-  
+
   const steps = [
     {
       title: 'Personal Info and Socials',
@@ -56,37 +56,38 @@ const ResumeTimeline = () => {
 
   return (
     <div className={styles.container}>
-    <Timeline
-      mode="left"
-      items={steps.map((step, index) => {
-        // Determine the dot icon based on status and active state
-        let dotIcon;
-        if (index === expandedStep) {
-          dotIcon = <LoadingOutlined className={styles.activeIcon} />;
-        } else if (step.status === 'complete') {
-          dotIcon = <CheckCircleOutlined className={styles.completeIcon} />;
-        } else {
-          dotIcon = <ClockCircleOutlined className={styles.incompleteIcon} />;
-        }
-        
-        return {
-          dot: dotIcon,
-          children: (
-            <ResumeStepCard
-              key={step.title}
-              title={step.title}
-              subtitle={step.subtitle}
-              icon={step.icon}
-              status={step.status}
-              isActive={index === expandedStep}
-              expanded={index === expandedStep}
-              onClick={() => handleStepClick(index)}
-            >
-              Dummy content for <strong>{step.title}</strong>. You can add a form or section content here.
-            </ResumeStepCard>
-          ),
-        };
-      })}
+      <Timeline
+        mode="left"
+        items={steps.map((step, index) => {
+          // Determine the dot icon based on status and active state
+          let dotIcon;
+          if (index === expandedStep) {
+            dotIcon = <LoadingOutlined className={styles.activeIcon} />;
+          } else if (step.status === 'complete') {
+            dotIcon = <CheckCircleOutlined className={styles.completeIcon} />;
+          } else {
+            dotIcon = <ClockCircleOutlined className={styles.incompleteIcon} />;
+          }
+
+          return {
+            dot: dotIcon,
+            children: (
+              <ResumeStepCard
+                key={step.title}
+                title={step.title}
+                subtitle={step.subtitle}
+                icon={step.icon}
+                status={step.status}
+                isActive={index === expandedStep}
+                expanded={index === expandedStep}
+                onClick={() => handleStepClick(index)}
+              >
+                Dummy content for <strong>{step.title}</strong>. You can add a
+                form or section content here.
+              </ResumeStepCard>
+            ),
+          };
+        })}
       />
     </div>
   );

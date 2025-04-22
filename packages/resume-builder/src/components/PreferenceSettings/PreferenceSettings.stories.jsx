@@ -1,4 +1,3 @@
-
 import PreferenceSettings from './PreferenceSettings';
 import ResumeLayout from '../../layout/ResumeLayout';
 
