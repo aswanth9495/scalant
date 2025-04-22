@@ -3,14 +3,14 @@ $header-bg-color: #fff;
 .header {
   position: sticky;
   top: 0;
-  z-index: 1;
+  z-index: 10;
   width: 100%;
   display: flex;
   align-items: center;
   background-color: $header-bg-color;
-  padding: 2.4rem 1.6rem !important;
+  padding: 1.6rem !important;
   border-bottom: 0.1rem solid $colors-neutral-border-color-border;
-  max-height: 6.4rem;
+  height: 6.4rem;
 }
 
 .logo {
@@ -20,22 +20,27 @@ $header-bg-color: #fff;
 
 .left {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow-y: scroll;
+  flex-direction: column;
   height: 100vh;
   background-color: $colors-neutral-color-bg-base;
+  overflow: hidden;
 }
 
 .content {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 16rem;
-  height: 100%;
+  overflow-y: auto;
   background-color: $colors-neutral-color-bg-base;
 }
 
 .layout { 
   height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.contentInner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: calc(100vh - 6.4rem);
+  padding: 2rem 16rem;
 }

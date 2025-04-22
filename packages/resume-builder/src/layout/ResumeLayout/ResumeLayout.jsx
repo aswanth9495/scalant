@@ -20,7 +20,7 @@ const ResumeLayout = ({
               <ArrowLeftOutlined onClick={onBackClick} />
               <img className={styles.logo} src={LOGO_URL} alt="logo" />
           </Header>
-          <Content className={styles.content}>{children}</Content>
+          <Content className={styles.content}> <div className={styles.contentInner}>{children}</div></Content>
         </Layout>
       </Col>
       <Col span={12}>
