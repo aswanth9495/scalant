@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Checkbox, Button, Typography } from 'antd';
+import PageHeader from '../PageHeader';
 import styles from './Acknowledgement.module.scss';
 
-const { Title, Text, Paragraph } = Typography;
+const { Paragraph } = Typography;
 
 const Acknowledgement = () => {
   const [checked1, setChecked1] = useState(false);
@@ -19,10 +20,8 @@ const Acknowledgement = () => {
   };
 
   return (
-      <div className={styles.container}>
-        <Title level={2} className={styles.title}>Scaler Resume Builder</Title>
-        <Title level={5} className={styles.subtitle}>Build a Resume with ATS Compliance</Title>
-
+      <>
+        <PageHeader title="Scaler Resume Builder" subtitle="Build a Resume with ATS Compliance" />
         <Paragraph className={styles.description}>
           Please acknowledge the following pointers basis on which your profile will be shortlisted for Job Opportunities.
         </Paragraph>
@@ -54,7 +53,7 @@ const Acknowledgement = () => {
             I will do this later
           </Button>
         </div>
-      </div>
+      </>
   );
 };
 

@@ -10,6 +10,7 @@ $header-bg-color: #fff;
   background-color: $header-bg-color;
   padding: 2.4rem 1.6rem !important;
   border-bottom: 0.1rem solid $colors-neutral-border-color-border;
+  max-height: 6.4rem;
 }
 
 .logo {
@@ -22,10 +23,19 @@ $header-bg-color: #fff;
   align-items: center;
   justify-content: center;
   overflow-y: scroll;
-  max-height: 100vh;
+  height: 100vh;
   background-color: $colors-neutral-color-bg-base;
 }
 
 .content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 16rem;
+  height: 100%;
   background-color: $colors-neutral-color-bg-base;
+}
+
+.layout { 
+  height: 100%;
 }
