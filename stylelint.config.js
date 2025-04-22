@@ -5,6 +5,7 @@ import scss from 'stylelint-scss';
 export default {
   extends: [standard],
   plugins: [scss],
+  ignoreFiles: ['node_modules/**', 'dist/**', 'theme'],
   rules: {
     'selector-class-pattern': null,
     'no-empty-source': null,

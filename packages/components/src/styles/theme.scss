@@ -9,7 +9,6 @@ $colors-base-blue-7: #0052ff;
 $colors-base-blue-8: #0041ca;
 $colors-base-blue-9: #083ca0;
 $colors-base-blue-10: #081e4d;
-
 $colors-base-cyan-1: #e6fffb;
 $colors-base-cyan-2: #b5f5ec;
 $colors-base-cyan-3: #87e8de;
@@ -20,7 +19,6 @@ $colors-base-cyan-7: #08979c;
 $colors-base-cyan-8: #006d75;
 $colors-base-cyan-9: #00474f;
 $colors-base-cyan-10: #002329;
-
 $colors-base-geekblue-1: #f0f5ff;
 $colors-base-geekblue-2: #d6e4ff;
 $colors-base-geekblue-3: #adc6ff;
@@ -31,7 +29,6 @@ $colors-base-geekblue-7: #1d39c4;
 $colors-base-geekblue-8: #10239e;
 $colors-base-geekblue-9: #061178;
 $colors-base-geekblue-10: #030852;
-
 $colors-base-gold-1: #fffbe6;
 $colors-base-gold-2: #fff1b8;
 $colors-base-gold-3: #ffe58f;
@@ -42,7 +39,6 @@ $colors-base-gold-7: #d48806;
 $colors-base-gold-8: #ad6800;
 $colors-base-gold-9: #874d00;
 $colors-base-gold-10: #613400;
-
 $colors-base-green-1: #f5fcf8;
 $colors-base-green-2: #e6f7ed;
 $colors-base-green-3: #b5e2cb;
@@ -53,7 +49,6 @@ $colors-base-green-7: #1d925b;
 $colors-base-green-8: #1a8452;
 $colors-base-green-9: #177548;
 $colors-base-green-10: #14663f;
-
 $colors-base-lime-1: #fcffe6;
 $colors-base-lime-2: #f4ffb8;
 $colors-base-lime-3: #eaff8f;
@@ -64,7 +59,6 @@ $colors-base-lime-7: #7cb305;
 $colors-base-lime-8: #5b8c00;
 $colors-base-lime-9: #3f6600;
 $colors-base-lime-10: #254000;
-
 $colors-base-magenta-1: #ffe6f1;
 $colors-base-magenta-2: #ffb8d7;
 $colors-base-magenta-3: #ff8abe;
@@ -75,7 +69,6 @@ $colors-base-magenta-7: #d90065;
 $colors-base-magenta-8: #b30058;
 $colors-base-magenta-9: #8c004c;
 $colors-base-magenta-10: #66003f;
-
 $colors-base-orange-1: #fffaf2;
 $colors-base-orange-2: #fff3e3;
 $colors-base-orange-3: #fedaaa;
@@ -86,7 +79,6 @@ $colors-base-orange-7: #d77c00;
 $colors-base-orange-8: #b16600;
 $colors-base-orange-9: #8c5100;
 $colors-base-orange-10: #663b00;
-
 $colors-base-purple-1: #fbf5ff;
 $colors-base-purple-2: #f6e8ff;
 $colors-base-purple-3: #f2dbff;
@@ -97,7 +89,6 @@ $colors-base-purple-7: #913ece;
 $colors-base-purple-8: #6d2a9e;
 $colors-base-purple-9: #481c67;
 $colors-base-purple-10: #240f33;
-
 $colors-base-red-1: #fff7f8;
 $colors-base-red-2: #ffebef;
 $colors-base-red-3: #f8bbc5;
@@ -108,7 +99,6 @@ $colors-base-red-7: #c32742;
 $colors-base-red-8: #a42137;
 $colors-base-red-9: #851a2d;
 $colors-base-red-10: #661422;
-
 $colors-base-volcano-1: #fff2e8;
 $colors-base-volcano-2: #ffd8bf;
 $colors-base-volcano-3: #ffbb96;
@@ -119,7 +109,6 @@ $colors-base-volcano-7: #d4380d;
 $colors-base-volcano-8: #ad2102;
 $colors-base-volcano-9: #871400;
 $colors-base-volcano-10: #610b00;
-
 $colors-base-yellow-1: #fefbf0;
 $colors-base-yellow-2: #fff7e0;
 $colors-base-yellow-3: #ffeba8;
@@ -132,10 +121,10 @@ $colors-base-yellow-9: #8c6e00;
 $colors-base-yellow-10: #665000;
 
 // Neutral Colors
-$colors-neutral-color-bg-base: #ffffff;
-$colors-neutral-color-text-base: #000000;
-$colors-neutral-color-white: #ffffff;
-$colors-neutral-transparent: #00000000;
+$colors-neutral-color-bg-base: #fff;
+$colors-neutral-color-text-base: #000;
+$colors-neutral-color-white: #fff;
+$colors-neutral-transparent: #0000;
 
 // Brand Colors
 $colors-brand-primary-color-primary: $colors-base-blue-6;
@@ -186,7 +175,7 @@ $colors-neutral-text-color-text-tertiary: #00000073;
 $colors-neutral-text-color-text-quaternary: #00000040;
 $colors-neutral-text-color-text-disabled: $colors-neutral-text-color-text-quaternary;
 $colors-neutral-text-color-text-placeholder: $colors-neutral-text-color-text-quaternary;
-$colors-neutral-text-color-text-light-solid: #ffffff;
+$colors-neutral-text-color-text-light-solid: #fff;
 
 // Background Colors
 $colors-neutral-bg-color-bg-container: $colors-neutral-color-bg-base;
