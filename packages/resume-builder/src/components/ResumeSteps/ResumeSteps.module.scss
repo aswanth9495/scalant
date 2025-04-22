@@ -1,0 +1,22 @@
+.container {
+  margin: 0 -8rem;
+}
+
+.active {
+  background-color: $colors-brand-primary-color-primary; // Primary color for active
+}
+
+.activeIcon {
+  font-size: 16px;
+  color: $colors-brand-primary-color-primary;
+}
+
+.completeIcon {
+  font-size: 16px;
+  color: $colors-brand-success-color-success;
+}
+
+.incompleteIcon {
+  font-size: 16px;
+  color: $colors-brand-warning-color-warning;
+}

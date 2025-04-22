@@ -1,4 +1,3 @@
-
 import { Typography } from 'antd';
 import styles from './PageHeader.module.scss';
 
@@ -9,7 +8,7 @@ const PageHeader = ({ title, subtitle }) => {
   return (
       <>
         <Title level={2} className={styles.title}>{title}</Title>
-        {subtitle && <Title type="secondary" level={5} className={styles.subtitle}>{subtitle}</Title>}
+        {subtitle && <Title level={5} className={styles.subtitle}>{subtitle}</Title>}
       </>
   );
 };

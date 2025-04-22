@@ -11,7 +11,7 @@ const theme = {
     colorSuccess: '#20a164',        // From green-6
     colorInfo: '#006aff',           // Same as primary
     fontFamily: 'Inter, sans-serif',
-    borderRadius: 6,
+    borderRadius: 6
   },
 };
 

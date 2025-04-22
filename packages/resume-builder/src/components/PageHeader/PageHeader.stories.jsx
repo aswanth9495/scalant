@@ -7,7 +7,6 @@ export default {
 };
 
 export const Default = () => (
-  <ResumeLayout>
     <PageHeader title="Scaler Resume Builder" subtitle="Build a Resume with ATS Compliance" />
-  </ResumeLayout>
+
 );

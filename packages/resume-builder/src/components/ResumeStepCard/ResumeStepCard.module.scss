@@ -1,0 +1,21 @@
+.title {
+  margin-bottom: 0.4rem !important;
+}
+
+.toggleIcon {
+  font-size: $h5-size;
+}
+
+.content {
+  margin-top: 1.6rem !important;
+}
+
+.card {
+  cursor: pointer;
+  border-color: $colors-neutral-border-color-border !important;
+}
+
+.icon {
+  color: $colors-neutral-text-color-text-tertiary !important;
+  background-color: $colors-neutral-bg-color-bg-layout !important;
+}

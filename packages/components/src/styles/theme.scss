@@ -138,16 +138,16 @@ $colors-neutral-color-white: #ffffff;
 $colors-neutral-transparent: #00000000;
 
 // Brand Colors
-$colors-brand-primary-color-primary: var(--colors-base-blue-6);
-$colors-brand-primary-color-primary-hover: var(--colors-base-blue-5);
-$colors-brand-primary-color-primary-active: var(--colors-base-blue-7);
-$colors-brand-primary-color-primary-text: var(--colors-base-blue-6);
-$colors-brand-primary-color-primary-text-hover: var(--colors-base-blue-5);
-$colors-brand-primary-color-primary-text-active: var(--colors-base-blue-7);
-$colors-brand-primary-color-primary-bg: var(--colors-base-blue-1);
-$colors-brand-primary-color-primary-bg-hover: var(--colors-base-blue-2);
-$colors-brand-primary-color-primary-border: var(--colors-base-blue-3);
-$colors-brand-primary-color-primary-border-hover: var(--colors-base-blue-4);
+$colors-brand-primary-color-primary: $colors-base-blue-6;
+$colors-brand-primary-color-primary-hover: $colors-base-blue-5;
+$colors-brand-primary-color-primary-active: $colors-base-blue-7;
+$colors-brand-primary-color-primary-text: $colors-base-blue-6;
+$colors-brand-primary-color-primary-text-hover: $colors-base-blue-5;
+$colors-brand-primary-color-primary-text-active: $colors-base-blue-7;
+$colors-brand-primary-color-primary-bg: $colors-base-blue-1;
+$colors-brand-primary-color-primary-bg-hover: $colors-base-blue-2;
+$colors-brand-primary-color-primary-border: $colors-base-blue-3;
+$colors-brand-primary-color-primary-border-hover: $colors-base-blue-4;
 
 // Error Colors
 $colors-brand-error-color-error: #ff4d4f;
@@ -158,39 +158,39 @@ $colors-brand-error-color-error-bg: #fff2f0;
 $colors-brand-error-color-error-border: #ffccc7;
 
 // Warning Colors
-$colors-brand-warning-color-warning: var(--colors-base-gold-6);
-$colors-brand-warning-color-warning-hover: var(--colors-base-gold-5);
-$colors-brand-warning-color-warning-active: var(--colors-base-gold-7);
+$colors-brand-warning-color-warning: $colors-base-gold-6;
+$colors-brand-warning-color-warning-hover: $colors-base-gold-5;
+$colors-brand-warning-color-warning-active: $colors-base-gold-7;
 $colors-brand-warning-color-warning-outline: #ffd7051a;
-$colors-brand-warning-color-warning-bg: var(--colors-base-gold-1);
-$colors-brand-warning-color-warning-border: var(--colors-base-gold-3);
+$colors-brand-warning-color-warning-bg: $colors-base-gold-1;
+$colors-brand-warning-color-warning-border: $colors-base-gold-3;
 
 // Success Colors
-$colors-brand-success-color-success: var(--colors-base-green-6);
-$colors-brand-success-color-success-hover: var(--colors-base-green-5);
-$colors-brand-success-color-success-active: var(--colors-base-green-7);
-$colors-brand-success-color-success-bg: var(--colors-base-green-1);
-$colors-brand-success-color-success-border: var(--colors-base-green-3);
+$colors-brand-success-color-success: $colors-base-green-6;
+$colors-brand-success-color-success-hover: $colors-base-green-5;
+$colors-brand-success-color-success-active: $colors-base-green-7;
+$colors-brand-success-color-success-bg: $colors-base-green-1;
+$colors-brand-success-color-success-border: $colors-base-green-3;
 
 // Info Colors
-$colors-brand-info-color-info: var(--colors-brand-primary-color-primary);
-$colors-brand-info-color-info-hover: var(--colors-brand-primary-color-primary-hover);
-$colors-brand-info-color-info-active: var(--colors-brand-primary-color-primary-active);
-$colors-brand-info-color-info-bg: var(--colors-brand-primary-color-primary-bg);
-$colors-brand-info-color-info-border: var(--colors-brand-primary-color-primary-border);
+$colors-brand-info-color-info: $colors-brand-primary-color-primary;
+$colors-brand-info-color-info-hover: $colors-brand-primary-color-primary-hover;
+$colors-brand-info-color-info-active: $colors-brand-primary-color-primary-active;
+$colors-brand-info-color-info-bg: $colors-brand-primary-color-primary-bg;
+$colors-brand-info-color-info-border: $colors-brand-primary-color-primary-border;
 
 // Text Colors
 $colors-neutral-text-color-text: #000000e0;
 $colors-neutral-text-color-text-secondary: #000000a6;
 $colors-neutral-text-color-text-tertiary: #00000073;
 $colors-neutral-text-color-text-quaternary: #00000040;
-$colors-neutral-text-color-text-disabled: var(--colors-neutral-text-color-text-quaternary);
-$colors-neutral-text-color-text-placeholder: var(--colors-neutral-text-color-text-quaternary);
+$colors-neutral-text-color-text-disabled: $colors-neutral-text-color-text-quaternary;
+$colors-neutral-text-color-text-placeholder: $colors-neutral-text-color-text-quaternary;
 $colors-neutral-text-color-text-light-solid: #ffffff;
 
 // Background Colors
-$colors-neutral-bg-color-bg-container: var(--colors-neutral-color-bg-base);
-$colors-neutral-bg-color-bg-elevated: var(--colors-neutral-color-bg-base);
+$colors-neutral-bg-color-bg-container: $colors-neutral-color-bg-base;
+$colors-neutral-bg-color-bg-elevated: $colors-neutral-color-bg-base;
 $colors-neutral-bg-color-bg-layout: #f5f5f5;
 $colors-neutral-bg-color-bg-spotlight: #000000d9;
 $colors-neutral-bg-color-bg-mask: #00000073;
@@ -205,3 +205,11 @@ $colors-neutral-fill-color-fill-quaternary: #00000005;
 $colors-neutral-border-color-border: #d9d9d9;
 $colors-neutral-border-color-border-secondary: #f0f0f0;
 $colors-neutral-border-color-split: #0000000f;
+
+// Font Sizes
+$default-font-size: 14;
+$h1-size: 38;
+$h2-size: 30;
+$h3-size: 24;
+$h4-size: 20;
+$h5-size: 16;
