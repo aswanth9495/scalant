@@ -1,0 +1,63 @@
+.container {
+  width: 100%;
+}
+
+.skillSection {
+  margin-bottom: 24px;
+}
+
+.sectionTitle {
+  margin-bottom: 16px !important;
+}
+
+.skillsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.skillTag {
+  cursor: pointer;
+  margin: 4px;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+
+  &.selected {
+    background-color: #1890ff;
+    color: white;
+  }
+}
+
+.closeIcon {
+  margin-left: 6px;
+  font-size: 12px;
+}
+
+.buttonContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.button {
+  flex: 1;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+
+  &.primary {
+    background-color: #1890ff;
+    color: white;
+  }
+
+  &.secondary {
+    background-color: white;
+    color: #1890ff;
+    border: 1px solid #1890ff;
+  }
+}
