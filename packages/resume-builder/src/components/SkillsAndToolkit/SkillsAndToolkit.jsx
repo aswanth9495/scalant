@@ -38,14 +38,19 @@ const SkillsAndToolkit = () => {
       tools: getSelectedFromSection(TOOLS),
     };
 
+    // eslint-disable-next-line no-console, no-undef
     console.log(
       'Selected Programming Languages:',
       selectedData.programmingLanguages
     );
+
+    // eslint-disable-next-line no-console, no-undef
     console.log(
       'Selected Libraries and Frameworks:',
       selectedData.librariesFrameworks
     );
+
+    // eslint-disable-next-line no-console, no-undef
     console.log('Selected Tools:', selectedData.tools);
   };
 
