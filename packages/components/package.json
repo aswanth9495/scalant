@@ -12,6 +12,7 @@
   "scripts": {
     "storybook": "storybook dev -p 6006",
     "lint": "eslint packages/**/src",
-    "lint:styles": "stylelint \"**/*.scss\""
+    "lint:styles": "stylelint \"**/*.scss\"",
+    "build": "vite build"
   }
 }

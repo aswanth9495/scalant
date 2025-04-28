@@ -7,7 +7,8 @@ const EducationForm = () => {
     { id: 1, completed: false, saved: false, expanded: true },
   ]);
 
-  const handleAddEducation = () => {
+  const handleAddEducation = (e) => {
+    e.stopPropagation();
     const newId = educationItems.length + 1;
     setEducationItems([
       ...educationItems,
