@@ -6,7 +6,6 @@ import {
   Typography,
   message,
   Input,
-  Select,
   Button,
   Tag,
 } from 'antd';
@@ -22,7 +21,6 @@ const ProjectFormItem = ({ item, setProjectItems, projectItems }) => {
   ]);
 
   const projectName = projectInfo[`project_${item.id}_projectName`];
-  const projectToolsTech = projectInfo[`project_${item.id}_projectToolsTech`];
 
   useEffect(() => {
     if (item.formData) {
@@ -34,7 +32,6 @@ const ProjectFormItem = ({ item, setProjectItems, projectItems }) => {
     try {
       const fieldNames = [
         `project_${id}_projectName`,
-        `project_${id}_projectToolsTech`,
         `project_${id}_projectLink`,
         `project_${id}_projectDescription`,
       ];
@@ -82,7 +79,6 @@ const ProjectFormItem = ({ item, setProjectItems, projectItems }) => {
       <Card key={item.id}>
         <Flex justify="space-between" align="center">
           <Text strong>{projectName}</Text>
-          <Text>{projectToolsTech.join(', ')}</Text>
         </Flex>
         <DownOutlined onClick={() => handleExpand(item.id)} />
       </Card>
@@ -114,26 +110,6 @@ const ProjectFormItem = ({ item, setProjectItems, projectItems }) => {
           rules={[{ required: true, message: 'Project Link is required' }]}
         >
           <Input placeholder="Enter Project Link" />
-        </Form.Item>
-        <Form.Item
-          name={`project_${item.id}_projectToolsTech`}
-          label="Tools & Technologies Used"
-          rules={[
-            {
-              required: true,
-              message: 'Tools & Technologies Used is required',
-            },
-          ]}
-        >
-          <Select
-            mode="multiple"
-            placeholder="Select Tools & Technologies"
-            options={[
-              { label: 'React', value: 'React' },
-              { label: 'Node.js', value: 'Node.js' },
-              { label: 'MongoDB', value: 'MongoDB' },
-            ]}
-          />
         </Form.Item>
         <Form.Item
           name={`project_${item.id}_projectDescription`}

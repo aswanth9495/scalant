@@ -11,8 +11,10 @@ import {
   DatePicker,
   Button,
   message,
+  InputNumber,
 } from 'antd';
 import { DownOutlined, DeleteOutlined } from '@ant-design/icons';
+import styles from './EducationForm.module.scss';
 
 const { Text } = Typography;
 
@@ -22,20 +24,22 @@ const EducationFormItem = ({ item, setEducationItems, educationItems }) => {
     `education_${item.id}_institute`,
     `education_${item.id}_degree`,
     `education_${item.id}_branch`,
-    `education_${item.id}_startDate`,
-    `education_${item.id}_endDate`,
+    `education_${item.id}_grades`,
+    `education_${item.id}_grade_type`,
+    `education_${item.id}_graduation`,
   ]);
 
   const institute = educationInfo[`education_${item.id}_institute`];
   const degree = educationInfo[`education_${item.id}_degree`];
-  const startDate =
-    educationInfo[`education_${item.id}_startDate`]?.format('YYYY');
-  const endDate = educationInfo[`education_${item.id}_endDate`]?.format('YYYY');
+  const graduation = educationInfo[`education_${item.id}_graduation`];
 
   useEffect(() => {
     // Initialize form with existing data if available
     if (item.formData) {
       form.setFieldsValue(item.formData);
+    } else {
+      // Set default value for grade type if not already set
+      form.setFieldValue(`education_${item.id}_grade_type`, 'cgpa');
     }
   }, [item.id, form, item.formData]);
 
@@ -45,9 +49,10 @@ const EducationFormItem = ({ item, setEducationItems, educationItems }) => {
         `education_${id}_institute`,
         `education_${id}_degree`,
         `education_${id}_branch`,
-        `education_${id}_startDate`,
-        `education_${id}_endDate`,
-        `education_${id}_gpa`,
+        `education_${id}_grades`,
+        `education_${id}_grade_type`,
+        `education_${id}_graduation`,
+        `education_${id}_description`,
       ];
 
       await form.validateFields(fieldNames);
@@ -88,6 +93,17 @@ const EducationFormItem = ({ item, setEducationItems, educationItems }) => {
     setEducationItems(educationItems.filter((item) => item.id !== id));
   };
 
+  const selectAfter = (
+    <Form.Item name={`education_${item.id}_grade_type`} noStyle>
+      <Select
+        options={[
+          { label: 'CGPA', value: 'cgpa' },
+          { label: 'Percentage', value: 'percentage' },
+        ]}
+      />
+    </Form.Item>
+  );
+
   if (item.saved && !item.expanded) {
     return (
       <Card key={item.id}>
@@ -97,7 +113,7 @@ const EducationFormItem = ({ item, setEducationItems, educationItems }) => {
             <Text>
               {degree && `${degree}, `}
               <Divider />
-              {startDate && `${startDate} - ${endDate}`}
+              {graduation && `${graduation}`}
             </Text>
           </Flex>
           <DownOutlined onClick={() => handleExpand(item.id)} />
@@ -110,7 +126,7 @@ const EducationFormItem = ({ item, setEducationItems, educationItems }) => {
     <Card key={item.id}>
       <Flex gap={16} justify="space-between">
         <Flex gap={4}>
-          <Text>Education {item.id}</Text>
+          <Text strong>Education {item.id}</Text>
           {item.saved && <Tag color="success">Saved</Tag>}
         </Flex>
         {educationItems.length > 1 && (
@@ -130,6 +146,7 @@ const EducationFormItem = ({ item, setEducationItems, educationItems }) => {
             name={`education_${item.id}_degree`}
             label="Degree Type"
             rules={[{ required: true, message: 'Degree Type is required' }]}
+            className={styles.midWidth}
           >
             <Select
               placeholder="Select Degree Type"
@@ -140,7 +157,11 @@ const EducationFormItem = ({ item, setEducationItems, educationItems }) => {
               ]}
             />
           </Form.Item>
-          <Form.Item name={`education_${item.id}_branch`} label="Branch">
+          <Form.Item
+            name={`education_${item.id}_branch`}
+            label="Branch"
+            className={styles.midWidth}
+          >
             <Select
               placeholder="Select Branch"
               options={[
@@ -153,29 +174,33 @@ const EducationFormItem = ({ item, setEducationItems, educationItems }) => {
             />
           </Form.Item>
         </Flex>
-        <Form.Item
-          name={`education_${item.id}_gpa`}
-          label="GPA (Final/Current)"
-          rules={[{ required: true, message: 'GPA is required' }]}
-        >
-          <Input placeholder="Enter GPA" />
-        </Form.Item>
-        <Flex gap={16}>
+        <Flex gap={16} className={styles.fullWidth}>
           <Form.Item
-            name={`education_${item.id}_startDate`}
-            label="Start Date"
-            rules={[{ required: true, message: 'Start Date is required' }]}
+            name={`education_${item.id}_grades`}
+            label="Grades (Final/Current)"
+            rules={[{ required: true, message: 'Grades are required' }]}
+            className={styles.midWidth}
           >
-            <DatePicker placeholder="Select Start Date" format="YYYY-MM-DD" />
+            <InputNumber placeholder="Enter Grades" addonAfter={selectAfter} />
           </Form.Item>
           <Form.Item
-            name={`education_${item.id}_endDate`}
-            label="End Date"
-            rules={[{ required: true, message: 'End Date is required' }]}
+            name={`education_${item.id}_graduation`}
+            label="Graduation (Actual/Expected)"
+            rules={[{ required: true, message: 'Graduation is required' }]}
+            className={styles.midWidth}
           >
-            <DatePicker placeholder="Select End Date" format="YYYY-MM-DD" />
+            <DatePicker
+              placeholder="Select Graduation Date"
+              format="YYYY-MM-DD"
+            />
           </Form.Item>
         </Flex>
+        <Form.Item
+          name={`education_${item.id}_description`}
+          label="Description"
+        >
+          <Input.TextArea placeholder="Enter Description" />
+        </Form.Item>
       </Form>
       <Flex gap={16}>
         <Button type="primary" block onClick={() => validateAndSave(item.id)}>

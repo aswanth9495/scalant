@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { Space, Button, Flex, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import ProjectFormItem from './ProjectFormItem';
+import CustomFormItem from './CustomFormItem';
 
-const ProjectForm = () => {
-  const [projectItems, setProjectItems] = useState([
+const CustomForm = () => {
+  const [customFormItems, setCustomFormItems] = useState([
     { id: 1, completed: false, saved: false, expanded: true },
   ]);
 
-  const handleAddProject = () => {
-    setProjectItems([
-      ...projectItems,
+  const handleAddCustomForm = () => {
+    setCustomFormItems([
+      ...customFormItems,
       {
-        id: projectItems.length + 1,
+        id: customFormItems.length + 1,
         completed: false,
         saved: false,
         expanded: true,
@@ -21,14 +21,16 @@ const ProjectForm = () => {
   };
 
   const handleMarkAsCompleted = () => {
-    const hasUnsavedItems = projectItems.some((item) => !item.saved);
+    const hasUnsavedItems = customFormItems.some((item) => !item.saved);
 
     if (hasUnsavedItems) {
-      message.error('Please save all project items before marking as complete');
+      message.error(
+        'Please save all custom form items before marking as complete'
+      );
       return;
     }
 
-    const projectData = projectItems
+    const customFormData = customFormItems
       .filter((item) => item.saved)
       .map((item) => {
         const formData = item.formData || {};
@@ -36,26 +38,28 @@ const ProjectForm = () => {
         return {
           id: item.id,
           saved: item.saved,
-          projectName: formData[`project_${item.id}_projectName`],
-          projectDescription: formData[`project_${item.id}_projectDescription`],
-          projectLink: formData[`project_${item.id}_projectLink`],
+          customFormHeading: formData[`custom_${item.id}_customFormHeading`],
+          customFormDescription:
+            formData[`custom_${item.id}_customFormDescription`],
+          customFormDate: formData[`custom_${item.id}_customFormDate`],
+          customFormLocation: formData[`custom_${item.id}_customFormLocation`],
         };
       });
 
     // eslint-disable-next-line no-console, no-undef
-    console.log(projectData);
+    console.log(customFormData);
   };
 
   return (
     <Flex vertical gap={16}>
       <Space direction="vertical" style={{ width: '100%' }}>
         <Flex vertical gap={16}>
-          {projectItems.map((item) => (
-            <ProjectFormItem
+          {customFormItems.map((item) => (
+            <CustomFormItem
               key={item.id}
               item={item}
-              setProjectItems={setProjectItems}
-              projectItems={projectItems}
+              setCustomFormItems={setCustomFormItems}
+              customFormItems={customFormItems}
             />
           ))}
         </Flex>
@@ -63,9 +67,9 @@ const ProjectForm = () => {
           type="dashed"
           block
           icon={<PlusOutlined />}
-          onClick={handleAddProject}
+          onClick={handleAddCustomForm}
         >
-          Add Project
+          Add Custom Form
         </Button>
         <Flex gap={16}>
           <Button type="primary" block onClick={handleMarkAsCompleted}>
@@ -80,4 +84,4 @@ const ProjectForm = () => {
   );
 };
 
-export default ProjectForm;
+export default CustomForm;

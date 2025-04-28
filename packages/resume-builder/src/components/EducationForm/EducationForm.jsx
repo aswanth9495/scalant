@@ -36,9 +36,10 @@ const EducationForm = () => {
           institute: formData[`education_${item.id}_institute`],
           degree: formData[`education_${item.id}_degree`],
           branch: formData[`education_${item.id}_branch`],
-          gpa: formData[`education_${item.id}_gpa`],
-          startDate: formData[`education_${item.id}_startDate`],
-          endDate: formData[`education_${item.id}_endDate`],
+          grades: formData[`education_${item.id}_grades`],
+          gradeType: formData[`education_${item.id}_grade_type`],
+          graduation: formData[`education_${item.id}_graduation`],
+          description: formData[`education_${item.id}_description`],
         };
       });
 
