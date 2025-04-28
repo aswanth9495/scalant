@@ -17,7 +17,7 @@ import {
   message,
 } from 'antd';
 import { useSelector } from 'react-redux';
-import { useUpdatePersonalDetailsMutation } from '../../services/resumeBuilderApi';
+import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 import styles from './PersonalInfoAndSocial.module.scss';
 const { Text } = Typography;
 
@@ -25,8 +25,7 @@ const PersonalInfoAndSocial = () => {
   const [form] = Form.useForm();
   const [additionalProfiles, setAdditionalProfiles] = useState([]);
   const resumeData = useSelector((state) => state.resumeBuilder.resumeData);
-  const [updatePersonalDetails, { isLoading }] =
-    useUpdatePersonalDetailsMutation();
+  const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
   useEffect(() => {
     if (resumeData?.personal_details) {
@@ -70,14 +69,16 @@ const PersonalInfoAndSocial = () => {
           link: profile.link,
         })),
       };
-      console.log(payload);
-      await updatePersonalDetails(payload).unwrap();
+
+      await updateResumeDetails({
+        formStage: 'personal-details',
+        payload,
+      }).unwrap();
       message.success('Personal details updated successfully');
     } catch (error) {
-      console.log(error);
       message.error('Failed to update personal details');
-
-      // console.error('Error updating personal details:', error);
+      // eslint-disable-next-line no-console
+      console.error('Error updating personal details:', error);
     }
   };
 

@@ -16,9 +16,9 @@ export const resumeBuilderApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    updatePersonalDetails: builder.mutation({
-      query: (payload) => ({
-        url: '/api/resume/personal-details',
+    updateResumeDetails: builder.mutation({
+      query: ({ formStage, payload }) => ({
+        url: `/api/resume/${formStage}`,
         method: 'POST',
         body: payload,
       }),
@@ -26,4 +26,4 @@ export const resumeBuilderApi = createApi({
   }),
 });
 
-export const { useUpdatePersonalDetailsMutation } = resumeBuilderApi;
+export const { useUpdateResumeDetailsMutation } = resumeBuilderApi;
