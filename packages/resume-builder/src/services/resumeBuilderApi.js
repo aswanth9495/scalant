@@ -9,7 +9,7 @@ export const setBaseUrl = (url) => {
 export const resumeBuilderApi = createApi({
   reducerPath: 'resumeBuilderApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: () => baseUrl,
+    baseUrl,
     prepareHeaders: (headers) => {
       headers.set('Content-Type', 'application/json');
       return headers;

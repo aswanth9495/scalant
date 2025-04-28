@@ -70,13 +70,14 @@ const PersonalInfoAndSocial = () => {
           link: profile.link,
         })),
       };
-
+      console.log(payload);
       await updatePersonalDetails(payload).unwrap();
       message.success('Personal details updated successfully');
     } catch (error) {
+      console.log(error);
       message.error('Failed to update personal details');
-      // eslint-disable-next-line no-console
-      console.error('Error updating personal details:', error);
+
+      // console.error('Error updating personal details:', error);
     }
   };
 
