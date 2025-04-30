@@ -3,16 +3,19 @@
   "version": "1.0.0",
   "license": "MIT",
   "main": "dist/components.umd.js",
-  "module": "dist/components.mjs",
+  "module": "dist/resume-builder.es.js",
+  "files": [
+    "dist"
+  ],
   "exports": {
-    "import": "./dist/components.mjs",
+    "import": "./dist/components.es.js",
     "require": "./dist/components.umd.js"
   },
   "style": "./dist/components.css",
   "scripts": {
-    "storybook": "storybook dev -p 6006",
     "lint": "eslint packages/**/src",
     "lint:styles": "stylelint \"**/*.scss\"",
-    "build": "vite build"
+    "build": "vite build",
+    "storybook": "start-storybook -p 6006"
   }
 }
