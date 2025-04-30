@@ -14,6 +14,7 @@ import {
   InputNumber,
 } from 'antd';
 import { DownOutlined, DeleteOutlined } from '@ant-design/icons';
+import dayjs from 'dayjs';
 import styles from './EducationForm.module.scss';
 
 const { Text } = Typography;
@@ -23,7 +24,12 @@ const EducationFormItem = ({ item, setEducationItems, educationItems }) => {
 
   useEffect(() => {
     if (item.formData) {
-      form.setFieldsValue(item.formData);
+      const formData = { ...item.formData };
+      // Convert string date to dayjs object if it exists
+      if (formData.graduation) {
+        formData.graduation = dayjs(formData.graduation);
+      }
+      form.setFieldsValue(formData);
     }
   }, [item.formData, form]);
 
@@ -32,6 +38,10 @@ const EducationFormItem = ({ item, setEducationItems, educationItems }) => {
       await form.validateFields();
 
       const formData = form.getFieldsValue();
+      // Convert dayjs object to YYYY-MM-DD string
+      if (formData.graduation) {
+        formData.graduation = formData.graduation.format('YYYY-MM-DD');
+      }
 
       setEducationItems(
         educationItems.map((item) =>
