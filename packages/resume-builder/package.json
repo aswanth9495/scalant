@@ -3,15 +3,19 @@
   "version": "1.0.0",
   "license": "MIT",
   "main": "dist/resume-builder.umd.js",
-  "module": "dist/resume-builder.mjs",
+  "module": "dist/resume-builder.es.js",
+  "files": [
+    "dist"
+  ],
   "exports": {
-    "import": "./dist/resume-builder.mjs",
+    "import": "./dist/resume-builder.es.js",
     "require": "./dist/resume-builder.umd.js"
   },
   "style": "./dist/resume-builder.css",
   "scripts": {
-    "storybook": "storybook dev -p 6006",
     "lint": "eslint packages/**/src",
-    "lint:styles": "stylelint \"**/*.scss\""
+    "lint:styles": "stylelint \"**/*.scss\"",
+    "build": "vite build",
+    "storybook": "start-storybook -p 6006"
   }
 }

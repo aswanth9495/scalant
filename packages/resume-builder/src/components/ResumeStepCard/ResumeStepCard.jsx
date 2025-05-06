@@ -33,24 +33,26 @@ const ResumeStepCard = ({
   status,
 }) => {
   return (
-    <Card className={styles.card} onClick={onClick}>
-      <Flex justify="space-between" align="start">
-        <Flex align="center" gap={12}>
-          <Avatar className={styles.icon} size={40} icon={icon} />
-          <div>
-            <Flex align="center" gap={8}>
-              <Title level={5} className={styles.title} style={{ margin: 0 }}>
-                {title}
-              </Title>
-              {status && STATUS_TAGS[status]}
-            </Flex>
-            <Text type="secondary">{subtitle}</Text>
+    <Card className={styles.card}>
+      <div onClick={onClick}>
+        <Flex justify="space-between" align="start">
+          <Flex align="center" gap={12}>
+            <Avatar className={styles.icon} size={40} icon={icon} />
+            <div>
+              <Flex align="center" gap={8}>
+                <Title level={5} className={styles.title} style={{ margin: 0 }}>
+                  {title}
+                </Title>
+                {status && STATUS_TAGS[status]}
+              </Flex>
+              <Text type="secondary">{subtitle}</Text>
+            </div>
+          </Flex>
+          <div className={styles.toggleIcon}>
+            {expanded ? <MinusOutlined /> : <PlusOutlined />}
           </div>
         </Flex>
-        <div className={styles.toggleIcon}>
-          {expanded ? <MinusOutlined /> : <PlusOutlined />}
-        </div>
-      </Flex>
+      </div>
 
       {expanded && <div className={styles.content}>{children}</div>}
     </Card>

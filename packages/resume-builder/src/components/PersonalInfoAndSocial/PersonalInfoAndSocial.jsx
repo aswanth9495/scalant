@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   GithubOutlined,
   LinkedinOutlined,
@@ -14,17 +14,72 @@ import {
   Typography,
   Button,
   Space,
+  message,
 } from 'antd';
+import { useSelector } from 'react-redux';
+import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 import styles from './PersonalInfoAndSocial.module.scss';
 const { Text } = Typography;
 
 const PersonalInfoAndSocial = () => {
   const [form] = Form.useForm();
   const [additionalProfiles, setAdditionalProfiles] = useState([]);
+  const resumeData = useSelector((state) => state.resumeBuilder.resumeData);
+  const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
-  const handleFinish = (values) => {
-    // eslint-disable-next-line no-console, no-undef
-    console.log(values);
+  useEffect(() => {
+    if (resumeData?.personal_details) {
+      const { personal_details } = resumeData;
+      form.setFieldsValue({
+        fullName: personal_details.name,
+        contactNumber: personal_details.phone_number,
+        emailAddress: personal_details.email,
+        gender: personal_details.gender,
+        currentCity: personal_details.city,
+        linkedIn: personal_details.linkedin,
+        github: personal_details.github,
+        personalWebsite: personal_details.portfolio,
+      });
+    }
+  }, [resumeData, form]);
+
+  const handleFinish = async (values) => {
+    try {
+      const payload = {
+        form_stage: 'personal_details_form',
+        name: values.fullName,
+        email: values.emailAddress,
+        phone_number: values.contactNumber,
+        city: values.currentCity,
+        show_user_city: true,
+        gender: values.gender,
+        linkedin: values.linkedIn,
+        github: values.github,
+        portfolio: values.personalWebsite,
+        skills: resumeData?.skills || [],
+        scaler_resume_template_structure:
+          resumeData?.scaler_resume_template_structure || {},
+        isPopulated: true,
+        bio: '',
+        job_title: resumeData?.personal_details?.job_title || '',
+        upgrade: false,
+        ctc_currency: 0,
+        socials: additionalProfiles.map((profile) => ({
+          type: profile.type,
+          link: profile.link,
+        })),
+      };
+
+      await updateResumeDetails({
+        formStage: 'personal-details',
+        payload,
+      }).unwrap();
+      message.success('Personal details updated successfully');
+    } catch (error) {
+      message.error('Failed to update personal details');
+      // eslint-disable-next-line no-console
+      console.error('Error updating personal details:', error);
+    }
   };
 
   const handleAddProfile = () => {
@@ -44,22 +99,7 @@ const PersonalInfoAndSocial = () => {
 
   return (
     <Space direction="vertical" size={24}>
-      <Form
-        form={form}
-        onFinish={handleFinish}
-        layout="vertical"
-        size="large"
-        initialValues={{
-          fullName: 'John Doe',
-          contactNumber: '+91 9876543210',
-          emailAddress: 'john.doe@example.com',
-          gender: 'male',
-          currentCity: 'Mumbai',
-          linkedIn: 'https://www.linkedin.com/in/john-doe',
-          github: 'https://www.github.com/john-doe',
-          personalWebsite: 'https://www.john-doe.com',
-        }}
-      >
+      <Form form={form} onFinish={handleFinish} layout="vertical" size="large">
         <Space direction="vertical" size={16} style={{ width: '100%' }}>
           <Form.Item
             label="Full Name"
@@ -193,7 +233,7 @@ const PersonalInfoAndSocial = () => {
             Add more Social Profiles
           </Button>
           <Flex gap={16}>
-            <Button type="primary" htmlType="submit" block>
+            <Button type="primary" htmlType="submit" block loading={isLoading}>
               Mark as complete
             </Button>
             <Button type="default" block>

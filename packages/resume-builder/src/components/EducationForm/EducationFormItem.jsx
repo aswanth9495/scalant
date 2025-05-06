@@ -14,50 +14,34 @@ import {
   InputNumber,
 } from 'antd';
 import { DownOutlined, DeleteOutlined } from '@ant-design/icons';
+import dayjs from 'dayjs';
 import styles from './EducationForm.module.scss';
 
 const { Text } = Typography;
 
 const EducationFormItem = ({ item, setEducationItems, educationItems }) => {
   const [form] = Form.useForm();
-  const educationInfo = form.getFieldsValue([
-    `education_${item.id}_institute`,
-    `education_${item.id}_degree`,
-    `education_${item.id}_branch`,
-    `education_${item.id}_grades`,
-    `education_${item.id}_grade_type`,
-    `education_${item.id}_graduation`,
-  ]);
-
-  const institute = educationInfo[`education_${item.id}_institute`];
-  const degree = educationInfo[`education_${item.id}_degree`];
-  const graduation = educationInfo[`education_${item.id}_graduation`];
 
   useEffect(() => {
-    // Initialize form with existing data if available
     if (item.formData) {
-      form.setFieldsValue(item.formData);
-    } else {
-      // Set default value for grade type if not already set
-      form.setFieldValue(`education_${item.id}_grade_type`, 'cgpa');
+      const formData = { ...item.formData };
+      // Convert string date to dayjs object if it exists
+      if (formData.graduation) {
+        formData.graduation = dayjs(formData.graduation);
+      }
+      form.setFieldsValue(formData);
     }
-  }, [item.id, form, item.formData]);
+  }, [item.formData, form]);
 
   const validateAndSave = async (id) => {
     try {
-      const fieldNames = [
-        `education_${id}_institute`,
-        `education_${id}_degree`,
-        `education_${id}_branch`,
-        `education_${id}_grades`,
-        `education_${id}_grade_type`,
-        `education_${id}_graduation`,
-        `education_${id}_description`,
-      ];
+      await form.validateFields();
 
-      await form.validateFields(fieldNames);
-
-      const formData = form.getFieldsValue(fieldNames);
+      const formData = form.getFieldsValue();
+      // Convert dayjs object to YYYY-MM-DD string
+      if (formData.graduation) {
+        formData.graduation = formData.graduation.format('YYYY-MM-DD');
+      }
 
       setEducationItems(
         educationItems.map((item) =>
@@ -94,7 +78,7 @@ const EducationFormItem = ({ item, setEducationItems, educationItems }) => {
   };
 
   const selectAfter = (
-    <Form.Item name={`education_${item.id}_grade_type`} noStyle>
+    <Form.Item name="grade_type" noStyle>
       <Select
         options={[
           { label: 'CGPA', value: 'cgpa' },
@@ -109,11 +93,11 @@ const EducationFormItem = ({ item, setEducationItems, educationItems }) => {
       <Card key={item.id}>
         <Flex justify="space-between" align="center">
           <Flex vertical gap={4}>
-            <Text strong>{institute}</Text>
+            <Text strong>{item.formData?.institute}</Text>
             <Text>
-              {degree && `${degree}, `}
+              {item.formData?.degree && `${item.formData.degree}, `}
               <Divider />
-              {graduation && `${graduation}`}
+              {item.formData?.graduation && `${item.formData.graduation}`}
             </Text>
           </Flex>
           <DownOutlined onClick={() => handleExpand(item.id)} />
@@ -133,9 +117,16 @@ const EducationFormItem = ({ item, setEducationItems, educationItems }) => {
           <DeleteOutlined onClick={() => handleDelete(item.id)} />
         )}
       </Flex>
-      <Form form={form} layout="vertical">
+      <Form
+        form={form}
+        layout="vertical"
+        initialValues={{
+          grade_type: 'cgpa',
+          ...item.formData,
+        }}
+      >
         <Form.Item
-          name={`education_${item.id}_institute`}
+          name="institute"
           label="Institute Name"
           rules={[{ required: true, message: 'Institute Name is required' }]}
         >
@@ -143,7 +134,7 @@ const EducationFormItem = ({ item, setEducationItems, educationItems }) => {
         </Form.Item>
         <Flex gap={16}>
           <Form.Item
-            name={`education_${item.id}_degree`}
+            name="degree"
             label="Degree Type"
             rules={[{ required: true, message: 'Degree Type is required' }]}
             className={styles.midWidth}
@@ -157,11 +148,7 @@ const EducationFormItem = ({ item, setEducationItems, educationItems }) => {
               ]}
             />
           </Form.Item>
-          <Form.Item
-            name={`education_${item.id}_branch`}
-            label="Branch"
-            className={styles.midWidth}
-          >
+          <Form.Item name="branch" label="Branch" className={styles.midWidth}>
             <Select
               placeholder="Select Branch"
               options={[
@@ -176,7 +163,7 @@ const EducationFormItem = ({ item, setEducationItems, educationItems }) => {
         </Flex>
         <Flex gap={16} className={styles.fullWidth}>
           <Form.Item
-            name={`education_${item.id}_grades`}
+            name="grades"
             label="Grades (Final/Current)"
             rules={[{ required: true, message: 'Grades are required' }]}
             className={styles.midWidth}
@@ -184,7 +171,7 @@ const EducationFormItem = ({ item, setEducationItems, educationItems }) => {
             <InputNumber placeholder="Enter Grades" addonAfter={selectAfter} />
           </Form.Item>
           <Form.Item
-            name={`education_${item.id}_graduation`}
+            name="graduation"
             label="Graduation (Actual/Expected)"
             rules={[{ required: true, message: 'Graduation is required' }]}
             className={styles.midWidth}
@@ -195,10 +182,7 @@ const EducationFormItem = ({ item, setEducationItems, educationItems }) => {
             />
           </Form.Item>
         </Flex>
-        <Form.Item
-          name={`education_${item.id}_description`}
-          label="Description"
-        >
+        <Form.Item name="description" label="Description">
           <Input.TextArea placeholder="Enter Description" />
         </Form.Item>
       </Form>

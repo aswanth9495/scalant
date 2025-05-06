@@ -1,0 +1,361 @@
+{
+  "resume_details": {
+      "id": 1,
+      "name": "AswanthDefaultResume",
+      "default": true,
+      "status": "active",
+      "meta": {
+          "social_profiles": {
+              "codechef": "",
+              "codeforces": "",
+              "geeksforgeeks": "",
+              "github": "",
+              "hackerearth": "",
+              "hackerrank": "",
+              "leetcode": "",
+              "portfolio": ""
+          },
+          "job_title": "Backend Engineer",
+          "interactions": {}
+      },
+      "modified_at": "2025-04-28T11:38:10.000Z"
+  },
+  "application_stage": 3,
+  "personal_details": {
+      "name": "Aswanth",
+      "email": "aswanth@scaler.com",
+      "gender": "male",
+      "phone_number": "+91-8075153299",
+      "experience": 51,
+      "orgyear": 2020,
+      "city": "Bangalore",
+      "user_bio_data": null,
+      "scaler": "",
+      "show_user_city": false,
+      "careers_hub_country": "in",
+      "experience_years": 4,
+      "experience_months": 3,
+      "job_title": "Backend Engineer",
+      "linkedin": "https://www.linkedin.com/in/aswanthkoleri/",
+      "leetcode": "",
+      "github": "",
+      "codeforces": "",
+      "codechef": "",
+      "hackerrank": "",
+      "hackerearth": "",
+      "geeksforgeeks": "",
+      "portfolio": ""
+  },
+  "education": [
+      {
+          "id": 180,
+          "user_id": 984868,
+          "university": "IIT Kanpur",
+          "degree": "BE/B.Tech/BS",
+          "graduation_date": "2035-01-01",
+          "field": "Computer Science",
+          "created_at": "2025-04-28T11:38:09.000Z",
+          "updated_at": "2025-04-28T11:38:09.000Z",
+          "creator": null,
+          "degree_free_text": null,
+          "field_free_text": null,
+          "short_description": "<p>Hello sample description</p>",
+          "from": null,
+          "to": null,
+          "projects": null,
+          "board": null,
+          "marks": "90",
+          "marks_type": "percentage",
+          "data_source": "careers_hub",
+          "university_city": null,
+          "math_score": null,
+          "math_score_type": null,
+          "show_marks_in_resume": false,
+          "show_branch_in_resume": false
+      },
+      {
+          "id": 177,
+          "user_id": 984868,
+          "university": "Scaler",
+          "degree": "Specialized in Software Development & Problem Solving",
+          "graduation_date": "2020-04-11",
+          "field": null,
+          "created_at": "2025-04-21T08:17:59.000Z",
+          "updated_at": "2025-04-28T11:38:09.000Z",
+          "creator": null,
+          "degree_free_text": null,
+          "field_free_text": null,
+          "short_description": "<p></p>",
+          "from": null,
+          "to": null,
+          "projects": null,
+          "board": null,
+          "marks": null,
+          "marks_type": "gpa",
+          "data_source": null,
+          "university_city": null,
+          "math_score": null,
+          "math_score_type": null,
+          "show_marks_in_resume": false,
+          "show_branch_in_resume": false
+      },
+      {
+          "id": 73,
+          "user_id": 984868,
+          "university": "AAST",
+          "degree": "BE/B.Tech/BS",
+          "graduation_date": "2020-01-01",
+          "field": "Computer Science",
+          "created_at": "2022-04-07T13:03:09.000Z",
+          "updated_at": "2025-04-28T11:38:09.000Z",
+          "creator": "candidate",
+          "degree_free_text": null,
+          "field_free_text": null,
+          "short_description": "<p></p>",
+          "from": null,
+          "to": null,
+          "projects": null,
+          "board": null,
+          "marks": "8.3",
+          "marks_type": "cgpa",
+          "data_source": null,
+          "university_city": null,
+          "math_score": null,
+          "math_score_type": null,
+          "show_marks_in_resume": false,
+          "show_branch_in_resume": false
+      }
+  ],
+  "experience": [
+      {
+          "id": 194,
+          "user_id": 984868,
+          "company": "Scaler Academy",
+          "position": "Software Development Engineer (Full Stack)",
+          "from": "2020-07-01",
+          "to": null,
+          "short_description": "",
+          "created_at": "2025-04-21T08:31:56.000Z",
+          "updated_at": "2025-04-21T08:31:56.000Z",
+          "is_current": true,
+          "creator": "candidate",
+          "experience_type": null,
+          "projects": null,
+          "location": "",
+          "freetext_position": null,
+          "base_ctc": 3400000,
+          "variable_ctc": 700000,
+          "ctc_currency": 0,
+          "team_size": null,
+          "data_source": "careers_hub",
+          "status": "active",
+          "show_user_work_experience_location": false,
+          "industry": []
+      },
+      {
+          "id": 193,
+          "user_id": 984868,
+          "company": "Microsoft",
+          "position": "Software Development Engineer (Frontend)",
+          "from": "2020-01-01",
+          "to": "2020-06-30",
+          "short_description": "",
+          "created_at": "2025-04-21T08:31:56.000Z",
+          "updated_at": "2025-04-21T08:31:56.000Z",
+          "is_current": false,
+          "creator": "candidate",
+          "experience_type": null,
+          "projects": null,
+          "location": "",
+          "freetext_position": null,
+          "base_ctc": 2400000,
+          "variable_ctc": 700000,
+          "ctc_currency": 0,
+          "team_size": 50,
+          "data_source": "careers_hub",
+          "status": "active",
+          "show_user_work_experience_location": false,
+          "industry": []
+      }
+  ],
+  "skills": [
+      {
+          "id": 146490,
+          "skill_type": "SubTopic",
+          "skill_id": 1081,
+          "proficiency": null,
+          "proficiency_period": {
+              "years": 1,
+              "months": 0
+          },
+          "category_type": null,
+          "name": "DS Arrays"
+      },
+      {
+          "id": 146491,
+          "skill_type": "SubTopic",
+          "skill_id": 1093,
+          "proficiency": null,
+          "proficiency_period": {
+              "years": 1,
+              "months": 1
+          },
+          "category_type": null,
+          "name": "SQL"
+      },
+      {
+          "id": 146492,
+          "skill_type": "Topic",
+          "skill_id": 379,
+          "proficiency": null,
+          "proficiency_period": {
+              "years": 1,
+              "months": 2
+          },
+          "category_type": null,
+          "name": "Networking"
+      }
+  ],
+  "scaler_performance": {
+      "use_scaler_resume": true,
+      "use_scaler_education": true,
+      "does_not_have_good_projects": true,
+      "resume_template_choice": "nonTechTemplate",
+      "problem_solving": {
+          "force_hide": true,
+          "show": true,
+          "problems_solved": 0
+      },
+      "leaderboard": {
+          "force_hide": true,
+          "show": true,
+          "percentile": 0
+      },
+      "mock_interview": {
+          "force_hide": true,
+          "show": true,
+          "rating": "Not Attempted",
+          "skill_name": null
+      }
+  },
+  "projects": [],
+  "achievements": [
+      {
+          "id": 1,
+          "description": "<p></p>",
+          "user_id": 984868,
+          "created_at": "2025-04-21T11:27:09.000Z",
+          "updated_at": "2025-04-21T11:27:09.000Z"
+      }
+  ],
+  "resume_custom_section": {
+      "id": 1,
+      "name": null,
+      "description": "<p></p>",
+      "user_id": 984868,
+      "created_at": "2025-04-28T11:38:10.000Z",
+      "updated_at": "2025-04-28T11:38:10.000Z"
+  },
+  "scaler_resume_template_structure": {
+      "nonTechTemplate": {
+          "sections": [
+              {
+                  "name": "PersonalDetails",
+                  "config": {
+                      "view": "view1"
+                  }
+              },
+              {
+                  "name": "Skills",
+                  "config": {
+                      "view": "view1"
+                  }
+              },
+              {
+                  "name": "Projects",
+                  "config": {
+                      "view": "view1"
+                  }
+              },
+              {
+                  "name": "Experience",
+                  "config": {
+                      "view": "view1"
+                  }
+              },
+              {
+                  "name": "Achievements",
+                  "config": {
+                      "view": "view1"
+                  }
+              },
+              {
+                  "name": "Education",
+                  "config": {
+                      "view": "view1"
+                  }
+              },
+              {
+                  "name": "CustomSection",
+                  "config": {
+                      "view": "view1"
+                  },
+                  "page": 1
+              }
+          ]
+      }
+  },
+  "resume_meta": {
+      "name": "fresher",
+      "font_size": "medium"
+  },
+  "preferred_company_categories": "large_enterprise",
+  "preferred_role_types": [
+      {
+          "value": 53294,
+          "label": "full_time"
+      }
+  ],
+  "rpo_consent": true,
+  "user_company_profile": {
+      "preferred_role": "Software Development Engineer (Frontend)",
+      "preferred_location": "Bangalore",
+      "resume_file_name": "Aswanth_Resume.pdf",
+      "city": "Bangalore",
+      "linkedin": "https://www.linkedin.com/in/aswanthkoleri/",
+      "notice_period": 60,
+      "ctc_currency": "INR",
+      "expected_ctc": "34",
+      "github": "",
+      "codeforces": "",
+      "hackerrank": "",
+      "codechef": "",
+      "hackerearth": "",
+      "leetcode": "",
+      "job_title": "Backend Engineer",
+      "geeksforgeeks": "",
+      "visa_type": 0,
+      "serving_notice": false,
+      "available_joining_date": null,
+      "buyout_notice": true
+  },
+  "blocker_details": {
+      "garbage_collection": {
+          "user_work_experiences": [],
+          "user_educations": []
+      },
+      "blockers": {
+          "bullets": false,
+          "skills": false,
+          "projects": false,
+          "experience": false
+      }
+  },
+  "relevancy_alert": false,
+  "evaluation_request": {
+      "completed_evaluation_request_id": null,
+      "pending_feedback": null,
+      "evaluation_passed": null
+  },
+  "resume_content_examples": {}
+}
