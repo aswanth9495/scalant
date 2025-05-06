@@ -1,4 +1,6 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { nextStep } from '../../store/resumeBuilderSlice';
 import { Typography, Flex, Form, InputNumber, Select, Button } from 'antd';
 import PageHeader from '../PageHeader';
 import styles from './ResumeBasicQuestions.module.scss';
@@ -6,16 +8,13 @@ import styles from './ResumeBasicQuestions.module.scss';
 const { Text } = Typography;
 
 const ResumeBasicQuestions = () => {
+  const dispatch = useDispatch();
   const [form] = Form.useForm();
 
   const handleFinish = (values) => {
     // eslint-disable-next-line no-console, no-undef
     console.log('Submitted values:', values);
-  };
-
-  const handleChange = (value) => {
-    // eslint-disable-next-line no-console, no-undef
-    console.log('Selected value:', value);
+    dispatch(nextStep());
   };
 
   return (
@@ -121,7 +120,6 @@ const ResumeBasicQuestions = () => {
               className={styles.formItem}
             >
               <Select
-                onChange={handleChange}
                 options={[
                   { value: 'Tech Adjancent', label: 'Tech Adjancent' },
                   { value: 'Product Manager', label: 'Product Manager' },

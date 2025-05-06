@@ -1,16 +1,19 @@
 import PageHeader from '../PageHeader';
-
+import { useDispatch } from 'react-redux';
+import { nextStep } from '../../store/resumeBuilderSlice';
 import { Form, Input, Select, Radio, Button } from 'antd';
 
 import styles from './PreferenceSettings.module.scss';
 
 const PreferenceSettings = () => {
+  const dispatch = useDispatch();
   const [form] = Form.useForm();
 
   const handleFinish = (values) => {
     // Process the form data here
     // eslint-disable-next-line no-console, no-undef
     console.log('Submitted values:', values);
+    dispatch(nextStep());
   };
 
   return (
@@ -29,6 +32,7 @@ const PreferenceSettings = () => {
           preferredRoles: ['SDE', 'Backend Developer'],
           ctc: '3',
           notice: '3',
+          internship: 'yes',
         }}
       >
         <Form.Item

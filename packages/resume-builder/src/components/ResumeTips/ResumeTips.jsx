@@ -1,4 +1,6 @@
 import PageHeader from '../PageHeader';
+import { useDispatch } from 'react-redux';
+import { nextStep } from '../../store/resumeBuilderSlice';
 import { Timeline, Button, Typography } from 'antd';
 
 const { Paragraph, Text } = Typography;
@@ -33,6 +35,12 @@ const DEFAULT_TIPS = [
 ];
 
 const ResumeTips = () => {
+  const dispatch = useDispatch();
+
+  const handleStartBuilding = () => {
+    dispatch(nextStep());
+  };
+
   return (
     <div>
       <PageHeader
@@ -57,7 +65,13 @@ const ResumeTips = () => {
         }))}
       />
 
-      <Button type="primary" size="large" block className={styles.button}>
+      <Button
+        type="primary"
+        size="large"
+        block
+        className={styles.button}
+        onClick={handleStartBuilding}
+      >
         Start Building
       </Button>
     </div>
