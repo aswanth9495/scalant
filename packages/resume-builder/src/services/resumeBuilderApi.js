@@ -1,20 +1,22 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-let baseUrl = 'http://localhost:3000';
+let baseUrl = 'https://cf1d948b-f96c-4781-8235-53d3293f0a70.mock.pstmn.io';
 
-export const setBaseUrl = (url) => {
-  baseUrl = url;
-};
-
-export const resumeBuilderApi = createApi({
-  reducerPath: 'resumeBuilderApi',
-  baseQuery: fetchBaseQuery({
+const dynamicBaseQuery = async (args, api, extraOptions) => {
+  const baseQuery = fetchBaseQuery({
     baseUrl,
     prepareHeaders: (headers) => {
       headers.set('Content-Type', 'application/json');
       return headers;
     },
-  }),
+  });
+  return baseQuery(args, api, extraOptions);
+};
+
+export const resumeBuilderApi = createApi({
+  reducerPath: 'resumeBuilderApi',
+  baseQuery: dynamicBaseQuery,
+  tagTypes: ['ResumeLink'],
   endpoints: (builder) => ({
     updateResumeDetails: builder.mutation({
       query: ({ formStage, payload }) => ({
@@ -23,7 +25,23 @@ export const resumeBuilderApi = createApi({
         body: payload,
       }),
     }),
+    getResumeLink: builder.query({
+      query: ({ resumeId }) => ({
+        url: `/api/v3/user-resumes/${resumeId}/download`,
+        method: 'GET',
+      }),
+      providesTags: (result, error, { resumeId }) => [
+        { type: 'ResumeLink', id: resumeId },
+      ],
+    }),
   }),
 });
 
-export const { useUpdateResumeDetailsMutation } = resumeBuilderApi;
+export const setBaseUrl = (url) => {
+  if (url !== baseUrl) {
+    baseUrl = url;
+  }
+};
+
+export const { useUpdateResumeDetailsMutation, useGetResumeLinkQuery } =
+  resumeBuilderApi;
