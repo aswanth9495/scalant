@@ -1,12 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+
 import { Space, Button, Flex, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import ProjectFormItem from './ProjectFormItem';
+// eslint-disable-next-line max-len
+import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 
-const ProjectForm = () => {
+const ProjectForm = ({ onComplete }) => {
   const [projectItems, setProjectItems] = useState([
     { id: 1, completed: false, saved: false, expanded: true },
   ]);
+
+  const resumeData = useSelector((state) => state.resumeBuilder.resumeData);
+  const [updateResumeDetails] = useUpdateResumeDetailsMutation();
+
+  useEffect(() => {
+    if (resumeData?.projects) {
+      setProjectItems(
+        resumeData.projects.map((item, index) => ({
+          id: index,
+          completed: true,
+          saved: true,
+          expanded: false,
+          formData: {
+            projectName: item.title,
+            projectLink: item.project_link,
+            projectDescription: item.description,
+          },
+        }))
+      );
+    }
+  }, [resumeData?.projects]);
 
   const handleAddProject = () => {
     setProjectItems([
@@ -20,7 +45,20 @@ const ProjectForm = () => {
     ]);
   };
 
-  const handleMarkAsCompleted = () => {
+  const createProjectsPayload = (projectItems) => {
+    return projectItems.map((item) => ({
+      id: item.id,
+      title: item.formData.projectName,
+      description: item.formData.projectDescription,
+      project_link: item.formData.projectLink,
+      data_source: 'careers_hub',
+      workplace_type: null,
+      workplace_id: null,
+      user_id: resumeData?.user_id,
+    }));
+  };
+
+  const handleMarkAsCompleted = async () => {
     const hasUnsavedItems = projectItems.some((item) => !item.saved);
 
     if (hasUnsavedItems) {
@@ -28,22 +66,27 @@ const ProjectForm = () => {
       return;
     }
 
-    const projectData = projectItems
-      .filter((item) => item.saved)
-      .map((item) => {
-        const formData = item.formData || {};
+    const projectsPayload = createProjectsPayload(projectItems);
 
-        return {
-          id: item.id,
-          saved: item.saved,
-          projectName: formData[`project_${item.id}_projectName`],
-          projectDescription: formData[`project_${item.id}_projectDescription`],
-          projectLink: formData[`project_${item.id}_projectLink`],
-        };
-      });
+    try {
+      const payload = {
+        form_stage: 'professional_details_form',
+        isPopulated: true,
+        previous_experience: [],
+        achievements: [],
+        projects: projectsPayload,
+        upgrade: false,
+      };
 
-    // eslint-disable-next-line no-console, no-undef
-    console.log(projectData);
+      await updateResumeDetails({
+        formStage: 'professional-details',
+        payload,
+      }).unwrap();
+      message.success('Projects updated successfully');
+      onComplete?.();
+    } catch (error) {
+      message.error(`Failed to update projects: ${error.message}`);
+    }
   };
 
   return (

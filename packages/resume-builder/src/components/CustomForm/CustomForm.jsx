@@ -3,7 +3,7 @@ import { Space, Button, Flex, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import CustomFormItem from './CustomFormItem';
 
-const CustomForm = () => {
+const CustomForm = ({ onComplete }) => {
   const [customFormItems, setCustomFormItems] = useState([
     { id: 1, completed: false, saved: false, expanded: true },
   ]);
@@ -48,6 +48,8 @@ const CustomForm = () => {
 
     // eslint-disable-next-line no-console, no-undef
     console.log(customFormData);
+    message.success('Custom form updated successfully');
+    onComplete?.();
   };
 
   return (

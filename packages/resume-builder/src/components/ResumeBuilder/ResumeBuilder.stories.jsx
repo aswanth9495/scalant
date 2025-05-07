@@ -8,4 +8,6 @@ export default {
 
 export const OnboardingFlow = () => <ResumeBuilder isOnboarding={true} />;
 export const ResumeFlow = () => <ResumeBuilder isOnboarding={false} />;
-export const WithDummyData = () => <ResumeBuilder isOnboarding={false} resumeData={resumeData} />;
+export const WithDummyData = () => (
+  <ResumeBuilder isOnboarding={false} resumeData={resumeData} />
+);

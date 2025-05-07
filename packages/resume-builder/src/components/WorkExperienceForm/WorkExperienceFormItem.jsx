@@ -10,11 +10,11 @@ import {
   Typography,
   Checkbox,
   DatePicker,
-  Select,
   message,
   Button,
 } from 'antd';
 import { DownOutlined, DeleteOutlined } from '@ant-design/icons';
+import dayjs from 'dayjs';
 
 const { Text } = Typography;
 
@@ -24,42 +24,38 @@ const WorkExperienceFormItem = ({
   workExperienceItems,
 }) => {
   const [form] = Form.useForm();
-  const workExperienceInfo = form.getFieldsValue([
-    `work_experience_${item.id}_company`,
-    `work_experience_${item.id}_position`,
-    `work_experience_${item.id}_startDate`,
-    `work_experience_${item.id}_endDate`,
-  ]);
-
-  const company = workExperienceInfo[`work_experience_${item.id}_company`];
-  const position = workExperienceInfo[`work_experience_${item.id}_position`];
-  const startDate =
-    workExperienceInfo[`work_experience_${item.id}_startDate`]?.format('YYYY');
-  const endDate =
-    workExperienceInfo[`work_experience_${item.id}_endDate`]?.format('YYYY');
 
   useEffect(() => {
     if (item.formData) {
-      form.setFieldsValue(item.formData);
+      const formData = {
+        ...item.formData,
+      };
+
+      if (formData.workStartDate) {
+        formData.workStartDate = dayjs(formData.workStartDate);
+      }
+
+      if (formData.workEndDate) {
+        formData.workEndDate = dayjs(formData.workEndDate);
+      }
+
+      form.setFieldsValue(formData);
     }
   }, [item.id, form, item.formData]);
 
   const validateAndSave = async (id) => {
     try {
-      const fieldNames = [
-        `work_experience_${id}_company`,
-        `work_experience_${id}_position`,
-        `work_experience_${id}_startDate`,
-        `work_experience_${id}_endDate`,
-        `work_experience_${id}_location`,
-        `work_experience_${id}_toolstech`,
-        `work_experience_${id}_keyPoints`,
-        `work_experience_${id}_currentWorking`,
-      ];
+      await form.validateFields();
 
-      await form.validateFields(fieldNames);
+      const formData = form.getFieldsValue();
 
-      const formData = form.getFieldsValue(fieldNames);
+      if (formData.workStartDate) {
+        formData.workStartDate = formData.workStartDate.format('YYYY-MM-DD');
+      }
+
+      if (formData.workEndDate) {
+        formData.workEndDate = formData.workEndDate.format('YYYY-MM-DD');
+      }
 
       setWorkExperienceItems(
         workExperienceItems.map((item) =>
@@ -102,11 +98,17 @@ const WorkExperienceFormItem = ({
       <Card key={item.id}>
         <Flex justify="space-between" align="center">
           <Flex vertical gap={4}>
-            <Text strong>{company}</Text>
+            <Text strong>{item.formData?.workCompany}</Text>
             <Text>
-              {position && `${position}, `}
+              {item.formData?.workPosition &&
+                `${item.formData?.workPosition}, `}
               <Divider />
-              {startDate && `${startDate} - ${endDate}`}
+              {item.formData?.workStartDate &&
+                `${item.formData?.workStartDate}`}
+              -
+              {item.formData?.workEndDate
+                ? `${item.formData?.workEndDate}`
+                : `Present`}
             </Text>
           </Flex>
           <DownOutlined onClick={() => handleExpand(item.id)} />
@@ -128,81 +130,42 @@ const WorkExperienceFormItem = ({
       </Flex>
       <Form form={form} layout="vertical">
         <Form.Item
-          name={`work_experience_${item.id}_company`}
+          name={`workCompany`}
           label="Company"
           rules={[{ required: true, message: 'Company is required' }]}
         >
           <Input placeholder="Enter Company" />
         </Form.Item>
         <Form.Item
-          name={`work_experience_${item.id}_position`}
+          name={`workPosition`}
           label="Position"
           rules={[{ required: true, message: 'Position is required' }]}
         >
           <Input placeholder="Enter Position" />
         </Form.Item>
-        <Form.Item
-          name={`work_experience_${item.id}_currentWorking`}
-          valuePropName="checked"
-        >
+        <Form.Item name={`workCurrentWorking`} valuePropName="checked">
           <Checkbox>I am currently working here</Checkbox>
         </Form.Item>
         <Flex gap={16}>
           <Form.Item
-            name={`work_experience_${item.id}_startDate`}
+            name={`workStartDate`}
             label="Start Date"
             rules={[{ required: true, message: 'Start Date is required' }]}
           >
             <DatePicker format="YYYY-MM-DD" />
           </Form.Item>
           <Form.Item
-            name={`work_experience_${item.id}_endDate`}
+            name={`workEndDate`}
             label="End Date"
             rules={[{ required: true, message: 'End Date is required' }]}
           >
             <DatePicker format="YYYY-MM-DD" />
           </Form.Item>
         </Flex>
-        <Form.Item
-          name={`work_experience_${item.id}_location`}
-          label="Location"
-        >
-          <Select
-            placeholder="Select Location"
-            options={[
-              { label: 'Bangalore', value: 'Bangalore' },
-              { label: 'Mumbai', value: 'Mumbai' },
-              { label: 'New Delhi', value: 'New Delhi' },
-              { label: 'Hyderabad', value: 'Hyderabad' },
-              { label: 'Chennai', value: 'Chennai' },
-              { label: 'Kolkata', value: 'Kolkata' },
-            ]}
-          />
+        <Form.Item name={`workLocation`} label="Location">
+          <Input />
         </Form.Item>
-        <Form.Item
-          name={`work_experience_${item.id}_toolstech`}
-          label="Tools & Technologies Used"
-          rules={[
-            {
-              required: true,
-              message: 'Tools & Technologies Used is required',
-            },
-          ]}
-        >
-          <Select
-            mode="multiple"
-            placeholder="Select Tools & Technologies"
-            options={[
-              { label: 'React', value: 'React' },
-              { label: 'Node.js', value: 'Node.js' },
-              { label: 'MongoDB', value: 'MongoDB' },
-            ]}
-          />
-        </Form.Item>
-        <Form.Item
-          name={`work_experience_${item.id}_keyPoints`}
-          label="Key Points"
-        >
+        <Form.Item name={`workKeyPoints`} label="Key Points">
           <Input.TextArea placeholder="Enter Key Points" />
         </Form.Item>
         <Flex gap={16}>

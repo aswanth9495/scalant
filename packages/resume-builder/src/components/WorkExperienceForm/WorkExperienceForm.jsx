@@ -1,12 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { Space, Button, Flex, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import WorkExperienceFormItem from './WorkExperienceFormItem';
+// eslint-disable-next-line max-len
+import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 
-const WorkExperienceForm = () => {
+const WorkExperienceForm = ({ onComplete }) => {
   const [workExperienceItems, setWorkExperienceItems] = useState([
     { id: 1, completed: false, saved: false, expanded: true },
   ]);
+
+  const [updateResumeDetails] = useUpdateResumeDetailsMutation();
+
+  const resumeData = useSelector((state) => state.resumeBuilder.resumeData);
+
+  useEffect(() => {
+    if (resumeData?.experience) {
+      setWorkExperienceItems(
+        resumeData.experience.map((item, index) => ({
+          id: index,
+          completed: true,
+          saved: true,
+          expanded: false,
+          formData: {
+            workCompany: item.company,
+            workPosition: item.position,
+            workStartDate: item.from,
+            workEndDate: item.to,
+            workLocation: item.location,
+            workKeyPoints: item.short_description,
+            workCurrentWorking: item.is_current,
+          },
+        }))
+      );
+    }
+  }, [resumeData.experience]);
 
   const handleAddWorkExperience = () => {
     setWorkExperienceItems([
@@ -20,7 +49,35 @@ const WorkExperienceForm = () => {
     ]);
   };
 
-  const handleMarkAsCompleted = () => {
+  const createWorkExperiencePayload = (workExperienceItems) => {
+    return workExperienceItems.map((item) => ({
+      id: item.id,
+      user_id: resumeData?.user_id,
+      company: item.formData.workCompany,
+      position: item.formData.workPosition,
+      from: item.formData.workStartDate,
+      to: item.formData.workEndDate,
+      short_description: item.formData.workKeyPoints,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      is_current: item.formData.workCurrentWorking,
+      creator: 'candidate',
+      experience_type: null,
+      projects: null,
+      location: '',
+      freetext_position: null,
+      base_ctc: 0,
+      variable_ctc: 0,
+      ctc_currency: 0,
+      team_size: null,
+      data_source: 'careers_hub',
+      status: 'active',
+      show_user_work_experience_location: false,
+      industry: [],
+    }));
+  };
+
+  const handleMarkAsCompleted = async () => {
     const hasUnsavedItems = workExperienceItems.some((item) => !item.saved);
 
     if (hasUnsavedItems) {
@@ -30,27 +87,31 @@ const WorkExperienceForm = () => {
       return;
     }
 
-    const workExperienceData = workExperienceItems
-      .filter((item) => item.saved)
-      .map((item) => {
-        const formData = item.formData || {};
+    const workExperiencePayload =
+      createWorkExperiencePayload(workExperienceItems);
 
-        return {
-          id: item.id,
-          saved: item.saved,
-          company: formData[`work_experience_${item.id}_company`],
-          position: formData[`work_experience_${item.id}_position`],
-          startDate: formData[`work_experience_${item.id}_startDate`],
-          endDate: formData[`work_experience_${item.id}_endDate`],
-          location: formData[`work_experience_${item.id}_location`],
-          toolstech: formData[`work_experience_${item.id}_toolstech`],
-          keyPoints: formData[`work_experience_${item.id}_keyPoints`],
-          currentWorking: formData[`work_experience_${item.id}_currentWorking`],
-        };
-      });
+    try {
+      const payload = {
+        form_stage: 'professional_details_form',
+        isPopulated: true,
+        upgrade: false,
+        previous_experience: workExperiencePayload,
+        projects: [],
+        achievements: [],
+      };
+      onComplete?.();
+
+      await updateResumeDetails({
+        formStage: 'professional-details',
+        payload,
+      }).unwrap();
+      message.success('Work experience details updated successfully');
+    } catch (error) {
+      message.error(`Failed to update work experience details: ${error}`);
+    }
 
     // eslint-disable-next-line no-console, no-undef
-    console.log(workExperienceData);
+    console.log(workExperienceItems);
   };
 
   return (

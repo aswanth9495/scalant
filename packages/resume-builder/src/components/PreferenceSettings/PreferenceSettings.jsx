@@ -1,11 +1,16 @@
 import PageHeader from '../PageHeader';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { nextStep } from '../../store/resumeBuilderSlice';
 import { Form, Input, Select, Radio, Button } from 'antd';
 
 import styles from './PreferenceSettings.module.scss';
 
 const PreferenceSettings = () => {
   const [form] = Form.useForm();
+
+  const resumeData = useSelector((state) => state.resumeBuilder.resumeData);
+
+  const preferenceData = resumeData?.user_company_profile;
 
   const handleFinish = (values) => {
     // Process the form data here
@@ -25,10 +30,11 @@ const PreferenceSettings = () => {
         layout="vertical"
         onFinish={handleFinish}
         initialValues={{
-          preferredLocations: 'All over India',
-          preferredRoles: ['SDE', 'Backend Developer'],
-          ctc: '3',
-          notice: '3',
+          preferredLocations: preferenceData?.preferred_location,
+          preferredRoles: [preferenceData?.preferred_role],
+          ctc: preferenceData?.expected_ctc,
+          notice: preferenceData?.notice_period,
+          internship: 'yes',
         }}
       >
         <Form.Item
@@ -72,7 +78,7 @@ const PreferenceSettings = () => {
         </Form.Item>
 
         <Form.Item
-          label="Notice Period (in Months)"
+          label="Notice Period (in Days)"
           name="notice"
           rules={[{ required: true, message: 'Please enter notice period!' }]}
         >
