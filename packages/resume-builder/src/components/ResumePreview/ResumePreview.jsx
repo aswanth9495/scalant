@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Flex, Button } from 'antd';
+import { Flex, Button, Empty } from 'antd';
 import { Document, Page, pdfjs } from 'react-pdf';
 import {
   LeftOutlined,
@@ -18,12 +18,32 @@ const WORKER_PATH = 'pdf.worker.min.js';
 // eslint-disable-next-line max-len
 pdfjs.GlobalWorkerOptions.workerSrc = `${CDN_BASE}/${pdfjs.version}/${WORKER_PATH}`;
 
-const LoadingLayout = () => <LoadingOutlined className={styles.loader} />;
+const MESSAGES = {
+  loading: {
+    initial: 'Loading your resume preview...',
+    refreshing: 'Refreshing your resume preview...',
+  },
+  error: {
+    preview: 'Error loading resume preview',
+  },
+};
+
+const LoadingLayout = ({ message = MESSAGES.loading.initial }) => (
+  <Flex
+    vertical
+    align="center"
+    justify="center"
+    className={styles.loadingContainer}
+  >
+    <LoadingOutlined className={styles.loader} />
+    <span className={styles.loadingText}>{message}</span>
+  </Flex>
+);
 
 const ResumePreview = ({ resumeData, resumeSelected = 'Default_Resume' }) => {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
-  const { data } = useGetResumeLinkQuery({
+  const { data, isLoading, isFetching, isError } = useGetResumeLinkQuery({
     resumeId: resumeData?.resume_details?.id,
   });
 
@@ -45,8 +65,32 @@ const ResumePreview = ({ resumeData, resumeSelected = 'Default_Resume' }) => {
     downloadFile(data?.link, `${resumeSelected}.pdf`);
   };
 
-  if (!data?.link) {
-    return <LoadingLayout />;
+  // Show loading state for initial load or refetching
+  if (isLoading || isFetching || !data?.link) {
+    return (
+      <LoadingLayout
+        message={
+          isLoading ? MESSAGES.loading.initial : MESSAGES.loading.refreshing
+        }
+      />
+    );
+  }
+
+  // Show error state if needed
+  if (isError) {
+    return (
+      <Flex
+        vertical
+        align="center"
+        justify="center"
+        className={styles.loadingContainer}
+      >
+        <Empty
+          description={MESSAGES.error.preview}
+          image={Empty.PRESENTED_IMAGE_SIMPLE}
+        />
+      </Flex>
+    );
   }
 
   return (
@@ -89,9 +133,9 @@ const ResumePreview = ({ resumeData, resumeSelected = 'Default_Resume' }) => {
       <Flex align="center" justify="center">
         <Document
           file={data?.link}
-          onLoadSuccess={onDocumentLoadSuccess}
-          loading={<LoadingLayout />}
           className={styles.document}
+          onLoadSuccess={onDocumentLoadSuccess}
+          loading={<LoadingLayout message="Loading PDF document..." />}
         >
           <Page
             pageNumber={pageNumber}

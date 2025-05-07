@@ -2,7 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Space, Button, Flex, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import EducationFormItem from './EducationFormItem';
-const EducationForm = ({ resumeData }) => {
+import { resumeBuilderApi } from '../../services/resumeBuilderApi';
+import { useSelector, useDispatch } from 'react-redux';
+
+const EducationForm = () => {
+  const dispatch = useDispatch();
+  const resumeData = useSelector((state) => state.resumeBuilder.resumeData);
   const [educationItems, setEducationItems] = useState([
     { id: 1, completed: false, saved: false, expanded: true },
   ]);
@@ -39,17 +44,16 @@ const EducationForm = ({ resumeData }) => {
   };
 
   const handleMarkAsCompleted = () => {
+    // Invalidate the cache and trigger a refetch
+    dispatch(resumeBuilderApi.util.invalidateTags(['ResumeLink']));
+
     const hasUnsavedItems = educationItems.some((item) => !item.saved);
-    console.log(hasUnsavedItems, 'hasUnsavedItems');
     if (hasUnsavedItems) {
       message.error(
         'Please save all education items before marking as complete'
       );
       return;
     }
-
-    // eslint-disable-next-line no-console, no-undef
-    console.log(educationItems);
   };
 
   return (

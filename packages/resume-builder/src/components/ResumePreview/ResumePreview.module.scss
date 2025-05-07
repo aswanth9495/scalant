@@ -33,10 +33,22 @@
   border-bottom: 0.1rem solid $colors-neutral-border-color-border;
 }
 .loader {
+  font-size: $h1-size;
+  color: $colors-neutral-text-color-text-disabled;
+}
+
+.loadingContainer {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
   min-height: 60rem;
+  gap: 1.6rem;
+}
+
+.loadingText {
+  color: $colors-neutral-text-color-text-disabled;
+  font-size: $h5-size;
 }
 
 .icon {

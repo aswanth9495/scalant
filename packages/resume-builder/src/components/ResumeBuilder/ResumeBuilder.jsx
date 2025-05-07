@@ -22,7 +22,6 @@ import styles from './ResumeBuilder.module.scss';
 const ResumeBuilderContent = ({ isOnboarding = true, resumeData }) => {
   const dispatch = useDispatch();
   const { currentStep, steps } = useSelector((state) => state.resumeBuilder);
-  console.log('resumeData running', resumeData);
   useEffect(() => {
     dispatch(setOnboarding(isOnboarding));
     if (!isOnboarding) {

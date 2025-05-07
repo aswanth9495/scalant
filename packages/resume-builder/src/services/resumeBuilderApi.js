@@ -16,6 +16,7 @@ const dynamicBaseQuery = async (args, api, extraOptions) => {
 export const resumeBuilderApi = createApi({
   reducerPath: 'resumeBuilderApi',
   baseQuery: dynamicBaseQuery,
+  tagTypes: ['ResumeLink'],
   endpoints: (builder) => ({
     updateResumeDetails: builder.mutation({
       query: ({ formStage, payload }) => ({
@@ -29,6 +30,9 @@ export const resumeBuilderApi = createApi({
         url: `/api/v3/user-resumes/${resumeId}/download`,
         method: 'GET',
       }),
+      providesTags: (result, error, { resumeId }) => [
+        { type: 'ResumeLink', id: resumeId },
+      ],
     }),
   }),
 });
