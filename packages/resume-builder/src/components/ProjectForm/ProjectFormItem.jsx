@@ -15,30 +15,19 @@ const { Text } = Typography;
 
 const ProjectFormItem = ({ item, setProjectItems, projectItems }) => {
   const [form] = Form.useForm();
-  const projectInfo = form.getFieldsValue([
-    `project_${item.id}_projectName`,
-    `project_${item.id}_projectToolsTech`,
-  ]);
-
-  const projectName = projectInfo[`project_${item.id}_projectName`];
 
   useEffect(() => {
     if (item.formData) {
-      form.setFieldsValue(item.formData);
+      const formData = { ...item.formData };
+      form.setFieldsValue(formData);
     }
-  }, [item.id, form, item.formData]);
+  }, [item.formData, form]);
 
   const validateAndSave = async (id) => {
     try {
-      const fieldNames = [
-        `project_${id}_projectName`,
-        `project_${id}_projectLink`,
-        `project_${id}_projectDescription`,
-      ];
+      await form.validateFields();
 
-      await form.validateFields(fieldNames);
-
-      const formData = form.getFieldsValue(fieldNames);
+      const formData = form.getFieldsValue();
 
       setProjectItems(
         projectItems.map((item) =>
@@ -78,7 +67,7 @@ const ProjectFormItem = ({ item, setProjectItems, projectItems }) => {
     return (
       <Card key={item.id}>
         <Flex justify="space-between" align="center">
-          <Text strong>{projectName}</Text>
+          <Text strong>{item.formData?.projectName}</Text>
         </Flex>
         <DownOutlined onClick={() => handleExpand(item.id)} />
       </Card>
@@ -96,23 +85,23 @@ const ProjectFormItem = ({ item, setProjectItems, projectItems }) => {
           <DeleteOutlined onClick={() => handleDelete(item.id)} />
         )}
       </Flex>
-      <Form form={form} layout="vertical">
+      <Form form={form} layout="vertical" initialValues={item.formData}>
         <Form.Item
-          name={`project_${item.id}_projectName`}
+          name={`projectName`}
           label="Project Name"
           rules={[{ required: true, message: 'Project Name is required' }]}
         >
           <Input placeholder="Enter Project Name" />
         </Form.Item>
         <Form.Item
-          name={`project_${item.id}_projectLink`}
+          name={`projectLink`}
           label="Project Link"
           rules={[{ required: true, message: 'Project Link is required' }]}
         >
           <Input placeholder="Enter Project Link" />
         </Form.Item>
         <Form.Item
-          name={`project_${item.id}_projectDescription`}
+          name={`projectDescription`}
           label="Key Points"
           rules={[{ required: true, message: 'Key Points is required' }]}
         >

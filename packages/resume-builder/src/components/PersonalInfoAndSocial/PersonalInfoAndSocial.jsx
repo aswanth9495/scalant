@@ -17,22 +17,23 @@ import {
   message,
 } from 'antd';
 import { useSelector } from 'react-redux';
+// eslint-disable-next-line max-len
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 import styles from './PersonalInfoAndSocial.module.scss';
 const { Text } = Typography;
 
-const PersonalInfoAndSocial = () => {
+const PersonalInfoAndSocial = ({ onComplete }) => {
   const [form] = Form.useForm();
   const [additionalProfiles, setAdditionalProfiles] = useState([]);
   const resumeData = useSelector((state) => state.resumeBuilder.resumeData);
   const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
   useEffect(() => {
-    if (resumeData?.personal_details) {
+    if (resumeData?.personal_details && !form.getFieldValue('fullName')) {
       const { personal_details } = resumeData;
       form.setFieldsValue({
         fullName: personal_details.name,
-        contactNumber: personal_details.phone_number,
+        contactNumber: personal_details.phone_number.replace('+91-', ''),
         emailAddress: personal_details.email,
         gender: personal_details.gender,
         currentCity: personal_details.city,
@@ -69,6 +70,7 @@ const PersonalInfoAndSocial = () => {
           link: profile.link,
         })),
       };
+      onComplete?.();
 
       await updateResumeDetails({
         formStage: 'personal-details',
@@ -77,7 +79,7 @@ const PersonalInfoAndSocial = () => {
       message.success('Personal details updated successfully');
     } catch (error) {
       message.error('Failed to update personal details');
-      // eslint-disable-next-line no-console
+      // eslint-disable-next-line no-console, no-undef
       console.error('Error updating personal details:', error);
     }
   };
@@ -94,6 +96,7 @@ const PersonalInfoAndSocial = () => {
         { label: '+91', value: '+91' },
         { label: '+1', value: '+1' },
       ]}
+      disabled
     />
   );
 
@@ -114,16 +117,18 @@ const PersonalInfoAndSocial = () => {
             name="contactNumber"
             rules={[{ required: true }]}
             className={styles.formItem}
+            tooltip="You can update this in the profile section"
           >
-            <InputNumber addonBefore={selectBefore} />
+            <InputNumber addonBefore={selectBefore} disabled />
           </Form.Item>
           <Form.Item
             label="Email Address"
             name="emailAddress"
             rules={[{ required: true }]}
             className={styles.formItem}
+            tooltip="You can update this in the profile section"
           >
-            <Input />
+            <Input disabled />
           </Form.Item>
           <Flex gap={16}>
             <Form.Item
@@ -148,16 +153,7 @@ const PersonalInfoAndSocial = () => {
               style={{ flex: 1 }}
               className={styles.formItem}
             >
-              <Select
-                options={[
-                  { label: 'Mumbai', value: 'mumbai' },
-                  { label: 'Delhi', value: 'delhi' },
-                  { label: 'Bangalore', value: 'bangalore' },
-                  { label: 'Chennai', value: 'chennai' },
-                  { label: 'Hyderabad', value: 'hyderabad' },
-                  { label: 'Kolkata', value: 'kolkata' },
-                ]}
-              />
+              <Input />
             </Form.Item>
           </Flex>
         </Space>
@@ -176,12 +172,7 @@ const PersonalInfoAndSocial = () => {
           >
             <Input prefix={<LinkedinOutlined />} />
           </Form.Item>
-          <Form.Item
-            label="GitHub"
-            name="github"
-            rules={[{ required: true }]}
-            className={styles.formItem}
-          >
+          <Form.Item label="GitHub" name="github" className={styles.formItem}>
             <Input prefix={<GithubOutlined />} />
           </Form.Item>
           <Form.Item

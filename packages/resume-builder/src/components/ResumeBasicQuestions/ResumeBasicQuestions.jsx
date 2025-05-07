@@ -1,4 +1,6 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { nextStep } from '../../store/resumeBuilderSlice';
 import { Typography, Flex, Form, InputNumber, Select, Button } from 'antd';
 import PageHeader from '../PageHeader';
 import styles from './ResumeBasicQuestions.module.scss';
@@ -7,6 +9,10 @@ const { Text } = Typography;
 
 const ResumeBasicQuestions = () => {
   const [form] = Form.useForm();
+
+  const resumeData = useSelector((state) => state.resumeBuilder.resumeData);
+
+  const basicQuestionsData = resumeData?.personal_details;
 
   const handleFinish = (values) => {
     // eslint-disable-next-line no-console, no-undef
@@ -33,14 +39,18 @@ const ResumeBasicQuestions = () => {
           onFinish={handleFinish}
           initialValues={{
             totalWorkExperience: {
-              yearsExperience: 10,
-              monthsExperience: 0,
+              yearsExperience: Math.floor(
+                basicQuestionsData?.non_tech_experience / 12
+              ),
+              monthsExperience: basicQuestionsData?.non_tech_experience % 12,
             },
             totalWorkExperienceInTech: {
-              yearsExperienceInTech: 0,
-              monthsExperienceInTech: 0,
+              yearsExperienceInTech: Math.floor(
+                basicQuestionsData?.experience / 12
+              ),
+              monthsExperienceInTech: basicQuestionsData?.experience % 12,
             },
-            currentJobRole: 'Tech Adjancent',
+            currentJobRole: basicQuestionsData?.job_title,
           }}
         >
           <Flex gap={16} vertical>
@@ -128,6 +138,12 @@ const ResumeBasicQuestions = () => {
                   { value: 'Sales', label: 'Sales' },
                   { value: 'Marketing', label: 'Marketing' },
                   { value: 'Design', label: 'Design' },
+                  { value: 'Backend Engineer', label: 'Backend Engineer' },
+                  { value: 'Frontend Engineer', label: 'Frontend Engineer' },
+                  {
+                    value: 'Full Stack Engineer',
+                    label: 'Full Stack Engineer',
+                  },
                   { value: 'Other', label: 'Other' },
                 ]}
               />

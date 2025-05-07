@@ -1,6 +1,6 @@
 export const PROGRAMMING_LANGUAGES = [
-  { name: 'Python', experience: '3YoE' },
-  { name: 'C#', experience: '5YoE' },
+  { name: 'Python', experience: null },
+  { name: 'C#', experience: null },
   { name: 'JavaScript', experience: null },
   { name: 'Golang', experience: null },
   { name: 'Rust', experience: null },
@@ -9,11 +9,12 @@ export const PROGRAMMING_LANGUAGES = [
   { name: 'Java', experience: null },
   { name: 'C++', experience: null },
   { name: 'C', experience: null },
+  { name: 'SQL', experience: null },
 ];
 
 export const LIBRARIES_FRAMEWORKS = [
   { name: 'React', experience: null },
-  { name: 'Tensorflow', experience: '3YoE' },
+  { name: 'Tensorflow', experience: null },
   { name: 'Angular', experience: null },
   { name: 'jQuery', experience: null },
   { name: 'Vue.js', experience: null },
@@ -26,7 +27,7 @@ export const LIBRARIES_FRAMEWORKS = [
 
 export const TOOLS = [
   { name: 'Kafka', experience: null },
-  { name: 'Git', experience: '5YoE' },
+  { name: 'Git', experience: null },
   { name: 'Eclipse', experience: null },
   { name: 'Redis', experience: null },
   { name: 'RabbitMQ', experience: null },

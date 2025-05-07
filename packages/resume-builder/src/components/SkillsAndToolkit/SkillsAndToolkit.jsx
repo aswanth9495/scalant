@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Space } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { Space, message } from 'antd';
 import SkillSection from './SkillSection';
 import {
   PROGRAMMING_LANGUAGES,
@@ -7,51 +8,80 @@ import {
   TOOLS,
 } from './constants';
 import styles from './SkillsAndToolkit.module.scss';
+// eslint-disable-next-line max-len
+import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 
-const SkillsAndToolkit = () => {
+const SkillsAndToolkit = ({ onComplete }) => {
   const [selectedSkills, setSelectedSkills] = useState([]);
+  const [skillExperience, setSkillExperience] = useState({});
+  const [updateResumeDetails] = useUpdateResumeDetailsMutation();
+
+  const resumeData = useSelector((state) => state.resumeBuilder.resumeData);
+
+  useEffect(() => {
+    if (resumeData?.skills) {
+      const skills = [];
+      const skillExp = {};
+      resumeData.skills.forEach((skill) => {
+        skills.push(skill.name);
+        skillExp[skill.name] = skill.proficiency_period;
+      });
+      setSelectedSkills(skills);
+      setSkillExperience(skillExp);
+    }
+  }, [resumeData?.skills]);
 
   const handleTagClick = (skill) => {
-    const skillKey = `${skill.name}-${skill.experience}`;
+    const skillKey = skill.name;
     if (selectedSkills.includes(skillKey)) {
       setSelectedSkills(selectedSkills.filter((s) => s !== skillKey));
+      // Remove experience data when unselecting a skill
+      const updatedExperience = { ...skillExperience };
+      delete updatedExperience[skillKey];
+      setSkillExperience(updatedExperience);
     } else {
       setSelectedSkills([...selectedSkills, skillKey]);
     }
   };
 
-  const handleMarkAsComplete = () => {
-    const getSelectedFromSection = (section) => {
-      return section
-        .filter((skill) =>
-          selectedSkills.includes(`${skill.name}-${skill.experience}`)
-        )
-        .map((skill) => ({
-          name: skill.name,
-          experience: skill.experience,
-        }));
-    };
+  const handleExperienceUpdate = (skillName, years, months) => {
+    setSkillExperience({
+      ...skillExperience,
+      [skillName]: {
+        years: years,
+        months: months,
+      },
+    });
+  };
 
-    const selectedData = {
-      programmingLanguages: getSelectedFromSection(PROGRAMMING_LANGUAGES),
-      librariesFrameworks: getSelectedFromSection(LIBRARIES_FRAMEWORKS),
-      tools: getSelectedFromSection(TOOLS),
-    };
+  const handleMarkAsComplete = async () => {
+    const allSelectedSkills = selectedSkills.map((skill) => {
+      return {
+        name: skill,
+        experience: skillExperience[skill] || {
+          years: 0,
+          months: 0,
+        },
+      };
+    });
 
-    // eslint-disable-next-line no-console, no-undef
-    console.log(
-      'Selected Programming Languages:',
-      selectedData.programmingLanguages
-    );
+    try {
+      const payload = {
+        form_stage: 'skills_and_toolkit_form',
+        skills: allSelectedSkills,
+      };
 
-    // eslint-disable-next-line no-console, no-undef
-    console.log(
-      'Selected Libraries and Frameworks:',
-      selectedData.librariesFrameworks
-    );
-
-    // eslint-disable-next-line no-console, no-undef
-    console.log('Selected Tools:', selectedData.tools);
+      await updateResumeDetails({
+        formStage: 'skills-and-toolkit',
+        payload,
+      }).unwrap();
+      message.success('Skills and toolkit updated successfully');
+      onComplete?.();
+    } catch (error) {
+      message.error('Failed to update skills and toolkit');
+      // eslint-disable-next-line no-console, no-undef
+      console.error('Error updating skills and toolkit:', error);
+    }
   };
 
   return (
@@ -61,6 +91,8 @@ const SkillsAndToolkit = () => {
         skills={PROGRAMMING_LANGUAGES}
         selectedSkills={selectedSkills}
         onSkillClick={handleTagClick}
+        onExperienceUpdate={handleExperienceUpdate}
+        skillExperience={skillExperience}
       />
 
       <SkillSection
@@ -68,6 +100,8 @@ const SkillsAndToolkit = () => {
         skills={LIBRARIES_FRAMEWORKS}
         selectedSkills={selectedSkills}
         onSkillClick={handleTagClick}
+        onExperienceUpdate={handleExperienceUpdate}
+        skillExperience={skillExperience}
       />
 
       <SkillSection
@@ -75,6 +109,8 @@ const SkillsAndToolkit = () => {
         skills={TOOLS}
         selectedSkills={selectedSkills}
         onSkillClick={handleTagClick}
+        onExperienceUpdate={handleExperienceUpdate}
+        skillExperience={skillExperience}
       />
 
       <div className={styles.buttonContainer}>
