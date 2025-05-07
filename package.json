@@ -43,7 +43,8 @@
     "webpack-cli": "4"
   },
   "dependencies": {
-    "antd": "^5.24.7"
+    "antd": "^5.24.7",
+    "react-pdf": "6.2.2"
   },
   "peerDependencies": {
     "@reduxjs/toolkit": "1.9.3",

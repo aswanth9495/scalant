@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Provider, useDispatch, useSelector } from 'react-redux';
-import { Button, Space } from 'antd';
+import { Button, Space, Spin } from 'antd';
 import resumeBuilderStore from '../../store/resumeBuilderStore';
 import {
   setOnboarding,
@@ -16,20 +16,13 @@ import PreferenceSettings from '../PreferenceSettings';
 import ResumeBasicQuestions from '../ResumeBasicQuestions';
 import ResumeTips from '../ResumeTips';
 import ResumeSteps from '../ResumeSteps';
-import { setBaseUrl } from '../../services/resumeBuilderApi';
+import ResumePreview from '../ResumePreview';
+import styles from './ResumeBuilder.module.scss';
 
-const ResumeBuilderContent = ({
-  isOnboarding = true,
-  resumeData,
-  baseUrl = 'http://localhost:3000',
-}) => {
+const ResumeBuilderContent = ({ isOnboarding = true, resumeData }) => {
   const dispatch = useDispatch();
   const { currentStep, steps } = useSelector((state) => state.resumeBuilder);
-
-  useEffect(() => {
-    setBaseUrl(baseUrl);
-  }, [baseUrl]);
-
+  console.log('resumeData running', resumeData);
   useEffect(() => {
     dispatch(setOnboarding(isOnboarding));
     if (!isOnboarding) {
@@ -74,9 +67,9 @@ const ResumeBuilderContent = ({
   };
 
   return (
-    <ResumeLayout>
+    <ResumeLayout preview={<ResumePreview resumeData={resumeData} />}>
       {renderComponent()}
-      <Space style={{ marginTop: 16, width: '100%', justifyContent: 'center' }}>
+      <Space className={styles.navigationButtons}>
         <Button onClick={handlePrevious} disabled={currentStep === 0}>
           Previous
         </Button>
@@ -92,17 +85,12 @@ const ResumeBuilderContent = ({
   );
 };
 
-const ResumeBuilder = ({
-  isOnboarding = true,
-  resumeData,
-  baseUrl = 'http://localhost:3000',
-}) => {
+const ResumeBuilder = ({ isOnboarding = true, resumeData }) => {
   return (
     <Provider store={resumeBuilderStore}>
       <ResumeBuilderContent
         isOnboarding={isOnboarding}
         resumeData={resumeData}
-        baseUrl={baseUrl}
       />
     </Provider>
   );
