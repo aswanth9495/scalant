@@ -18,6 +18,7 @@ export const downloadFile = async (url, filename) => {
     document.body.removeChild(link);
     window.URL.revokeObjectURL(objectUrl);
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error downloading file:', error);
     throw error;
   }

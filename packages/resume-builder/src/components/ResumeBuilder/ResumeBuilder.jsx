@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Provider, useDispatch, useSelector } from 'react-redux';
-import { Button, Space, Spin } from 'antd';
+import { Button, Space } from 'antd';
 import resumeBuilderStore from '../../store/resumeBuilderStore';
 import {
   setOnboarding,

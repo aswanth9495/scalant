@@ -23,7 +23,9 @@ const ResumeLayout = ({ onBackClick, children, preview }) => {
           </Content>
         </Layout>
       </Col>
-      <Col span={12}>{preview}</Col>
+      <Col className={styles.right} span={12}>
+        {preview}
+      </Col>
     </Row>
   );
 };

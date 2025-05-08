@@ -26,6 +26,15 @@ $header-bg-color: #fff;
   overflow: hidden;
 }
 
+
+.right {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: auto;
+}
+
+
 .content {
   overflow-y: auto;
   background-color: $colors-neutral-color-bg-base;
