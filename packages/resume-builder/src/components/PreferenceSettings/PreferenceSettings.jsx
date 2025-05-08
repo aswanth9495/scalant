@@ -106,10 +106,6 @@ const PreferenceSettings = () => {
           >
             Save and Continue
           </Button>
-
-          <Button color="primary" variant="outlined" block>
-            I will do this later
-          </Button>
         </div>
       </Form>
     </div>

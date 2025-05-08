@@ -65,14 +65,6 @@ const Acknowledgement = () => {
         >
           I Understand, Continue
         </Button>
-        <Button
-          type="link"
-          block
-          className={styles.laterText}
-          onClick={handleLater}
-        >
-          I will do this later
-        </Button>
       </div>
     </>
   );
