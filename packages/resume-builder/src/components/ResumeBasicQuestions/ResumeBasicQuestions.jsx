@@ -8,6 +8,7 @@ import styles from './ResumeBasicQuestions.module.scss';
 const { Text } = Typography;
 
 const ResumeBasicQuestions = () => {
+  const dispatch = useDispatch();
   const [form] = Form.useForm();
 
   const resumeData = useSelector((state) => state.resumeBuilder.resumeData);
@@ -17,11 +18,7 @@ const ResumeBasicQuestions = () => {
   const handleFinish = (values) => {
     // eslint-disable-next-line no-console, no-undef
     console.log('Submitted values:', values);
-  };
-
-  const handleChange = (value) => {
-    // eslint-disable-next-line no-console, no-undef
-    console.log('Selected value:', value);
+    dispatch(nextStep());
   };
 
   return (
@@ -131,7 +128,6 @@ const ResumeBasicQuestions = () => {
               className={styles.formItem}
             >
               <Select
-                onChange={handleChange}
                 options={[
                   { value: 'Tech Adjancent', label: 'Tech Adjancent' },
                   { value: 'Product Manager', label: 'Product Manager' },

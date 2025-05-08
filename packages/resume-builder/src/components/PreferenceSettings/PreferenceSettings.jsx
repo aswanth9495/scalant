@@ -6,6 +6,7 @@ import { Form, Input, Select, Radio, Button } from 'antd';
 import styles from './PreferenceSettings.module.scss';
 
 const PreferenceSettings = () => {
+  const dispatch = useDispatch();
   const [form] = Form.useForm();
 
   const resumeData = useSelector((state) => state.resumeBuilder.resumeData);
@@ -16,6 +17,7 @@ const PreferenceSettings = () => {
     // Process the form data here
     // eslint-disable-next-line no-console, no-undef
     console.log('Submitted values:', values);
+    dispatch(nextStep());
   };
 
   return (
