@@ -19,7 +19,12 @@ import styles from './EducationForm.module.scss';
 
 const { Text } = Typography;
 
-const EducationFormItem = ({ item, setEducationItems, educationItems }) => {
+const EducationFormItem = ({
+  item,
+  setEducationItems,
+  educationItems,
+  required,
+}) => {
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -128,7 +133,7 @@ const EducationFormItem = ({ item, setEducationItems, educationItems }) => {
         <Form.Item
           name="institute"
           label="Institute Name"
-          rules={[{ required: true, message: 'Institute Name is required' }]}
+          rules={[{ required: required }]}
         >
           <Input placeholder="Enter Institute Name" />
         </Form.Item>
@@ -136,15 +141,20 @@ const EducationFormItem = ({ item, setEducationItems, educationItems }) => {
           <Form.Item
             name="degree"
             label="Degree Type"
-            rules={[{ required: true, message: 'Degree Type is required' }]}
+            rules={[{ required: required }]}
             className={styles.midWidth}
           >
             <Select
               placeholder="Select Degree Type"
               options={[
-                { label: 'Bachelor', value: 'bachelor' },
-                { label: 'Master', value: 'master' },
-                { label: 'PhD', value: 'phd' },
+                { label: 'BE/B.Tech/Bs', value: 'bachelor' },
+                { label: 'ME/M.Tech', value: 'master' },
+                { label: 'Dual Degree - BE + ME', value: 'dual' },
+                { label: 'Ms', value: 'ms' },
+                { label: 'MBA', value: 'mba' },
+                { label: 'MCA/BCA', value: 'mca_bca' },
+                { label: 'BE + MBA', value: 'be_mba' },
+                { label: 'Other', value: 'other' },
               ]}
             />
           </Form.Item>
@@ -154,8 +164,36 @@ const EducationFormItem = ({ item, setEducationItems, educationItems }) => {
               options={[
                 { label: 'Computer Science', value: 'computer-science' },
                 {
-                  label: 'Electrical Engineering',
-                  value: 'electrical-engineering',
+                  label: 'Information Technology',
+                  value: 'information-technology',
+                },
+                {
+                  label: 'Mathematics and Computing',
+                  value: 'mathematics-and-computing',
+                },
+                {
+                  label: 'Electronics',
+                  value: 'electronics',
+                },
+                {
+                  label: 'Mechanical',
+                  value: 'mechanical',
+                },
+                {
+                  label: 'Civil',
+                  value: 'civil',
+                },
+                {
+                  label: 'MBA',
+                  value: 'mba',
+                },
+                {
+                  label: 'Electical',
+                  value: 'electrical',
+                },
+                {
+                  label: 'Other',
+                  value: 'other',
                 },
               ]}
             />
@@ -165,7 +203,7 @@ const EducationFormItem = ({ item, setEducationItems, educationItems }) => {
           <Form.Item
             name="grades"
             label="Grades (Final/Current)"
-            rules={[{ required: true, message: 'Grades are required' }]}
+            rules={[{ required: required }]}
             className={styles.midWidth}
           >
             <InputNumber placeholder="Enter Grades" addonAfter={selectAfter} />
@@ -173,7 +211,7 @@ const EducationFormItem = ({ item, setEducationItems, educationItems }) => {
           <Form.Item
             name="graduation"
             label="Graduation (Actual/Expected)"
-            rules={[{ required: true, message: 'Graduation is required' }]}
+            rules={[{ required: required }]}
             className={styles.midWidth}
           >
             <DatePicker
