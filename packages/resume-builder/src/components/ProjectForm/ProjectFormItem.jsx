@@ -13,7 +13,7 @@ import { DownOutlined, DeleteOutlined } from '@ant-design/icons';
 
 const { Text } = Typography;
 
-const ProjectFormItem = ({ item, setProjectItems, projectItems }) => {
+const ProjectFormItem = ({ item, setProjectItems, projectItems, required }) => {
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -89,21 +89,21 @@ const ProjectFormItem = ({ item, setProjectItems, projectItems }) => {
         <Form.Item
           name={`projectName`}
           label="Project Name"
-          rules={[{ required: true, message: 'Project Name is required' }]}
+          rules={[{ required: required }]}
         >
           <Input placeholder="Enter Project Name" />
         </Form.Item>
         <Form.Item
           name={`projectLink`}
           label="Project Link"
-          rules={[{ required: true, message: 'Project Link is required' }]}
+          rules={[{ required: required }]}
         >
           <Input placeholder="Enter Project Link" />
         </Form.Item>
         <Form.Item
           name={`projectDescription`}
           label="Key Points"
-          rules={[{ required: true, message: 'Key Points is required' }]}
+          rules={[{ required: required }]}
         >
           <Input.TextArea placeholder="Enter Key Points" />
         </Form.Item>

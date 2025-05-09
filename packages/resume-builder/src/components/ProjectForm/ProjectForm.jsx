@@ -7,7 +7,7 @@ import ProjectFormItem from './ProjectFormItem';
 // eslint-disable-next-line max-len
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 
-const ProjectForm = ({ onComplete }) => {
+const ProjectForm = ({ onComplete, required = false }) => {
   const [projectItems, setProjectItems] = useState([
     { id: 1, completed: false, saved: false, expanded: true },
   ]);
@@ -99,6 +99,7 @@ const ProjectForm = ({ onComplete }) => {
               item={item}
               setProjectItems={setProjectItems}
               projectItems={projectItems}
+              required={required}
             />
           ))}
         </Flex>

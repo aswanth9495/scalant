@@ -6,7 +6,7 @@ import WorkExperienceFormItem from './WorkExperienceFormItem';
 // eslint-disable-next-line max-len
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 
-const WorkExperienceForm = ({ onComplete }) => {
+const WorkExperienceForm = ({ onComplete, required = false }) => {
   const [workExperienceItems, setWorkExperienceItems] = useState([
     { id: 1, completed: false, saved: false, expanded: true },
   ]);
@@ -124,6 +124,7 @@ const WorkExperienceForm = ({ onComplete }) => {
               item={item}
               setWorkExperienceItems={setWorkExperienceItems}
               workExperienceItems={workExperienceItems}
+              required={required}
             />
           ))}
         </Flex>

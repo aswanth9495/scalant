@@ -22,6 +22,7 @@ const WorkExperienceFormItem = ({
   item,
   setWorkExperienceItems,
   workExperienceItems,
+  required,
 }) => {
   const [form] = Form.useForm();
 
@@ -132,14 +133,14 @@ const WorkExperienceFormItem = ({
         <Form.Item
           name={`workCompany`}
           label="Company"
-          rules={[{ required: true, message: 'Company is required' }]}
+          rules={[{ required: required }]}
         >
           <Input placeholder="Enter Company" />
         </Form.Item>
         <Form.Item
           name={`workPosition`}
           label="Position"
-          rules={[{ required: true, message: 'Position is required' }]}
+          rules={[{ required: required }]}
         >
           <Input placeholder="Enter Position" />
         </Form.Item>
@@ -150,14 +151,14 @@ const WorkExperienceFormItem = ({
           <Form.Item
             name={`workStartDate`}
             label="Start Date"
-            rules={[{ required: true, message: 'Start Date is required' }]}
+            rules={[{ required: required }]}
           >
             <DatePicker format="YYYY-MM-DD" />
           </Form.Item>
           <Form.Item
             name={`workEndDate`}
             label="End Date"
-            rules={[{ required: true, message: 'End Date is required' }]}
+            rules={[{ required: required }]}
           >
             <DatePicker format="YYYY-MM-DD" />
           </Form.Item>
