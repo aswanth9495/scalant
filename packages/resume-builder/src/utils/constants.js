@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 export const PREFERENCE_SETTINGS_IMAGE =
   'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/124/609/original/image_%281%29.png?1746936231';
 

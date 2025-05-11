@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   UserOutlined,
   ToolOutlined,
@@ -13,6 +12,7 @@ import ProjectForm from '../components/ProjectForm';
 import EducationForm from '../components/EducationForm';
 import WorkExperienceForm from '../components/WorkExperienceForm';
 import CustomForm from '../components/CustomForm';
+import React from 'react';
 
 const PERSONAL_DETAILS_FORM_REQUIRED_FIELDS = [
   'name',
@@ -52,42 +52,42 @@ const FORM_STEPS = [
     key: 'personalDetails',
     title: 'Personal Info and Socials',
     subtitle: 'Lets get to know you! Fill in your personal details',
-    icon: <UserOutlined />,
+    icon: UserOutlined,
     component: PersonalInfoAndSocial,
   },
   {
     key: 'skills',
     title: 'Skills and Toolset',
     subtitle: 'Select from these industry-standard skills and tools',
-    icon: <ToolOutlined />,
+    icon: ToolOutlined,
     component: SkillsAndToolkit,
   },
   {
     key: 'projects',
     title: 'Projects',
     subtitle: 'Add personal projects',
-    icon: <FileTextOutlined />,
+    icon: FileTextOutlined,
     component: ProjectForm,
   },
   {
     key: 'education',
     title: 'Education',
     subtitle: 'Add academic background and certifications',
-    icon: <BookOutlined />,
+    icon: BookOutlined,
     component: EducationForm,
   },
   {
     key: 'experience',
     title: 'Work Experience',
     subtitle: 'Add details about jobs and internships',
-    icon: <RiseOutlined />,
+    icon: RiseOutlined,
     component: WorkExperienceForm,
   },
   {
     key: 'achievements',
     title: 'Custom Form',
     subtitle: 'Add custom form',
-    icon: <FormOutlined />,
+    icon: FormOutlined,
     component: CustomForm,
   },
 ];
@@ -226,7 +226,6 @@ const getFormOrderDetails = (program, currentJobRole) => {
       'Data Engineer',
     ].includes(currentJobRole)
   ) {
-    console.log('academy except engineering');
     return STEP_ORDERS.ACADEMY_EXCEPT_ENGINEERING;
   } else if (
     program === 'academy' &&
@@ -365,9 +364,10 @@ export const getFormSteps = (
         ...step,
         status: incompleteForms.includes(key) ? 'incomplete' : 'complete',
         required: isRequired,
-        component: (
-          <step.component onComplete={onComplete} required={isRequired} />
-        ),
+        component: React.createElement(step.component, {
+          onComplete,
+          required: isRequired,
+        }),
       };
     })
     .filter(Boolean);
