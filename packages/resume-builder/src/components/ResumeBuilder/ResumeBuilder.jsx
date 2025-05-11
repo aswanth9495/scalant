@@ -19,6 +19,8 @@ import ResumeSteps from '../ResumeSteps';
 import ResumePreview from '../ResumePreview';
 import styles from './ResumeBuilder.module.scss';
 
+const PREFERENCE_SETTINGS_IMAGE =
+  'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/124/609/original/image_%281%29.png?1746936231';
 const ResumeBuilderContent = ({ isOnboarding = true, resumeData }) => {
   const dispatch = useDispatch();
   const { currentStep, steps } = useSelector((state) => state.resumeBuilder);
@@ -65,8 +67,49 @@ const ResumeBuilderContent = ({ isOnboarding = true, resumeData }) => {
     }
   };
 
+  const previewUi = () => {
+    const currentStepData = steps[currentStep];
+    switch (currentStepData.component) {
+      case RESUME_BUILDER_STEPS.ACKNOWLEDGEMENT.component:
+        return (
+          <img
+            src={PREFERENCE_SETTINGS_IMAGE}
+            className={styles.previewImage}
+            alt="preference-settings"
+          />
+        );
+      case RESUME_BUILDER_STEPS.PREFERENCE_SETTINGS.component:
+        return (
+          <img
+            src={PREFERENCE_SETTINGS_IMAGE}
+            className={styles.previewImage}
+            alt="preference-settings"
+          />
+        );
+      case RESUME_BUILDER_STEPS.RESUME_BASIC_QUESTIONS.component:
+        return (
+          <img
+            src={PREFERENCE_SETTINGS_IMAGE}
+            className={styles.previewImage}
+            alt="preference-settings"
+          />
+        );
+      case RESUME_BUILDER_STEPS.RESUME_TIPS.component:
+        return (
+          <img
+            src={PREFERENCE_SETTINGS_IMAGE}
+            className={styles.previewImage}
+            alt="preference-settings"
+          />
+        );
+      case RESUME_BUILDER_STEPS.RESUME_STEPS.component:
+        return <ResumePreview resumeData={resumeData} />;
+      default:
+        return null;
+    }
+  };
   return (
-    <ResumeLayout preview={<ResumePreview resumeData={resumeData} />}>
+    <ResumeLayout preview={previewUi()}>
       {renderComponent()}
       <Space className={styles.navigationButtons}>
         <Button onClick={handlePrevious} disabled={currentStep === 0}>
