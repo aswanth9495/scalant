@@ -1,5 +1,5 @@
 {
-  "name": "resume-builder",
+  "name": "@scalant/resume-builder",
   "version": "2.0.0",
   "license": "MIT",
   "main": "dist/resume-builder.umd.js",
