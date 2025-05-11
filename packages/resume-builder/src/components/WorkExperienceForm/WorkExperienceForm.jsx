@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import { Space, Button, Flex, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import WorkExperienceFormItem from './WorkExperienceFormItem';
-
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 
 const WorkExperienceForm = ({ onComplete, required = false }) => {
@@ -12,7 +11,6 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
   ]);
 
   const [updateResumeDetails] = useUpdateResumeDetailsMutation();
-
   const resumeData = useSelector((state) => state.resumeBuilder.resumeData);
 
   useEffect(() => {
@@ -102,7 +100,7 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
       onComplete?.();
 
       await updateResumeDetails({
-        formStage: 'professional-details',
+        resumeId: resumeData?.id,
         payload,
       }).unwrap();
       message.success('Work experience details updated successfully');

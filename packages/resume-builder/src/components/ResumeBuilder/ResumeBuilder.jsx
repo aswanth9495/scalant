@@ -28,6 +28,7 @@ const ResumeBuilderContent = ({
   isOnboarding = true,
   resumeData,
   onBackButtonClick,
+  resumeManager,
 }) => {
   const dispatch = useDispatch();
   const { currentStep, steps } = useSelector((state) => state.resumeBuilder);
@@ -105,7 +106,12 @@ const ResumeBuilderContent = ({
         return <SampleResumePreview />;
 
       case RESUME_BUILDER_STEPS.RESUME_STEPS.component:
-        return <ResumePreview resumeData={resumeData} />;
+        return (
+          <ResumePreview
+            resumeSelected={resumeManager}
+            resumeData={resumeData}
+          />
+        );
       default:
         return null;
     }
@@ -133,6 +139,7 @@ const ResumeBuilder = ({
   isOnboarding = true,
   resumeData,
   onBackButtonClick,
+  resumeManager,
 }) => {
   return (
     <Provider store={resumeBuilderStore}>
@@ -140,6 +147,7 @@ const ResumeBuilder = ({
         isOnboarding={isOnboarding}
         resumeData={resumeData}
         onBackButtonClick={onBackButtonClick}
+        resumeManager={resumeManager}
       />
     </Provider>
   );

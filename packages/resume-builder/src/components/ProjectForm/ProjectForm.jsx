@@ -14,7 +14,6 @@ const ProjectForm = ({ onComplete, required = false }) => {
 
   const resumeData = useSelector((state) => state.resumeBuilder.resumeData);
   const [updateResumeDetails] = useUpdateResumeDetailsMutation();
-
   useEffect(() => {
     if (resumeData?.projects) {
       setProjectItems(
@@ -79,7 +78,7 @@ const ProjectForm = ({ onComplete, required = false }) => {
       };
 
       await updateResumeDetails({
-        formStage: 'professional-details',
+        resumeId: resumeData?.id,
         payload,
       }).unwrap();
       message.success('Projects updated successfully');

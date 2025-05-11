@@ -8,7 +8,6 @@ import {
   TOOLS,
 } from './constants';
 import styles from './SkillsAndToolkit.module.scss';
-
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 
 const SkillsAndToolkit = ({ onComplete }) => {
@@ -72,7 +71,7 @@ const SkillsAndToolkit = ({ onComplete }) => {
       };
 
       await updateResumeDetails({
-        formStage: 'skills-and-toolkit',
+        resumeId: resumeData?.id,
         payload,
       }).unwrap();
       message.success('Skills and toolkit updated successfully');

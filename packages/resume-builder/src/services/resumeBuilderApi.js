@@ -19,11 +19,12 @@ export const resumeBuilderApi = createApi({
   tagTypes: ['ResumeLink'],
   endpoints: (builder) => ({
     updateResumeDetails: builder.mutation({
-      query: ({ formStage, payload }) => ({
-        url: `/api/resume/${formStage}`,
-        method: 'POST',
+      query: ({ resumeId, payload }) => ({
+        url: `/api/v3/user-resumes/${resumeId}/`,
+        method: 'PUT',
         body: payload,
       }),
+      invalidatesTags: ['ResumeLink'],
     }),
     getResumeLink: builder.query({
       query: ({ resumeId }) => ({

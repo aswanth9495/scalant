@@ -17,9 +17,10 @@ import {
   message,
 } from 'antd';
 import { useSelector } from 'react-redux';
-
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
+
 import styles from './PersonalInfoAndSocial.module.scss';
+
 const { Text } = Typography;
 
 const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
@@ -73,7 +74,7 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
       onComplete?.();
 
       await updateResumeDetails({
-        formStage: 'personal-details',
+        resumeId: resumeData?.id,
         payload,
       }).unwrap();
       message.success('Personal details updated successfully');

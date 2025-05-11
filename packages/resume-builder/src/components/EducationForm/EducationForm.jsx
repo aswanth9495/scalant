@@ -157,7 +157,7 @@ const EducationForm = ({ onComplete, required = false }) => {
       };
 
       await updateResumeDetails({
-        formStage: 'education-details',
+        resumeId: resumeData?.id,
         payload,
       }).unwrap();
       message.success('Education details updated successfully');
