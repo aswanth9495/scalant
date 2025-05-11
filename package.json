@@ -1,6 +1,6 @@
 {
   "name": "scalant",
-  "private": true,
+  "private": false,
   "workspaces": [
     "packages/*"
   ],
