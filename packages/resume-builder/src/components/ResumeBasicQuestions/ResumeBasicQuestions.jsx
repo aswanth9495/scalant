@@ -40,8 +40,6 @@ const ResumeBasicQuestions = () => {
   const basicQuestionsData = resumeData?.personal_details;
   const jobRoles = getJobRoles('academy');
 
-  console.log('basicQuestionsData', basicQuestionsData);
-
   const initialValues = useMemo(
     () =>
       basicQuestionsData

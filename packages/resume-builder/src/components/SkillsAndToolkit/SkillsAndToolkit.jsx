@@ -8,7 +8,7 @@ import {
   TOOLS,
 } from './constants';
 import styles from './SkillsAndToolkit.module.scss';
-// eslint-disable-next-line max-len
+
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 
 const SkillsAndToolkit = ({ onComplete }) => {

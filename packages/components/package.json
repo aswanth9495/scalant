@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "main": "dist/components.umd.js",
-  "module": "dist/resume-builder.es.js",
+  "module": "dist/components.es.js",
   "files": [
     "dist"
   ],

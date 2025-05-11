@@ -15,7 +15,7 @@ import styles from './PdfPreview.module.scss';
 // Set the worker source for PDF.js
 const CDN_BASE = '//cdnjs.cloudflare.com/ajax/libs/pdf.js';
 const WORKER_PATH = 'pdf.worker.min.js';
-// eslint-disable-next-line max-len
+
 pdfjs.GlobalWorkerOptions.workerSrc = `${CDN_BASE}/${pdfjs.version}/${WORKER_PATH}`;
 
 const MESSAGES = {

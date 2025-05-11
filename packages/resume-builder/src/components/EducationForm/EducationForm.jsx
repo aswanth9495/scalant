@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Space, Button, Flex, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import EducationFormItem from './EducationFormItem';
-// eslint-disable-next-line max-len
+
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 import { initializeForm, updateFormData } from '../../store/formStoreSlice';
 import dayjs from 'dayjs';
@@ -43,24 +43,24 @@ const EducationForm = ({ onComplete, required = false }) => {
     () =>
       resumeData?.education
         ? {
-          educationItems: resumeData.education.map((item, index) => ({
-            id: index,
-            completed: true,
-            saved: true,
-            expanded: false,
-            formData: {
-              institute: item.university,
-              degree: item.degree,
-              branch: item.field,
-              grades: item.marks,
-              gradeType: item.marks_type,
-              graduation: item.graduation_date
+            educationItems: resumeData.education.map((item, index) => ({
+              id: index,
+              completed: true,
+              saved: true,
+              expanded: false,
+              formData: {
+                institute: item.university,
+                degree: item.degree,
+                branch: item.field,
+                grades: item.marks,
+                gradeType: item.marks_type,
+                graduation: item.graduation_date
                   ? dayjs(item.graduation_date)
                   : null,
-              description: item.short_description,
-            },
-          })),
-        }
+                description: item.short_description,
+              },
+            })),
+          }
         : initialFormData,
     [resumeData?.education]
   );

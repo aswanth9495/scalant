@@ -45,21 +45,21 @@ export default [
     rules: {
       // Base rules
       "array-bracket-spacing": ["error", "never"],
-      "comma-spacing": "error",
+      "comma-spacing": "off",
       "default-case": "error",
-      "eol-last": "error",
+      "eol-last": "off",
       eqeqeq: "error",
       "func-call-spacing": "error",
-      indent: ["error", 2, { SwitchCase: 1 }],
-      "key-spacing": "error",
+      indent: "off",
+      "key-spacing": "off",
       "keyword-spacing": 1,
-      "max-len": ["error", { code: 80 }],
+      "max-len": "off",
       "no-console": 1,
       "no-multi-spaces": "error",
       "no-sequences": "error",
       "no-use-before-define": "error",
       radix: "error",
-      semi: "error",
+      semi: "off",
 
       // React specific rules
       "react/react-in-jsx-scope": "off",

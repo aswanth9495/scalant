@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Space, Button, Flex, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import WorkExperienceFormItem from './WorkExperienceFormItem';
-// eslint-disable-next-line max-len
+
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 
 const WorkExperienceForm = ({ onComplete, required = false }) => {

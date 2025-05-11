@@ -71,7 +71,7 @@ const PreferenceSettings = () => {
     );
   };
 
-  const handleFinish = (values) => {
+  const handleFinish = () => {
     dispatch(nextStep());
   };
 

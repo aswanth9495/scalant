@@ -5,7 +5,6 @@ const { Header, Content } = Layout;
 import styles from './ResumeLayout.module.scss';
 
 const LOGO_URL =
-  // eslint-disable-next-line max-len
   'https://assets.fp.scaler.com/seo/_next/static/media/scaler-light.6def257e.svg';
 
 const ResumeLayout = ({ onBackButtonClick, children, preview }) => {

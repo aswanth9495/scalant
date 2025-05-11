@@ -17,7 +17,7 @@ import {
   message,
 } from 'antd';
 import { useSelector } from 'react-redux';
-// eslint-disable-next-line max-len
+
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 import styles from './PersonalInfoAndSocial.module.scss';
 const { Text } = Typography;
