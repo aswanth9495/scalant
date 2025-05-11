@@ -19,7 +19,13 @@ export default defineConfig({
       formats: ['es', 'umd'],
     },
     rollupOptions: {
-      external: ['react', 'react-dom', '@reduxjs/toolkit', 'react-redux'],
+      external: [
+        'react',
+        'react-dom',
+        '@reduxjs/toolkit',
+        'react-redux',
+        'react/jsx-runtime',
+      ],
       output: {
         globals: {
           react: 'React',
