@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-let baseUrl = 'https://cf1d948b-f96c-4781-8235-53d3293f0a70.mock.pstmn.io';
+// eslint-disable-next-line no-undef
+let baseUrl = window.location.origin;
 
 const dynamicBaseQuery = async (args, api, extraOptions) => {
   const baseQuery = fetchBaseQuery({
