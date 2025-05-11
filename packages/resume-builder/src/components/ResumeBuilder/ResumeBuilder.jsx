@@ -9,6 +9,7 @@ import {
   previousStep,
   setResumeData,
 } from '../../store/resumeBuilderSlice';
+
 import {
   RESUME_BUILDER_STEPS,
   PREFERENCE_SETTINGS_IMAGE,
@@ -20,7 +21,7 @@ import ResumeBasicQuestions from '../ResumeBasicQuestions';
 import ResumeTips from '../ResumeTips';
 import ResumeSteps from '../ResumeSteps';
 import ResumePreview from '../ResumePreview';
-import PdfPreview from '../PdfPreview';
+import SampleResumePreview from '../SampleResumePreview';
 import styles from './ResumeBuilder.module.scss';
 
 const ResumeBuilderContent = ({
@@ -94,20 +95,15 @@ const ResumeBuilderContent = ({
         );
       case RESUME_BUILDER_STEPS.RESUME_BASIC_QUESTIONS.component:
         return (
-          <PdfPreview
-            // eslint-disable-next-line max-len
-            pdfLink="https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/124/611/original/Fresher_Resume.pdf?1746938381"
-            selectedResume="Sample Resume"
-          />
-        );
-      case RESUME_BUILDER_STEPS.RESUME_TIPS.component:
-        return (
           <img
             src={PREFERENCE_SETTINGS_IMAGE}
             className={styles.previewImage}
             alt="preference-settings"
           />
         );
+      case RESUME_BUILDER_STEPS.RESUME_TIPS.component:
+        return <SampleResumePreview />;
+
       case RESUME_BUILDER_STEPS.RESUME_STEPS.component:
         return <ResumePreview resumeData={resumeData} />;
       default:

@@ -10,17 +10,17 @@ import styles from './ResumeTips.module.scss';
 
 const ResumeTips = () => {
   const dispatch = useDispatch();
-  const resumeQuestionsData = useSelector(
-    (state) => state.resumeQuestions.resumeQuestionsData
+  const resumePersonaData = useSelector(
+    (state) => state.resumePersona.resumePersonaData
   );
 
   const [tips, setTips] = useState([]);
 
   useEffect(() => {
-    if (resumeQuestionsData) {
-      setTips(getResumeTips(resumeQuestionsData));
+    if (resumePersonaData) {
+      setTips(getResumeTips(resumePersonaData));
     }
-  }, [resumeQuestionsData]);
+  }, [resumePersonaData]);
 
   const handleStartBuilding = () => {
     dispatch(nextStep());

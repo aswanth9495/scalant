@@ -27,8 +27,8 @@ const ResumeTimeline = () => {
   );
   const stepRefs = useRef([]);
   const [mounted, setMounted] = useState(false);
-  const resumeQuestionsData = useSelector(
-    (state) => state.resumeQuestions.resumeQuestionsData
+  const resumePersonaData = useSelector(
+    (state) => state.resumePersona.resumePersonaData
   );
 
   useEffect(() => {
@@ -76,15 +76,15 @@ const ResumeTimeline = () => {
   }, [incompleteForms, currentIncompleteForm, dispatch]);
 
   useEffect(() => {
-    if (resumeQuestionsData && incompleteForms.length > 0) {
+    if (resumePersonaData && incompleteForms.length > 0) {
       const formSteps = getFormSteps(
-        resumeQuestionsData,
+        resumePersonaData,
         incompleteForms,
         handleFormCompletion
       );
       setSteps(formSteps);
     }
-  }, [resumeQuestionsData, incompleteForms, handleFormCompletion]);
+  }, [resumePersonaData, incompleteForms, handleFormCompletion]);
 
   return (
     <div className={styles.container}>

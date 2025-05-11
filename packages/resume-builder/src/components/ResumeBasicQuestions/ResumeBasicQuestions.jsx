@@ -1,16 +1,31 @@
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector, batch } from 'react-redux';
 import { nextStep } from '../../store/resumeBuilderSlice';
 import { Typography, Flex, Form, InputNumber, Select, Button } from 'antd';
 import PageHeader from '../PageHeader';
-import { setResumeQuestionsData } from '../../store/resumeQuestionsSlice';
+import { setResumePersonaData } from '../../store/resumePersonaSlice';
+import { initializeForm, updateFormData } from '../../store/formStoreSlice';
 import styles from './ResumeBasicQuestions.module.scss';
 import { PROGRAM_JOB_ROLES } from '../../utils/constants';
 
 const { Text } = Typography;
 
+const FORM_ID = 'basicQuestions';
+
 const getJobRoles = (program) => {
   return PROGRAM_JOB_ROLES[program] || [];
+};
+
+const initialFormData = {
+  totalWorkExperience: {
+    yearsExperience: 0,
+    monthsExperience: 0,
+  },
+  totalWorkExperienceInTech: {
+    yearsExperienceInTech: 0,
+    monthsExperienceInTech: 0,
+  },
+  currentJobRole: '',
 };
 
 const ResumeBasicQuestions = () => {
@@ -18,10 +33,60 @@ const ResumeBasicQuestions = () => {
   const [form] = Form.useForm();
 
   const resumeData = useSelector((state) => state.resumeBuilder.resumeData);
-
+  const formData = useSelector((state) => state.formStore.forms[FORM_ID]);
+  const isFormInitialized = useSelector(
+    (state) => state.formStore.initializedForms[FORM_ID]
+  );
   const basicQuestionsData = resumeData?.personal_details;
-
   const jobRoles = getJobRoles('academy');
+
+  console.log('basicQuestionsData', basicQuestionsData);
+
+  const initialValues = useMemo(
+    () =>
+      basicQuestionsData
+        ? {
+            totalWorkExperience: {
+              yearsExperience: Math.floor(
+                basicQuestionsData?.total_experience / 12
+              ),
+              monthsExperience: basicQuestionsData?.total_experience % 12,
+            },
+            totalWorkExperienceInTech: {
+              yearsExperienceInTech: Math.floor(
+                basicQuestionsData?.experience / 12
+              ),
+              monthsExperienceInTech: basicQuestionsData?.experience % 12,
+            },
+            currentJobRole: basicQuestionsData?.job_title,
+          }
+        : initialFormData,
+    [basicQuestionsData]
+  );
+  useEffect(() => {
+    if (!isFormInitialized) {
+      dispatch(
+        initializeForm({
+          formId: FORM_ID,
+          initialData: initialValues,
+        })
+      );
+    }
+  }, [dispatch, isFormInitialized, initialValues]);
+
+  useEffect(() => {
+    // Initialize form with Redux state
+    form.setFieldsValue(formData);
+  }, [form, formData]);
+
+  const handleValuesChange = (changedValues, allValues) => {
+    dispatch(
+      updateFormData({
+        formId: FORM_ID,
+        data: allValues,
+      })
+    );
+  };
 
   const handleFinish = (values) => {
     const totalExperience =
@@ -30,13 +95,21 @@ const ResumeBasicQuestions = () => {
     const techExperience =
       values?.totalWorkExperienceInTech?.yearsExperienceInTech * 12 +
       values?.totalWorkExperienceInTech?.monthsExperienceInTech;
+
     batch(() => {
       dispatch(
-        setResumeQuestionsData({
+        setResumePersonaData({
           totalExperience,
           techExperience,
           currentJobRole: values?.currentJobRole,
           program: 'academy',
+        })
+      );
+
+      dispatch(
+        updateFormData({
+          formId: FORM_ID,
+          data: values,
         })
       );
       dispatch(nextStep());
@@ -58,21 +131,8 @@ const ResumeBasicQuestions = () => {
           form={form}
           layout="vertical"
           onFinish={handleFinish}
-          initialValues={{
-            totalWorkExperience: {
-              yearsExperience: Math.floor(
-                basicQuestionsData?.total_experience / 12
-              ),
-              monthsExperience: basicQuestionsData?.total_experience % 12,
-            },
-            totalWorkExperienceInTech: {
-              yearsExperienceInTech: Math.floor(
-                basicQuestionsData?.experience / 12
-              ),
-              monthsExperienceInTech: basicQuestionsData?.experience % 12,
-            },
-            currentJobRole: basicQuestionsData?.job_title,
-          }}
+          onValuesChange={handleValuesChange}
+          initialValues={initialValues}
         >
           <Flex gap={16} vertical>
             <Form.Item

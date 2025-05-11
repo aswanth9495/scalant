@@ -1,22 +1,77 @@
+import React, { useEffect, useMemo } from 'react';
 import PageHeader from '../PageHeader';
 import { useDispatch, useSelector } from 'react-redux';
 import { nextStep } from '../../store/resumeBuilderSlice';
 import { Form, Input, Select, Radio, Button, Flex, Checkbox } from 'antd';
 import { PREFERRED_JOB_LOCATIONS, PREFERRED_JOB_ROLES } from './constants';
 import styles from './PreferenceSettings.module.scss';
+import { initializeForm, updateFormData } from '../../store/formStoreSlice';
+
+const FORM_ID = 'preferenceSettings';
+
+const initialFormData = {
+  preferredLocations: [],
+  preferredRoles: [],
+  ctc: '',
+  notice: '',
+  negotiable: 'no',
+  internship: true,
+  acknowledge: true,
+};
 
 const PreferenceSettings = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
 
   const resumeData = useSelector((state) => state.resumeBuilder.resumeData);
-
+  const formData = useSelector((state) => state.formStore.forms[FORM_ID]);
+  const isFormInitialized = useSelector(
+    (state) => state.formStore.initializedForms[FORM_ID]
+  );
   const preferenceData = resumeData?.user_company_profile;
 
+  const initialValues = useMemo(
+    () =>
+      preferenceData
+        ? {
+            preferredLocations: preferenceData?.preferred_location,
+            preferredRoles: [preferenceData?.preferred_role],
+            ctc: preferenceData?.expected_ctc,
+            notice: preferenceData?.notice_period,
+            negotiable: preferenceData?.buyout_notice ? 'yes' : 'no',
+            internship: true,
+            acknowledge: true,
+          }
+        : initialFormData,
+    [preferenceData]
+  );
+
+  useEffect(() => {
+    if (!isFormInitialized) {
+      dispatch(
+        initializeForm({
+          formId: FORM_ID,
+          initialData: initialValues,
+        })
+      );
+    }
+  }, [dispatch, isFormInitialized, initialValues]);
+
+  useEffect(() => {
+    // Initialize form with Redux state
+    form.setFieldsValue(formData);
+  }, [form, formData]);
+
+  const handleValuesChange = (changedValues, allValues) => {
+    dispatch(
+      updateFormData({
+        formId: FORM_ID,
+        data: allValues,
+      })
+    );
+  };
+
   const handleFinish = (values) => {
-    // Process the form data here
-    // eslint-disable-next-line no-console, no-undef
-    console.log('Submitted values:', values);
     dispatch(nextStep());
   };
 
@@ -31,15 +86,8 @@ const PreferenceSettings = () => {
         form={form}
         layout="vertical"
         onFinish={handleFinish}
-        initialValues={{
-          preferredLocations: preferenceData?.preferred_location,
-          preferredRoles: [preferenceData?.preferred_role],
-          ctc: preferenceData?.expected_ctc,
-          notice: preferenceData?.notice_period,
-          negotiable: preferenceData?.buyout_notice ? 'yes' : 'no',
-          internship: true,
-          acknowledge: true,
-        }}
+        onValuesChange={handleValuesChange}
+        initialValues={initialValues}
       >
         <Form.Item
           label="Preferred job locations?"
