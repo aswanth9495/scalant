@@ -9,7 +9,7 @@ const __dirname = dirname(__filename);
 export default defineConfig({
   plugins: [
     react({
-      jsxRuntime: 'automatic',
+      jsxRuntime: 'classic',
     }),
   ],
   css: {
@@ -30,13 +30,7 @@ export default defineConfig({
       formats: ['es', 'umd'],
     },
     rollupOptions: {
-      external: [
-        'react',
-        'react-dom',
-        '@reduxjs/toolkit',
-        'react-redux',
-        'react/jsx-runtime',
-      ],
+      external: ['react', 'react-dom', '@reduxjs/toolkit', 'react-redux'],
       output: {
         globals: {
           react: 'React',

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Checkbox, Button, Typography } from 'antd';
 import { useDispatch } from 'react-redux';
 import { nextStep } from '../../store/resumeBuilderSlice';

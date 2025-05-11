@@ -62,7 +62,7 @@ export default [
       semi: "off",
 
       // React specific rules
-      "react/react-in-jsx-scope": "off",
+      "react/react-in-jsx-scope": "error",
       "react/prop-types": "off",
       "react/jsx-uses-vars": "error",
       "react/jsx-filename-extension": "off",

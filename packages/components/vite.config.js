@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [
     react({
-      jsxRuntime: 'automatic',
+      jsxRuntime: 'classic',
     }),
   ],
   build: {
@@ -19,13 +19,7 @@ export default defineConfig({
       formats: ['es', 'umd'],
     },
     rollupOptions: {
-      external: [
-        'react',
-        'react-dom',
-        '@reduxjs/toolkit',
-        'react-redux',
-        'react/jsx-runtime',
-      ],
+      external: ['react', 'react-dom', '@reduxjs/toolkit', 'react-redux'],
       output: {
         globals: {
           react: 'React',
