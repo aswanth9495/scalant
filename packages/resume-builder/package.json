@@ -2,6 +2,9 @@
   "name": "@scalant/resume-builder",
   "version": "2.0.0",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "dist/resume-builder.umd.js",
   "module": "dist/resume-builder.es.js",
   "files": [
