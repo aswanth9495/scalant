@@ -19,7 +19,12 @@ import styles from './EducationForm.module.scss';
 
 const { Text } = Typography;
 
-const EducationFormItem = ({ item, setEducationItems, educationItems }) => {
+const EducationFormItem = ({
+  item,
+  setEducationItems,
+  educationItems,
+  required,
+}) => {
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -128,7 +133,7 @@ const EducationFormItem = ({ item, setEducationItems, educationItems }) => {
         <Form.Item
           name="institute"
           label="Institute Name"
-          rules={[{ required: true, message: 'Institute Name is required' }]}
+          rules={[{ required: required }]}
         >
           <Input placeholder="Enter Institute Name" />
         </Form.Item>
@@ -136,7 +141,7 @@ const EducationFormItem = ({ item, setEducationItems, educationItems }) => {
           <Form.Item
             name="degree"
             label="Degree Type"
-            rules={[{ required: true, message: 'Degree Type is required' }]}
+            rules={[{ required: required }]}
             className={styles.midWidth}
           >
             <Select
@@ -198,7 +203,7 @@ const EducationFormItem = ({ item, setEducationItems, educationItems }) => {
           <Form.Item
             name="grades"
             label="Grades (Final/Current)"
-            rules={[{ required: true, message: 'Grades are required' }]}
+            rules={[{ required: required }]}
             className={styles.midWidth}
           >
             <InputNumber placeholder="Enter Grades" addonAfter={selectAfter} />
@@ -206,7 +211,7 @@ const EducationFormItem = ({ item, setEducationItems, educationItems }) => {
           <Form.Item
             name="graduation"
             label="Graduation (Actual/Expected)"
-            rules={[{ required: true, message: 'Graduation is required' }]}
+            rules={[{ required: required }]}
             className={styles.midWidth}
           >
             <DatePicker

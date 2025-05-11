@@ -7,7 +7,7 @@ import EducationFormItem from './EducationFormItem';
 // eslint-disable-next-line max-len
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 
-const EducationForm = ({ onComplete }) => {
+const EducationForm = ({ onComplete, required = false }) => {
   const [educationItems, setEducationItems] = useState([
     { id: 1, completed: false, saved: false, expanded: true },
   ]);
@@ -142,6 +142,7 @@ const EducationForm = ({ onComplete }) => {
               item={item}
               setEducationItems={setEducationItems}
               educationItems={educationItems}
+              required={required}
             />
           ))}
         </Flex>

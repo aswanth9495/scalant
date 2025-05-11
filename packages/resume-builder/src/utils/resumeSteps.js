@@ -1,3 +1,19 @@
+import React from 'react';
+import {
+  UserOutlined,
+  ToolOutlined,
+  FileTextOutlined,
+  BookOutlined,
+  RiseOutlined,
+  FormOutlined,
+} from '@ant-design/icons';
+import PersonalInfoAndSocial from '../components/PersonalInfoAndSocial';
+import SkillsAndToolkit from '../components/SkillsAndToolkit';
+import ProjectForm from '../components/ProjectForm';
+import EducationForm from '../components/EducationForm';
+import WorkExperienceForm from '../components/WorkExperienceForm';
+import CustomForm from '../components/CustomForm';
+
 const PERSONAL_DETAILS_FORM_REQUIRED_FIELDS = [
   'name',
   'phone_number',
@@ -29,6 +45,217 @@ const ALL_FORMS_KEYS = {
   education: 'education',
   skills: 'skills',
   achievements: 'achievements',
+};
+
+const FORM_STEPS = [
+  {
+    key: 'personalDetails',
+    title: 'Personal Info and Socials',
+    subtitle: 'Lets get to know you! Fill in your personal details',
+    icon: <UserOutlined />,
+    component: PersonalInfoAndSocial,
+  },
+  {
+    key: 'skills',
+    title: 'Skills and Toolset',
+    subtitle: 'Select from these industry-standard skills and tools',
+    icon: <ToolOutlined />,
+    component: SkillsAndToolkit,
+  },
+  {
+    key: 'projects',
+    title: 'Projects',
+    subtitle: 'Add personal projects',
+    icon: <FileTextOutlined />,
+    component: ProjectForm,
+  },
+  {
+    key: 'education',
+    title: 'Education',
+    subtitle: 'Add academic background and certifications',
+    icon: <BookOutlined />,
+    component: EducationForm,
+  },
+  {
+    key: 'experience',
+    title: 'Work Experience',
+    subtitle: 'Add details about jobs and internships',
+    icon: <RiseOutlined />,
+    component: WorkExperienceForm,
+  },
+  {
+    key: 'achievements',
+    title: 'Custom Form',
+    subtitle: 'Add custom form',
+    icon: <FormOutlined />,
+    component: CustomForm,
+  },
+];
+
+const STEP_ORDERS = {
+  ACADEMY_FRESHER: {
+    order: [
+      'personalDetails',
+      'skills',
+      'projects',
+      'education',
+      'experience',
+      'achievements',
+    ],
+    requiredForms: ['personalDetails', 'skills', 'projects', 'education'],
+  },
+  ACADEMY_QA_AND_SALESFORCE: {
+    order: [
+      'personalDetails',
+      'skills',
+      'projects',
+      'experience',
+      'education',
+      'achievements',
+    ],
+    requiredForms: [
+      'personalDetails',
+      'skills',
+      'projects',
+      'experience',
+      'education',
+    ],
+  },
+  ACADEMY_EXCEPT_ENGINEERING: {
+    order: [
+      'personalDetails',
+      'skills',
+      'experience',
+      'projects',
+      'education',
+      'achievements',
+    ],
+    requiredForms: ['personalDetails', 'skills', 'experience', 'education'],
+  },
+  ACADEMY_ENGINEERING: {
+    order: [
+      'personalDetails',
+      'skills',
+      'experience',
+      'projects',
+      'education',
+      'achievements',
+    ],
+    requiredForms: ['personalDetails', 'skills', 'experience', 'education'],
+  },
+  DSML_FRESHER: {
+    order: [
+      'personalDetails',
+      'skills',
+      'projects',
+      'experience',
+      'education',
+      'achievements',
+    ],
+    requiredForms: ['personalDetails', 'skills', 'projects', 'education'],
+  },
+  DSML_NON_DEV_IT_PROFESSIONAL: {
+    order: [
+      'personalDetails',
+      'skills',
+      'projects',
+      'experience',
+      'education',
+      'achievements',
+    ],
+    requiredForms: [
+      'personalDetails',
+      'skills',
+      'projects',
+      'experience',
+      'education',
+    ],
+  },
+  DSML_DEVELOPER: {
+    order: [
+      'personalDetails',
+      'skills',
+      'projects',
+      'experience',
+      'education',
+      'achievements',
+    ],
+    requiredForms: [
+      'personalDetails',
+      'skills',
+      'projects',
+      'experience',
+      'education',
+    ],
+  },
+  DSML_DATA_ML_ENGINEER: {
+    order: [
+      'personalDetails',
+      'skills',
+      'experience',
+      'projects',
+      'education',
+      'achievements',
+    ],
+    requiredForms: ['personalDetails', 'skills', 'experience', 'education'],
+  },
+};
+
+const getFormOrderDetails = (program, currentJobRole) => {
+  if (
+    program === 'academy' &&
+    ['Fresher', 'Non- Tech'].includes(currentJobRole)
+  ) {
+    return STEP_ORDERS.ACADEMY_FRESHER;
+  } else if (
+    program === 'academy' &&
+    [
+      'Quality Assurance / SDE in Testing',
+      'Salesforce / Servicenow / RPA',
+    ].includes(currentJobRole)
+  ) {
+    return STEP_ORDERS.ACADEMY_QA_AND_SALESFORCE;
+  } else if (
+    program === 'academy' &&
+    [
+      'Embedded Systems Engineer',
+      'Mobile Engineer',
+      'Frontend/Full-stack',
+      'Backend / Backend Heavy Full-stack',
+      'DevOps / Network Engineer',
+      'Data Engineer',
+    ].includes(currentJobRole)
+  ) {
+    console.log('academy except engineering');
+    return STEP_ORDERS.ACADEMY_EXCEPT_ENGINEERING;
+  } else if (
+    program === 'academy' &&
+    currentJobRole === 'Engineering Leadership'
+  ) {
+    return STEP_ORDERS.ACADEMY_ENGINEERING;
+  } else if (
+    program === 'dsml' &&
+    ['Fresher', 'Non- Tech'].includes(currentJobRole)
+  ) {
+    return STEP_ORDERS.DSML_FRESHER;
+  } else if (
+    program === 'dsml' &&
+    currentJobRole === 'Non-Developer & IT Professional'
+  ) {
+    return STEP_ORDERS.DSML_NON_DEV_IT_PROFESSIONAL;
+  } else if (program === 'dsml' && currentJobRole === 'Developer') {
+    return STEP_ORDERS.DSML_DEVELOPER;
+  } else if (
+    program === 'dsml' &&
+    [
+      'Data Analyst / Business Analyst',
+      'Data Scientist / Machine Learning Engineer',
+    ].includes(currentJobRole)
+  ) {
+    return STEP_ORDERS.DSML_DATA_ANALYST_ML_ENGINEER;
+  } else {
+    return STEP_ORDERS.DSML_FRESHER;
+  }
 };
 
 const getRequiredFields = (formKey) => {
@@ -106,4 +333,44 @@ export const getAllIncompleteForms = (resumeData) => {
   });
 
   return incompleteForms;
+};
+
+export const getFormSteps = (
+  resumeQuestionsData,
+  incompleteForms,
+  onComplete
+) => {
+  if (!resumeQuestionsData) return [];
+
+  const { program, currentJobRole } = resumeQuestionsData;
+
+  const formOrderDetails = getFormOrderDetails(program, currentJobRole);
+
+  // Determine which step order to use
+  const stepOrder = formOrderDetails.order;
+  const requiredForms = formOrderDetails.requiredForms;
+
+  // Create ordered steps based on the determined order
+  const orderedSteps = stepOrder
+    .map((key) => {
+      const step = FORM_STEPS.find((s) => s.key === key);
+      if (!step) return null;
+
+      // Determine if the step is required
+      let isRequired = false;
+      if (requiredForms.includes(key)) {
+        isRequired = true;
+      }
+      return {
+        ...step,
+        status: incompleteForms.includes(key) ? 'incomplete' : 'complete',
+        required: isRequired,
+        component: (
+          <step.component onComplete={onComplete} required={isRequired} />
+        ),
+      };
+    })
+    .filter(Boolean);
+
+  return orderedSteps;
 };

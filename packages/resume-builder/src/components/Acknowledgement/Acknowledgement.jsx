@@ -20,11 +20,6 @@ const Acknowledgement = () => {
     }
   };
 
-  const handleLater = () => {
-    // eslint-disable-next-line no-console, no-undef
-    console.log('Later');
-  };
-
   return (
     <>
       <PageHeader

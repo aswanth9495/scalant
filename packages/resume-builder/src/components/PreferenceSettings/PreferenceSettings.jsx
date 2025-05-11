@@ -1,8 +1,8 @@
 import PageHeader from '../PageHeader';
 import { useDispatch, useSelector } from 'react-redux';
 import { nextStep } from '../../store/resumeBuilderSlice';
-import { Form, Input, Select, Radio, Button } from 'antd';
-
+import { Form, Input, Select, Radio, Button, Flex, Checkbox } from 'antd';
+import { PREFERRED_JOB_LOCATIONS, PREFERRED_JOB_ROLES } from './constants';
 import styles from './PreferenceSettings.module.scss';
 
 const PreferenceSettings = () => {
@@ -36,7 +36,9 @@ const PreferenceSettings = () => {
           preferredRoles: [preferenceData?.preferred_role],
           ctc: preferenceData?.expected_ctc,
           notice: preferenceData?.notice_period,
-          internship: 'yes',
+          negotiable: preferenceData?.buyout_notice ? 'yes' : 'no',
+          internship: true,
+          acknowledge: true,
         }}
       >
         <Form.Item
@@ -46,11 +48,11 @@ const PreferenceSettings = () => {
             { required: true, message: 'Please select preferred location!' },
           ]}
         >
-          <Select>
-            <Select.Option value="All over India">All over India</Select.Option>
-            <Select.Option value="Remote">Remote</Select.Option>
-            <Select.Option value="Bangalore">Bangalore</Select.Option>
-          </Select>
+          <Select
+            mode="multiple"
+            allowClear
+            options={PREFERRED_JOB_LOCATIONS}
+          />
         </Form.Item>
 
         <Form.Item
@@ -58,15 +60,7 @@ const PreferenceSettings = () => {
           name="preferredRoles"
           rules={[{ required: true, message: 'Please select job roles!' }]}
         >
-          <Select mode="multiple" allowClear>
-            <Select.Option value="SDE">SDE</Select.Option>
-            <Select.Option value="Backend Developer">
-              Backend Developer
-            </Select.Option>
-            <Select.Option value="Frontend Developer">
-              Frontend Developer
-            </Select.Option>
-          </Select>
+          <Select mode="multiple" allowClear options={PREFERRED_JOB_ROLES} />
         </Form.Item>
 
         <Form.Item
@@ -79,24 +73,41 @@ const PreferenceSettings = () => {
           <Input placeholder="e.g., 3" />
         </Form.Item>
 
-        <Form.Item
-          label="Notice Period (in Days)"
-          name="notice"
-          rules={[{ required: true, message: 'Please enter notice period!' }]}
-        >
-          <Input placeholder="e.g., 3" />
-        </Form.Item>
+        <Flex gap={16}>
+          <Form.Item
+            label="Notice Period (in Days)"
+            name="notice"
+            rules={[{ required: true, message: 'Please enter notice period!' }]}
+          >
+            <Input placeholder="e.g., 3" />
+          </Form.Item>
+          <Form.Item
+            label="Negotiable / Buyout available"
+            name="negotiable"
+            rules={[{ required: true, message: 'Please select an option!' }]}
+          >
+            <Radio.Group>
+              <Radio value="yes">Yes</Radio>
+              <Radio value="no">No</Radio>
+            </Radio.Group>
+          </Form.Item>
+        </Flex>
 
         <Form.Item
-          label="Would you also consider internships?"
           name="internship"
+          valuePropName="checked"
           rules={[{ required: true, message: 'Please select an option!' }]}
         >
-          <Radio.Group>
-            <Radio value="yes">Yes</Radio>
-            <Radio value="no">No</Radio>
-          </Radio.Group>
+          <Checkbox>I am also open to Internships</Checkbox>
         </Form.Item>
+
+        <Form.Item name="acknowledge" valuePropName="checked">
+          <Checkbox>
+            Notify me on email and Whatsapp if any relevant job is added to
+            Careers Hub dashboard as per my given preference
+          </Checkbox>
+        </Form.Item>
+
         <div className={styles.buttonContainer}>
           <Button
             className={styles.submitBtn}

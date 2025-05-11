@@ -22,7 +22,7 @@ import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi'
 import styles from './PersonalInfoAndSocial.module.scss';
 const { Text } = Typography;
 
-const PersonalInfoAndSocial = ({ onComplete }) => {
+const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
   const [form] = Form.useForm();
   const [additionalProfiles, setAdditionalProfiles] = useState([]);
   const resumeData = useSelector((state) => state.resumeBuilder.resumeData);
@@ -107,7 +107,7 @@ const PersonalInfoAndSocial = ({ onComplete }) => {
           <Form.Item
             label="Full Name"
             name="fullName"
-            rules={[{ required: true }]}
+            rules={[{ required: required }]}
             className={styles.formItem}
           >
             <Input />
@@ -115,7 +115,7 @@ const PersonalInfoAndSocial = ({ onComplete }) => {
           <Form.Item
             label="Contact Number"
             name="contactNumber"
-            rules={[{ required: true }]}
+            rules={[{ required: required }]}
             className={styles.formItem}
             tooltip="You can update this in the profile section"
           >
@@ -124,7 +124,7 @@ const PersonalInfoAndSocial = ({ onComplete }) => {
           <Form.Item
             label="Email Address"
             name="emailAddress"
-            rules={[{ required: true }]}
+            rules={[{ required: required }]}
             className={styles.formItem}
             tooltip="You can update this in the profile section"
           >
@@ -134,7 +134,7 @@ const PersonalInfoAndSocial = ({ onComplete }) => {
             <Form.Item
               label="Gender"
               name="gender"
-              rules={[{ required: true }]}
+              rules={[{ required: required }]}
               style={{ flex: 1 }}
               className={styles.formItem}
             >
@@ -167,7 +167,7 @@ const PersonalInfoAndSocial = ({ onComplete }) => {
           <Form.Item
             label="LinkedIn"
             name="linkedIn"
-            rules={[{ required: true }]}
+            rules={[{ required: required }]}
             className={styles.formItem}
           >
             <Input prefix={<LinkedinOutlined />} />
