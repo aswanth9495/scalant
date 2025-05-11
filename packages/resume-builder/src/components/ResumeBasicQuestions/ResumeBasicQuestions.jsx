@@ -5,8 +5,13 @@ import { Typography, Flex, Form, InputNumber, Select, Button } from 'antd';
 import PageHeader from '../PageHeader';
 import { setResumeQuestionsData } from '../../store/resumeQuestionsSlice';
 import styles from './ResumeBasicQuestions.module.scss';
-import { getJobRoles } from './constants';
+import { PROGRAM_JOB_ROLES } from '../../utils/constants';
+
 const { Text } = Typography;
+
+const getJobRoles = (program) => {
+  return PROGRAM_JOB_ROLES[program] || [];
+};
 
 const ResumeBasicQuestions = () => {
   const dispatch = useDispatch();

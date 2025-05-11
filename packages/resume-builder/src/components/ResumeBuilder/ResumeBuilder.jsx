@@ -9,7 +9,10 @@ import {
   previousStep,
   setResumeData,
 } from '../../store/resumeBuilderSlice';
-import { RESUME_BUILDER_STEPS } from '../../utils/constants';
+import {
+  RESUME_BUILDER_STEPS,
+  PREFERENCE_SETTINGS_IMAGE,
+} from '../../utils/constants';
 import ResumeLayout from '../../layout/ResumeLayout';
 import Acknowledgement from '../Acknowledgement';
 import PreferenceSettings from '../PreferenceSettings';
@@ -17,11 +20,14 @@ import ResumeBasicQuestions from '../ResumeBasicQuestions';
 import ResumeTips from '../ResumeTips';
 import ResumeSteps from '../ResumeSteps';
 import ResumePreview from '../ResumePreview';
+import PdfPreview from '../PdfPreview';
 import styles from './ResumeBuilder.module.scss';
 
-const PREFERENCE_SETTINGS_IMAGE =
-  'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/124/609/original/image_%281%29.png?1746936231';
-const ResumeBuilderContent = ({ isOnboarding = true, resumeData }) => {
+const ResumeBuilderContent = ({
+  isOnboarding = true,
+  resumeData,
+  onBackButtonClick,
+}) => {
   const dispatch = useDispatch();
   const { currentStep, steps } = useSelector((state) => state.resumeBuilder);
   useEffect(() => {
@@ -88,10 +94,10 @@ const ResumeBuilderContent = ({ isOnboarding = true, resumeData }) => {
         );
       case RESUME_BUILDER_STEPS.RESUME_BASIC_QUESTIONS.component:
         return (
-          <img
-            src={PREFERENCE_SETTINGS_IMAGE}
-            className={styles.previewImage}
-            alt="preference-settings"
+          <PdfPreview
+            // eslint-disable-next-line max-len
+            pdfLink="https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/124/611/original/Fresher_Resume.pdf?1746938381"
+            selectedResume="Sample Resume"
           />
         );
       case RESUME_BUILDER_STEPS.RESUME_TIPS.component:
@@ -109,7 +115,7 @@ const ResumeBuilderContent = ({ isOnboarding = true, resumeData }) => {
     }
   };
   return (
-    <ResumeLayout preview={previewUi()}>
+    <ResumeLayout onBackButtonClick={onBackButtonClick} preview={previewUi()}>
       {renderComponent()}
       <Space className={styles.navigationButtons}>
         <Button onClick={handlePrevious} disabled={currentStep === 0}>
@@ -127,12 +133,17 @@ const ResumeBuilderContent = ({ isOnboarding = true, resumeData }) => {
   );
 };
 
-const ResumeBuilder = ({ isOnboarding = true, resumeData }) => {
+const ResumeBuilder = ({
+  isOnboarding = true,
+  resumeData,
+  onBackButtonClick,
+}) => {
   return (
     <Provider store={resumeBuilderStore}>
       <ResumeBuilderContent
         isOnboarding={isOnboarding}
         resumeData={resumeData}
+        onBackButtonClick={onBackButtonClick}
       />
     </Provider>
   );
