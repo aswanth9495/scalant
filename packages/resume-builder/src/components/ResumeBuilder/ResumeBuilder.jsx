@@ -119,7 +119,8 @@ const ResumeBuilderContent = ({
   return (
     <ResumeLayout onBackButtonClick={onBackButtonClick} preview={previewUi()}>
       {renderComponent()}
-      <Space className={styles.navigationButtons}>
+      {/* Uncomment this when you want to debug
+       <Space className={styles.navigationButtons}>
         <Button onClick={handlePrevious} disabled={currentStep === 0}>
           Previous
         </Button>
@@ -130,7 +131,7 @@ const ResumeBuilderContent = ({
         >
           Next
         </Button>
-      </Space>
+      </Space> */}
     </ResumeLayout>
   );
 };
