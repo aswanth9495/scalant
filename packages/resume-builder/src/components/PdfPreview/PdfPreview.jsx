@@ -13,10 +13,7 @@ import { downloadFile } from '../../utils/downloadUtils';
 import styles from './PdfPreview.module.scss';
 
 // Set the worker source for PDF.js
-const CDN_BASE = '//cdnjs.cloudflare.com/ajax/libs/pdf.js';
-const WORKER_PATH = 'pdf.worker.min.js';
-
-pdfjs.GlobalWorkerOptions.workerSrc = `${CDN_BASE}/${pdfjs.version}/${WORKER_PATH}`;
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const MESSAGES = {
   loading: {
