@@ -7,6 +7,9 @@
   "files": [
     "dist"
   ],
+  "dependencies": {
+    "react-pdf": "6.2.2"
+  },
   "exports": {
     "import": "./dist/resume-builder.es.js",
     "require": "./dist/resume-builder.umd.js"
