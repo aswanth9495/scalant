@@ -1,12 +1,8 @@
 import React, { useEffect } from 'react';
-import { Provider, useDispatch, useSelector } from 'react-redux';
-import { Button, Space } from 'antd';
-import resumeBuilderStore from '../../store/resumeBuilderStore';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   setOnboarding,
   setCurrentStep,
-  nextStep,
-  previousStep,
   setResumeData,
 } from '../../store/resumeBuilderSlice';
 
@@ -49,13 +45,13 @@ const ResumeBuilderContent = ({
     }
   }, [resumeData, dispatch]);
 
-  const handleNext = () => {
-    dispatch(nextStep());
-  };
+  // const handleNext = () => {
+  //   dispatch(nextStep());
+  // };
 
-  const handlePrevious = () => {
-    dispatch(previousStep());
-  };
+  // const handlePrevious = () => {
+  //   dispatch(previousStep());
+  // };
 
   const renderComponent = () => {
     const currentStepData = steps[currentStep];
@@ -142,15 +138,15 @@ const ResumeBuilder = ({
   onBackButtonClick,
   resumeManager,
 }) => {
+  const storeState = useSelector((state) => state);
+  console.log('storeState', storeState);
   return (
-    <Provider store={resumeBuilderStore}>
-      <ResumeBuilderContent
-        isOnboarding={isOnboarding}
-        resumeData={resumeData}
-        onBackButtonClick={onBackButtonClick}
-        resumeManager={resumeManager}
-      />
-    </Provider>
+    <ResumeBuilderContent
+      isOnboarding={isOnboarding}
+      resumeData={resumeData}
+      onBackButtonClick={onBackButtonClick}
+      resumeManager={resumeManager}
+    />
   );
 };
 
