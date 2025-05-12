@@ -1,6 +1,5 @@
 import EducationForm from './EducationForm';
 import ResumeLayout from '../../layout/ResumeLayout';
-import resumeData from '../../dummyData/resumeData.json';
 
 export default {
   title: 'EducationForm',
@@ -9,6 +8,6 @@ export default {
 
 export const Default = () => (
   <ResumeLayout>
-    <EducationForm resumeData={resumeData} />
+    <EducationForm />
   </ResumeLayout>
 );

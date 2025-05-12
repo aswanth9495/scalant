@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Typography, Flex, Avatar, Tag } from 'antd';
+import { Card, Typography, Flex, Avatar, Tag, Tooltip } from 'antd';
 import {
   PlusOutlined,
   MinusOutlined,
@@ -31,17 +31,29 @@ const ResumeStepCard = ({
   expanded,
   onClick,
   status,
+  required,
 }) => {
   return (
     <Card className={styles.card}>
       <div onClick={onClick}>
         <Flex justify="space-between" align="start">
           <Flex align="center" gap={12}>
-            <Avatar className={styles.icon} size={40} icon={icon} />
+            <Avatar
+              className={styles.icon}
+              size={40}
+              icon={React.createElement(icon)}
+            />
             <div>
               <Flex align="center" gap={8}>
                 <Title level={5} className={styles.title} style={{ margin: 0 }}>
                   {title}
+                  {required && (
+                    <Tooltip title="This step is required to complete your profile">
+                      <ExclamationCircleOutlined
+                        style={{ color: 'red', marginLeft: 4 }}
+                      />
+                    </Tooltip>
+                  )}
                 </Title>
                 {status && STATUS_TAGS[status]}
               </Flex>

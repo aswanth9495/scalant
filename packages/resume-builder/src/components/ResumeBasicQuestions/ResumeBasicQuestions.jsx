@@ -1,21 +1,123 @@
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
+import { useDispatch, useSelector, batch } from 'react-redux';
+import { nextStep } from '../../store/resumeBuilderSlice';
 import { Typography, Flex, Form, InputNumber, Select, Button } from 'antd';
 import PageHeader from '../PageHeader';
+import { setResumePersonaData } from '../../store/resumePersonaSlice';
+import { initializeForm, updateFormData } from '../../store/formStoreSlice';
 import styles from './ResumeBasicQuestions.module.scss';
+import { PROGRAM_JOB_ROLES } from '../../utils/constants';
 
 const { Text } = Typography;
 
+const FORM_ID = 'basicQuestions';
+
+const getJobRoles = (program) => {
+  return PROGRAM_JOB_ROLES[program] || [];
+};
+
+const initialFormData = {
+  totalWorkExperience: {
+    yearsExperience: 0,
+    monthsExperience: 0,
+  },
+  totalWorkExperienceInTech: {
+    yearsExperienceInTech: 0,
+    monthsExperienceInTech: 0,
+  },
+  currentJobRole: '',
+};
+
 const ResumeBasicQuestions = () => {
+  const dispatch = useDispatch();
   const [form] = Form.useForm();
 
-  const handleFinish = (values) => {
-    // eslint-disable-next-line no-console, no-undef
-    console.log('Submitted values:', values);
+  const resumeData = useSelector(
+    (state) => state.scalantResumeBuilder.resumeBuilder.resumeData
+  );
+  const formData = useSelector(
+    (state) => state.scalantResumeBuilder.formStore.forms[FORM_ID]
+  );
+  const isFormInitialized = useSelector(
+    (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
+  );
+  const basicQuestionsData = resumeData?.personal_details;
+  const jobRoles = getJobRoles('academy');
+
+  const initialValues = useMemo(
+    () =>
+      basicQuestionsData
+        ? {
+            totalWorkExperience: {
+              yearsExperience: Math.floor(
+                basicQuestionsData?.total_experience / 12
+              ),
+              monthsExperience: basicQuestionsData?.total_experience % 12,
+            },
+            totalWorkExperienceInTech: {
+              yearsExperienceInTech: Math.floor(
+                basicQuestionsData?.experience / 12
+              ),
+              monthsExperienceInTech: basicQuestionsData?.experience % 12,
+            },
+            currentJobRole: basicQuestionsData?.job_title,
+          }
+        : initialFormData,
+    [basicQuestionsData]
+  );
+  useEffect(() => {
+    if (!isFormInitialized) {
+      dispatch(
+        initializeForm({
+          formId: FORM_ID,
+          initialData: initialValues,
+        })
+      );
+    }
+  }, [dispatch, isFormInitialized, initialValues]);
+
+  useEffect(() => {
+    // Initialize form with Redux state
+    form.setFieldsValue(formData);
+  }, [form, formData]);
+
+  const handleValuesChange = (changedValues, allValues) => {
+    dispatch(
+      updateFormData({
+        formId: FORM_ID,
+        data: allValues,
+      })
+    );
   };
 
-  const handleChange = (value) => {
+  const handleFinish = (values) => {
+    const totalExperience =
+      values?.totalWorkExperience?.yearsExperience * 12 +
+      values?.totalWorkExperience?.monthsExperience;
+    const techExperience =
+      values?.totalWorkExperienceInTech?.yearsExperienceInTech * 12 +
+      values?.totalWorkExperienceInTech?.monthsExperienceInTech;
+
+    batch(() => {
+      dispatch(
+        setResumePersonaData({
+          totalExperience,
+          techExperience,
+          currentJobRole: values?.currentJobRole,
+          program: 'academy',
+        })
+      );
+
+      dispatch(
+        updateFormData({
+          formId: FORM_ID,
+          data: values,
+        })
+      );
+      dispatch(nextStep());
+    });
     // eslint-disable-next-line no-console, no-undef
-    console.log('Selected value:', value);
+    console.log('Submitted values:', values);
   };
 
   return (
@@ -31,30 +133,24 @@ const ResumeBasicQuestions = () => {
           form={form}
           layout="vertical"
           onFinish={handleFinish}
-          initialValues={{
-            totalWorkExperience: {
-              yearsExperience: 10,
-              monthsExperience: 0,
-            },
-            totalWorkExperienceInTech: {
-              yearsExperienceInTech: 0,
-              monthsExperienceInTech: 0,
-            },
-            currentJobRole: 'Tech Adjancent',
-          }}
+          onValuesChange={handleValuesChange}
+          initialValues={initialValues}
         >
           <Flex gap={16} vertical>
             <Form.Item
               label="Total Work Experience"
-              name="totalWorkExperience"
-              rules={[{ required: true }]}
               className={styles.formItem}
             >
               <Flex gap={16} align="center">
                 <Flex gap={4} vertical>
                   <Form.Item
                     name={['totalWorkExperience', 'yearsExperience']}
-                    rules={[{ required: true }]}
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Please enter years of total work experience',
+                      },
+                    ]}
                     noStyle
                     className={styles.formItem}
                   >
@@ -65,7 +161,12 @@ const ResumeBasicQuestions = () => {
                 <Flex gap={4} vertical>
                   <Form.Item
                     name={['totalWorkExperience', 'monthsExperience']}
-                    rules={[{ required: true }]}
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Please enter months of total work experience',
+                      },
+                    ]}
                     noStyle
                     className={styles.formItem}
                   >
@@ -78,8 +179,6 @@ const ResumeBasicQuestions = () => {
 
             <Form.Item
               label="Total Work Experience in Tech"
-              name="totalWorkExperienceInTech"
-              rules={[{ required: true }]}
               className={styles.formItem}
             >
               <Flex gap={16} align="center">
@@ -89,7 +188,12 @@ const ResumeBasicQuestions = () => {
                       'totalWorkExperienceInTech',
                       'yearsExperienceInTech',
                     ]}
-                    rules={[{ required: true }]}
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Please enter years of tech work experience',
+                      },
+                    ]}
                     noStyle
                     className={styles.formItem}
                   >
@@ -103,7 +207,12 @@ const ResumeBasicQuestions = () => {
                       'totalWorkExperienceInTech',
                       'monthsExperienceInTech',
                     ]}
-                    rules={[{ required: true }]}
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Please enter months of tech work experience',
+                      },
+                    ]}
                     noStyle
                     className={styles.formItem}
                   >
@@ -120,17 +229,7 @@ const ResumeBasicQuestions = () => {
               rules={[{ required: true }]}
               className={styles.formItem}
             >
-              <Select
-                onChange={handleChange}
-                options={[
-                  { value: 'Tech Adjancent', label: 'Tech Adjancent' },
-                  { value: 'Product Manager', label: 'Product Manager' },
-                  { value: 'Sales', label: 'Sales' },
-                  { value: 'Marketing', label: 'Marketing' },
-                  { value: 'Design', label: 'Design' },
-                  { value: 'Other', label: 'Other' },
-                ]}
-              />
+              <Select options={jobRoles} />
             </Form.Item>
           </Flex>
 

@@ -30,8 +30,7 @@ export default defineConfig({
       formats: ['es', 'umd'],
     },
     rollupOptions: {
-      external: (id) =>
-        /^react|react-dom|@reduxjs\/toolkit|react-redux/.test(id),
+      external: ['react', 'react-dom', '@reduxjs/toolkit', 'react-redux'],
       output: {
         globals: {
           react: 'React',
