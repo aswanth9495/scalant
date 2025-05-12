@@ -21,7 +21,9 @@ const { Text } = Typography;
 
 const EducationFormItem = ({ item, formId, required = false }) => {
   const dispatch = useDispatch();
-  const formData = useSelector((state) => state.formStore.forms[formId]);
+  const formData = useSelector(
+    (state) => state.scalantResumeBuilder.formStore.forms[formId]
+  );
   const [form] = Form.useForm();
 
   const handleValuesChange = (changedValues, allValues) => {

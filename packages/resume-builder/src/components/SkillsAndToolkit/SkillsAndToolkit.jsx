@@ -15,7 +15,9 @@ const SkillsAndToolkit = ({ onComplete }) => {
   const [skillExperience, setSkillExperience] = useState({});
   const [updateResumeDetails] = useUpdateResumeDetailsMutation();
 
-  const resumeData = useSelector((state) => state.resumeBuilder.resumeData);
+  const resumeData = useSelector(
+    (state) => state.scalantResumeBuilder.resumeBuilder.resumeData
+  );
 
   useEffect(() => {
     if (resumeData?.skills) {

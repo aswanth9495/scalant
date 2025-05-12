@@ -11,7 +11,7 @@ import styles from './ResumeTips.module.scss';
 const ResumeTips = () => {
   const dispatch = useDispatch();
   const resumePersonaData = useSelector(
-    (state) => state.resumePersona.resumePersonaData
+    (state) => state.scalantResumeBuilder.resumePersona.resumePersonaData
   );
 
   const [tips, setTips] = useState([]);

@@ -11,7 +11,9 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
   ]);
 
   const [updateResumeDetails] = useUpdateResumeDetailsMutation();
-  const resumeData = useSelector((state) => state.resumeBuilder.resumeData);
+  const resumeData = useSelector(
+    (state) => state.scalantResumeBuilder.resumeBuilder.resumeData
+  );
 
   useEffect(() => {
     if (resumeData?.experience) {

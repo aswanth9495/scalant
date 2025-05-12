@@ -32,10 +32,14 @@ const initialFormData = {
 
 const EducationForm = ({ onComplete, required = false }) => {
   const dispatch = useDispatch();
-  const resumeData = useSelector((state) => state.resumeBuilder.resumeData);
-  const formData = useSelector((state) => state.formStore.forms[FORM_ID]);
+  const resumeData = useSelector(
+    (state) => state.scalantResumeBuilder.resumeBuilder.resumeData
+  );
+  const formData = useSelector(
+    (state) => state.scalantResumeBuilder.formStore.forms[FORM_ID]
+  );
   const isFormInitialized = useSelector(
-    (state) => state.formStore.initializedForms[FORM_ID]
+    (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
   );
   const [updateResumeDetails] = useUpdateResumeDetailsMutation();
 

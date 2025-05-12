@@ -18,17 +18,19 @@ const ResumeTimeline = () => {
   const dispatch = useDispatch();
   const [expandedStep, setExpandedStep] = useState(null);
   const [steps, setSteps] = useState([]);
-  const resumeData = useSelector((state) => state.resumeBuilder.resumeData);
+  const resumeData = useSelector(
+    (state) => state.scalantResumeBuilder.resumeBuilder.resumeData
+  );
   const incompleteForms = useSelector(
-    (state) => state.resumeForms.incompleteForms
+    (state) => state.scalantResumeBuilder.resumeForms.incompleteForms
   );
   const currentIncompleteForm = useSelector(
-    (state) => state.resumeForms.currentIncompleteForm
+    (state) => state.scalantResumeBuilder.resumeForms.currentIncompleteForm
   );
   const stepRefs = useRef([]);
   const [mounted, setMounted] = useState(false);
   const resumePersonaData = useSelector(
-    (state) => state.resumePersona.resumePersonaData
+    (state) => state.scalantResumeBuilder.resumePersona.resumePersonaData
   );
 
   useEffect(() => {

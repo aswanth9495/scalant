@@ -8,7 +8,7 @@ import styles from './SampleResumePreview.module.scss';
 
 const SampleResumePreview = () => {
   const { currentJobRole } = useSelector(
-    (state) => state.resumePersona.resumePersonaData
+    (state) => state.scalantResumeBuilder.resumePersona.resumePersonaData
   );
   const { preview, pdfLink } = getResumeTemplateByJobRole(currentJobRole);
   return (

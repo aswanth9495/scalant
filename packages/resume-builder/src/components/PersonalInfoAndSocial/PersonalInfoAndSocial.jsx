@@ -26,7 +26,9 @@ const { Text } = Typography;
 const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
   const [form] = Form.useForm();
   const [additionalProfiles, setAdditionalProfiles] = useState([]);
-  const resumeData = useSelector((state) => state.resumeBuilder.resumeData);
+  const resumeData = useSelector(
+    (state) => state.scalantResumeBuilder.resumeBuilder.resumeData
+  );
   const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
   useEffect(() => {

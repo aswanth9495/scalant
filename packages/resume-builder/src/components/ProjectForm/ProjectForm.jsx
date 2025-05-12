@@ -12,7 +12,9 @@ const ProjectForm = ({ onComplete, required = false }) => {
     { id: 1, completed: false, saved: false, expanded: true },
   ]);
 
-  const resumeData = useSelector((state) => state.resumeBuilder.resumeData);
+  const resumeData = useSelector(
+    (state) => state.scalantResumeBuilder.resumeBuilder.resumeData
+  );
   const [updateResumeDetails] = useUpdateResumeDetailsMutation();
   useEffect(() => {
     if (resumeData?.projects) {
