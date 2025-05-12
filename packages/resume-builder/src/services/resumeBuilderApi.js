@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
+// eslint-disable-next-line no-undef
 let baseUrl = window.location.origin;
 
 const dynamicBaseQuery = async (args, api, extraOptions) => {
