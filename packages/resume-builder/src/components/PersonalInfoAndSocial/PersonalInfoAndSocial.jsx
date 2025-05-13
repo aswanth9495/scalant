@@ -192,6 +192,7 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
   if (!isFormInitialized) {
     return <Spin />;
   }
+
   return (
     <Space direction="vertical" size={24}>
       <Form

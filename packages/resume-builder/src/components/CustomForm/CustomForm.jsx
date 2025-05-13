@@ -46,8 +46,6 @@ const CustomForm = ({ onComplete }) => {
         };
       });
 
-    // eslint-disable-next-line no-console, no-undef
-    console.log(customFormData);
     message.success('Custom form updated successfully');
     onComplete?.();
   };

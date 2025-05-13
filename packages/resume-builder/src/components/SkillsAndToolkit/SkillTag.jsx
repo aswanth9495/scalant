@@ -26,9 +26,6 @@ const SkillTag = ({
 
   // Format months into years and months for display
   const getFormattedExperience = () => {
-    // eslint-disable-next-line no-console, no-undef
-    console.log('experience: ', experience);
-
     const years = experience.years;
     const months = experience.months;
 

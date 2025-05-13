@@ -120,8 +120,6 @@ const SkillsAndToolkit = ({ onComplete }) => {
       },
     }));
 
-    console.log('allSelectedSkills', allSelectedSkills);
-
     try {
       const payload = {
         form_stage: 'skills_and_toolkit_form',

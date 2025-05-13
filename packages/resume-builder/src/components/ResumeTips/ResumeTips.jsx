@@ -14,8 +14,6 @@ const ResumeTips = () => {
     (state) => state.scalantResumeBuilder.formStore.forms.basicQuestions
   );
 
-  console.log(resumePersonaData);
-
   const [tips, setTips] = useState([]);
 
   useEffect(() => {

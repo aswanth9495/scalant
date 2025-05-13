@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector, batch } from 'react-redux';
 import { nextStep } from '../../store/resumeBuilderSlice';
 import {
@@ -11,30 +11,16 @@ import {
   message,
 } from 'antd';
 import PageHeader from '../PageHeader';
-// import { setResumePersonaData } from '../../store/resumePersonaSlice';
-import { initializeForm, updateFormData } from '../../store/formStoreSlice';
+import { updateFormData } from '../../store/formStoreSlice';
 import styles from './ResumeBasicQuestions.module.scss';
 import { PROGRAM_JOB_ROLES } from '../../utils/constants';
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
+import { useBasicQuestionsForm } from '../../hooks/useBasicQuestionsForm';
 
 const { Text } = Typography;
 
-const FORM_ID = 'basicQuestions';
-
 const getJobRoles = (program) => {
   return PROGRAM_JOB_ROLES[program] || [];
-};
-
-const initialFormData = {
-  totalWorkExperience: {
-    yearsExperience: 0,
-    monthsExperience: 0,
-  },
-  totalWorkExperienceInTech: {
-    yearsExperienceInTech: 0,
-    monthsExperienceInTech: 0,
-  },
-  currentJobRole: '',
 };
 
 const ResumeBasicQuestions = () => {
@@ -44,48 +30,15 @@ const ResumeBasicQuestions = () => {
   const resumeData = useSelector(
     (state) => state.scalantResumeBuilder.resumeBuilder.resumeData
   );
-  const formData = useSelector(
-    (state) => state.scalantResumeBuilder.formStore.forms[FORM_ID]
-  );
-  const isFormInitialized = useSelector(
-    (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
-  );
   const basicQuestionsData = resumeData?.personal_details;
   const jobRoles = getJobRoles('academy');
 
-  const [updateResumeDetails] = useUpdateResumeDetailsMutation();
-
-  const initialValues = useMemo(
-    () =>
-      basicQuestionsData
-        ? {
-            totalWorkExperience: {
-              yearsExperience: Math.floor(
-                basicQuestionsData?.total_experience / 12
-              ),
-              monthsExperience: basicQuestionsData?.total_experience % 12,
-            },
-            totalWorkExperienceInTech: {
-              yearsExperienceInTech: Math.floor(
-                basicQuestionsData?.experience / 12
-              ),
-              monthsExperienceInTech: basicQuestionsData?.experience % 12,
-            },
-            currentJobRole: basicQuestionsData?.job_title,
-          }
-        : initialFormData,
-    [basicQuestionsData]
+  const { initialValues, FORM_ID } = useBasicQuestionsForm(basicQuestionsData);
+  const formData = useSelector(
+    (state) => state.scalantResumeBuilder.formStore.forms[FORM_ID]
   );
-  useEffect(() => {
-    if (!isFormInitialized) {
-      dispatch(
-        initializeForm({
-          formId: FORM_ID,
-          initialData: initialValues,
-        })
-      );
-    }
-  }, [dispatch, isFormInitialized, initialValues]);
+
+  const [updateResumeDetails] = useUpdateResumeDetailsMutation();
 
   useEffect(() => {
     // Initialize form with Redux state
@@ -151,8 +104,6 @@ const ResumeBasicQuestions = () => {
       );
       dispatch(nextStep());
     });
-    // eslint-disable-next-line no-console, no-undef
-    console.log('Submitted values:', values);
   };
 
   return (

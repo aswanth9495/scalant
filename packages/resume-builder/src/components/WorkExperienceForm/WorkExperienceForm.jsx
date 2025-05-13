@@ -169,9 +169,6 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
     } catch (error) {
       message.error(`Failed to update work experience details: ${error}`);
     }
-
-    // eslint-disable-next-line no-console, no-undef
-    console.log(workExperienceItems);
   };
 
   return (

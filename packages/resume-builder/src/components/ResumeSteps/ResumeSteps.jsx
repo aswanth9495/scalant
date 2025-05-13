@@ -13,6 +13,7 @@ import {
   setIncompleteForms,
   setCurrentIncompleteForm,
 } from '../../store/resumeFormsSlice';
+import { useBasicQuestionsForm } from '../../hooks/useBasicQuestionsForm';
 
 const ResumeTimeline = () => {
   const dispatch = useDispatch();
@@ -33,6 +34,26 @@ const ResumeTimeline = () => {
     (state) => state.scalantResumeBuilder.formStore.forms.basicQuestions
   );
 
+  // Initialize form values when resumeData is loaded
+  useBasicQuestionsForm(resumeData?.personal_details);
+
+  // Force re-render when resumeData changes
+  useEffect(() => {
+    if (resumeData) {
+      setSteps([]); // Clear steps to force re-render
+      const newIncompleteForms = getAllIncompleteForms(resumeData);
+      batch(() => {
+        dispatch(setIncompleteForms(newIncompleteForms));
+        if (newIncompleteForms.length > 0) {
+          dispatch(setCurrentIncompleteForm(newIncompleteForms[0]));
+          setExpandedStep(newIncompleteForms[0]);
+        } else {
+          setExpandedStep(null);
+        }
+      });
+    }
+  }, [resumeData, dispatch]);
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -43,19 +64,6 @@ const ResumeTimeline = () => {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }, [expandedStep, mounted]);
-
-  useEffect(() => {
-    const newIncompleteForms = getAllIncompleteForms(resumeData);
-    batch(() => {
-      dispatch(setIncompleteForms(newIncompleteForms));
-      if (newIncompleteForms.length > 0) {
-        dispatch(setCurrentIncompleteForm(newIncompleteForms[0]));
-        setExpandedStep(newIncompleteForms[0]);
-      } else {
-        setExpandedStep(null);
-      }
-    });
-  }, [resumeData, dispatch]);
 
   const handleStepClick = (key) => {
     setExpandedStep((prev) => (prev === key ? null : key));
@@ -87,7 +95,6 @@ const ResumeTimeline = () => {
       setSteps(formSteps);
     }
   }, [resumePersonaData, incompleteForms, handleFormCompletion]);
-
   return (
     <div className={styles.container}>
       {steps && steps.length > 0 ? (

@@ -14,8 +14,6 @@ const Acknowledgement = () => {
 
   const handleContinue = () => {
     if (checked1 && checked2) {
-      // eslint-disable-next-line no-console, no-undef
-      console.log('Continue');
       dispatch(nextStep());
     }
   };
