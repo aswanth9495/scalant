@@ -6,20 +6,30 @@ import styles from './SkillsAndToolkit.module.scss';
 
 const { Title } = Typography;
 
-const SkillSection = ({ title, skills, selectedSkills, onSkillClick }) => (
+const SkillSection = ({
+  title,
+  skills,
+  selectedSkills,
+  onSkillClick,
+  onExperienceUpdate,
+  skillExperience,
+}) => (
   <div className={styles.skillSection}>
     <Title level={5} className={styles.sectionTitle}>
       {title}
     </Title>
     <div className={styles.skillsContainer}>
       {skills.map((skill, index) => {
-        const skillKey = `${skill.name}-${skill.experience}`;
         return (
           <SkillTag
             key={index}
             skill={skill}
-            isSelected={selectedSkills.includes(skillKey)}
+            isSelected={selectedSkills.includes(skill.name)}
             onClick={() => onSkillClick(skill)}
+            onExperienceUpdate={(years, months) =>
+              onExperienceUpdate(skill.name, years, months)
+            }
+            experience={skillExperience[skill.name]}
           />
         );
       })}
@@ -37,6 +47,8 @@ SkillSection.propTypes = {
   ).isRequired,
   selectedSkills: PropTypes.arrayOf(PropTypes.string).isRequired,
   onSkillClick: PropTypes.func.isRequired,
+  onExperienceUpdate: PropTypes.func.isRequired,
+  skillExperience: PropTypes.object.isRequired,
 };
 
 export default SkillSection;
