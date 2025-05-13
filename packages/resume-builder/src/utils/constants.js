@@ -291,3 +291,13 @@ export const RESUME_PERSONAS = {
     RESUME_TIPS.keySkills,
   ],
 };
+
+export const SOCIAL_LINKS = [
+  'codeforces',
+  'hackerrank',
+  'codechef',
+  'hackerearth',
+  'geeksforgeeks',
+  'leetcode',
+  'scaler',
+];

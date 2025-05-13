@@ -30,7 +30,7 @@ const ResumeTimeline = () => {
   const stepRefs = useRef([]);
   const [mounted, setMounted] = useState(false);
   const resumePersonaData = useSelector(
-    (state) => state.scalantResumeBuilder.resumePersona.resumePersonaData
+    (state) => state.scalantResumeBuilder.formStore.forms.basicQuestions
   );
 
   useEffect(() => {

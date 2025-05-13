@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useMemo } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Space, message } from 'antd';
 import SkillSection from './SkillSection';
 import {
@@ -9,62 +9,118 @@ import {
 } from './constants';
 import styles from './SkillsAndToolkit.module.scss';
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
+import { initializeForm, updateFormData } from '../../store/formStoreSlice';
+
+const FORM_ID = 'skillsForm';
+
+const initialFormData = {
+  selectedSkills: [],
+  skillExperience: {},
+};
 
 const SkillsAndToolkit = ({ onComplete }) => {
-  const [selectedSkills, setSelectedSkills] = useState([]);
-  const [skillExperience, setSkillExperience] = useState({});
-  const [updateResumeDetails] = useUpdateResumeDetailsMutation();
-
+  const dispatch = useDispatch();
   const resumeData = useSelector(
     (state) => state.scalantResumeBuilder.resumeBuilder.resumeData
   );
+  const formData = useSelector(
+    (state) => state.scalantResumeBuilder.formStore.forms[FORM_ID]
+  );
+  const isFormInitialized = useSelector(
+    (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
+  );
+  const [updateResumeDetails] = useUpdateResumeDetailsMutation();
+
+  const initialValues = useMemo(
+    () =>
+      resumeData?.skills
+        ? {
+            selectedSkills: resumeData.skills.map((skill) => skill.name),
+            skillExperience: resumeData.skills.reduce((acc, skill) => {
+              acc[skill.name] = skill.proficiency_period;
+              return acc;
+            }, {}),
+          }
+        : initialFormData,
+    [resumeData?.skills]
+  );
 
   useEffect(() => {
-    if (resumeData?.skills) {
-      const skills = [];
-      const skillExp = {};
-      resumeData.skills.forEach((skill) => {
-        skills.push(skill.name);
-        skillExp[skill.name] = skill.proficiency_period;
-      });
-      setSelectedSkills(skills);
-      setSkillExperience(skillExp);
+    if (!isFormInitialized) {
+      dispatch(
+        initializeForm({
+          formId: FORM_ID,
+          initialData: initialValues,
+        })
+      );
     }
-  }, [resumeData?.skills]);
+  }, [dispatch, isFormInitialized, initialValues]);
 
   const handleTagClick = (skill) => {
     const skillKey = skill.name;
-    if (selectedSkills.includes(skillKey)) {
-      setSelectedSkills(selectedSkills.filter((s) => s !== skillKey));
-      // Remove experience data when unselecting a skill
-      const updatedExperience = { ...skillExperience };
+    const currentSelectedSkills = formData?.selectedSkills || [];
+    const currentSkillExperience = formData?.skillExperience || {};
+
+    if (currentSelectedSkills.includes(skillKey)) {
+      const updatedSelectedSkills = currentSelectedSkills.filter(
+        (s) => s !== skillKey
+      );
+      const updatedExperience = { ...currentSkillExperience };
       delete updatedExperience[skillKey];
-      setSkillExperience(updatedExperience);
+
+      dispatch(
+        updateFormData({
+          formId: FORM_ID,
+          data: {
+            selectedSkills: updatedSelectedSkills,
+            skillExperience: updatedExperience,
+          },
+        })
+      );
     } else {
-      setSelectedSkills([...selectedSkills, skillKey]);
+      dispatch(
+        updateFormData({
+          formId: FORM_ID,
+          data: {
+            selectedSkills: [...currentSelectedSkills, skillKey],
+          },
+        })
+      );
     }
   };
 
   const handleExperienceUpdate = (skillName, years, months) => {
-    setSkillExperience({
-      ...skillExperience,
-      [skillName]: {
-        years: years,
-        months: months,
-      },
-    });
+    const currentSkillExperience = formData?.skillExperience || {};
+
+    dispatch(
+      updateFormData({
+        formId: FORM_ID,
+        data: {
+          skillExperience: {
+            ...currentSkillExperience,
+            [skillName]: {
+              years,
+              months,
+            },
+          },
+        },
+      })
+    );
   };
 
   const handleMarkAsComplete = async () => {
-    const allSelectedSkills = selectedSkills.map((skill) => {
-      return {
-        name: skill,
-        experience: skillExperience[skill] || {
-          years: 0,
-          months: 0,
-        },
-      };
-    });
+    const selectedSkills = formData?.selectedSkills || [];
+    const skillExperience = formData?.skillExperience || {};
+
+    const allSelectedSkills = selectedSkills.map((skill) => ({
+      name: skill,
+      experience: skillExperience[skill] || {
+        years: 0,
+        months: 0,
+      },
+    }));
+
+    console.log('allSelectedSkills', allSelectedSkills);
 
     try {
       const payload = {
@@ -73,14 +129,14 @@ const SkillsAndToolkit = ({ onComplete }) => {
       };
 
       await updateResumeDetails({
-        resumeId: resumeData?.id,
+        resumeId: resumeData?.resume_details?.id,
         payload,
       }).unwrap();
       message.success('Skills and toolkit updated successfully');
       onComplete?.();
     } catch (error) {
       message.error('Failed to update skills and toolkit');
-      // eslint-disable-next-line no-console, no-undef
+
       console.error('Error updating skills and toolkit:', error);
     }
   };
@@ -90,28 +146,28 @@ const SkillsAndToolkit = ({ onComplete }) => {
       <SkillSection
         title="Programming Languages"
         skills={PROGRAMMING_LANGUAGES}
-        selectedSkills={selectedSkills}
+        selectedSkills={formData?.selectedSkills || []}
         onSkillClick={handleTagClick}
         onExperienceUpdate={handleExperienceUpdate}
-        skillExperience={skillExperience}
+        skillExperience={formData?.skillExperience || {}}
       />
 
       <SkillSection
         title="Libraries and Framework"
         skills={LIBRARIES_FRAMEWORKS}
-        selectedSkills={selectedSkills}
+        selectedSkills={formData?.selectedSkills || []}
         onSkillClick={handleTagClick}
         onExperienceUpdate={handleExperienceUpdate}
-        skillExperience={skillExperience}
+        skillExperience={formData?.skillExperience || {}}
       />
 
       <SkillSection
         title="Tools, databases, version control and everything else:"
         skills={TOOLS}
-        selectedSkills={selectedSkills}
+        selectedSkills={formData?.selectedSkills || []}
         onSkillClick={handleTagClick}
         onExperienceUpdate={handleExperienceUpdate}
-        skillExperience={skillExperience}
+        skillExperience={formData?.skillExperience || {}}
       />
 
       <div className={styles.buttonContainer}>

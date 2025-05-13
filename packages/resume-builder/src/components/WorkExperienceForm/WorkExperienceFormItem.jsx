@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Form,
   Input,
@@ -10,87 +10,65 @@ import {
   Typography,
   Checkbox,
   DatePicker,
-  message,
   Button,
 } from 'antd';
 import { DownOutlined, DeleteOutlined } from '@ant-design/icons';
-import dayjs from 'dayjs';
+import { updateFormData } from '../../store/formStoreSlice';
 
 const { Text } = Typography;
 
-const WorkExperienceFormItem = ({
-  item,
-  setWorkExperienceItems,
-  workExperienceItems,
-  required,
-}) => {
+const WorkExperienceFormItem = ({ item, formId, required = false }) => {
+  const dispatch = useDispatch();
+  const formData = useSelector(
+    (state) => state.scalantResumeBuilder.formStore.forms[formId]
+  );
   const [form] = Form.useForm();
 
-  useEffect(() => {
-    if (item.formData) {
-      const formData = {
-        ...item.formData,
-      };
+  const handleValuesChange = (changedValues, allValues) => {
+    const currentItems = formData?.workExperienceItems || [];
+    const updatedItems = currentItems.map((workExperienceItem) =>
+      workExperienceItem.id === item.id
+        ? { ...workExperienceItem, formData: allValues, saved: true }
+        : workExperienceItem
+    );
 
-      if (formData.workStartDate) {
-        formData.workStartDate = dayjs(formData.workStartDate);
-      }
-
-      if (formData.workEndDate) {
-        formData.workEndDate = dayjs(formData.workEndDate);
-      }
-
-      form.setFieldsValue(formData);
-    }
-  }, [item.id, form, item.formData]);
-
-  const validateAndSave = async (id) => {
-    try {
-      await form.validateFields();
-
-      const formData = form.getFieldsValue();
-
-      if (formData.workStartDate) {
-        formData.workStartDate = formData.workStartDate.format('YYYY-MM-DD');
-      }
-
-      if (formData.workEndDate) {
-        formData.workEndDate = formData.workEndDate.format('YYYY-MM-DD');
-      }
-
-      setWorkExperienceItems(
-        workExperienceItems.map((item) =>
-          item.id === id
-            ? { ...item, saved: true, expanded: false, formData: formData }
-            : item
-        )
-      );
-
-      message.success('Work Experience saved successfully');
-    } catch (error) {
-      message.error(`Failed to save Work Experience: ${error}`);
-    }
-  };
-
-  const handleCancel = (id) => {
-    setWorkExperienceItems(
-      workExperienceItems.map((item) =>
-        item.id === id ? { ...item, expanded: false } : item
-      )
+    dispatch(
+      updateFormData({
+        formId,
+        data: {
+          workExperienceItems: updatedItems,
+        },
+      })
     );
   };
 
-  const handleExpand = (id) => {
-    setWorkExperienceItems(
-      workExperienceItems.map((item) =>
-        item.id === id ? { ...item, expanded: true } : item
-      )
+  const handleExpand = () => {
+    const currentItems = formData?.workExperienceItems || [];
+    const updatedItems = currentItems.map((workExperienceItem) =>
+      workExperienceItem.id === item.id
+        ? { ...workExperienceItem, expanded: !workExperienceItem.expanded }
+        : workExperienceItem
+    );
+
+    dispatch(
+      updateFormData({
+        formId,
+        data: { workExperienceItems: updatedItems },
+      })
     );
   };
 
-  const handleDelete = (id) => {
-    setWorkExperienceItems(
-      workExperienceItems.filter((item) => item.id !== id)
+  const handleDelete = () => {
+    const currentItems = formData?.workExperienceItems || [];
+    const updatedItems = currentItems.filter(
+      (workExperienceItem) => workExperienceItem.id !== item.id
+    );
+
+    dispatch(
+      updateFormData({
+        formId,
+        data: { workExperienceItems: updatedItems },
+      })
     );
   };
 
@@ -105,14 +83,14 @@ const WorkExperienceFormItem = ({
                 `${item.formData?.workPosition}, `}
               <Divider />
               {item.formData?.workStartDate &&
-                `${item.formData?.workStartDate}`}
+                `${item.formData?.workStartDate.format('YYYY-MM-DD')}`}
               -
               {item.formData?.workEndDate
-                ? `${item.formData?.workEndDate}`
+                ? `${item.formData?.workEndDate.format('YYYY-MM-DD')}`
                 : `Present`}
             </Text>
           </Flex>
-          <DownOutlined onClick={() => handleExpand(item.id)} />
+          <DownOutlined onClick={handleExpand} />
         </Flex>
       </Card>
     );
@@ -125,11 +103,16 @@ const WorkExperienceFormItem = ({
           <Text>Work Experience {item.id}</Text>
           {item.saved && <Tag color="success">Saved</Tag>}
         </Flex>
-        {workExperienceItems.length > 1 && (
-          <DeleteOutlined onClick={() => handleDelete(item.id)} />
+        {(formData?.workExperienceItems || []).length > 1 && (
+          <DeleteOutlined onClick={handleDelete} />
         )}
       </Flex>
-      <Form form={form} layout="vertical">
+      <Form
+        form={form}
+        layout="vertical"
+        initialValues={item.formData}
+        onValuesChange={handleValuesChange}
+      >
         <Form.Item
           name={`workCompany`}
           label="Company"
@@ -170,10 +153,10 @@ const WorkExperienceFormItem = ({
           <Input.TextArea placeholder="Enter Key Points" />
         </Form.Item>
         <Flex gap={16}>
-          <Button type="primary" block onClick={() => validateAndSave(item.id)}>
+          <Button type="primary" block onClick={handleExpand}>
             Save
           </Button>
-          <Button type="default" block onClick={() => handleCancel(item.id)}>
+          <Button type="default" block onClick={handleExpand}>
             Cancel
           </Button>
         </Flex>

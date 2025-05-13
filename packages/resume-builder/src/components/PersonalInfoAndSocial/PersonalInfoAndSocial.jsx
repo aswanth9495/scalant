@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import {
   GithubOutlined,
   LinkedinOutlined,
@@ -15,39 +15,104 @@ import {
   Button,
   Space,
   message,
+  Spin,
 } from 'antd';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
+import { initializeForm, updateFormData } from '../../store/formStoreSlice';
+import { SOCIAL_LINKS } from '../../utils/constants';
 
 import styles from './PersonalInfoAndSocial.module.scss';
 
 const { Text } = Typography;
 
+const FORM_ID = 'personalInfoAndSocialForm';
+
+const initialFormData = {
+  personalInfoAndSocial: {
+    fullName: '',
+    contactNumber: '',
+    emailAddress: '',
+    gender: '',
+    currentCity: '',
+    linkedIn: '',
+    github: '',
+    personalWebsite: '',
+    additionalProfiles: [],
+  },
+};
+
 const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
-  const [form] = Form.useForm();
-  const [additionalProfiles, setAdditionalProfiles] = useState([]);
+  const dispatch = useDispatch();
   const resumeData = useSelector(
     (state) => state.scalantResumeBuilder.resumeBuilder.resumeData
   );
+  const formData = useSelector(
+    (state) => state.scalantResumeBuilder.formStore.forms[FORM_ID]
+  );
+  const isFormInitialized = useSelector(
+    (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
+  );
   const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
+  const [form] = Form.useForm();
+
+  const getAdditionalProfiles = useMemo(() => {
+    const additionalProfiles = [];
+    SOCIAL_LINKS.forEach((link) => {
+      if (resumeData.personal_details[link]) {
+        additionalProfiles.push({
+          type: link,
+          link: resumeData.personal_details[link],
+          id: additionalProfiles.length + 1,
+        });
+      }
+    });
+    return additionalProfiles;
+  }, [resumeData]);
+
+  const initialValues = useMemo(
+    () =>
+      resumeData?.personal_details
+        ? {
+            personalInfoAndSocial: {
+              fullName: resumeData.personal_details.name,
+              contactNumber: resumeData.personal_details.phone_number.replace(
+                '+91-',
+                ''
+              ),
+              emailAddress: resumeData.personal_details.email,
+              gender: resumeData.personal_details.gender,
+              currentCity: resumeData.personal_details.city,
+              linkedIn: resumeData.personal_details.linkedin,
+              github: resumeData.personal_details.github,
+              personalWebsite: resumeData.personal_details.portfolio,
+              additionalProfiles: getAdditionalProfiles,
+            },
+          }
+        : initialFormData,
+    [resumeData?.personal_details, getAdditionalProfiles]
+  );
+
   useEffect(() => {
-    if (resumeData?.personal_details && !form.getFieldValue('fullName')) {
-      const { personal_details } = resumeData;
-      form.setFieldsValue({
-        fullName: personal_details.name,
-        contactNumber: personal_details.phone_number.replace('+91-', ''),
-        emailAddress: personal_details.email,
-        gender: personal_details.gender,
-        currentCity: personal_details.city,
-        linkedIn: personal_details.linkedin,
-        github: personal_details.github,
-        personalWebsite: personal_details.portfolio,
-      });
+    if (!isFormInitialized) {
+      dispatch(
+        initializeForm({
+          formId: FORM_ID,
+          initialData: initialValues,
+        })
+      );
     }
-  }, [resumeData, form]);
+  }, [dispatch, isFormInitialized, initialValues]);
 
   const handleFinish = async (values) => {
+    updateFormData({
+      formId: FORM_ID,
+      data: {
+        personalInfoAndSocial: values,
+      },
+    });
+
     try {
       const payload = {
         form_stage: 'personal_details_form',
@@ -68,11 +133,12 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
         job_title: resumeData?.personal_details?.job_title || '',
         upgrade: false,
         ctc_currency: 0,
-        socials: additionalProfiles.map((profile) => ({
-          type: profile.type,
-          link: profile.link,
-        })),
       };
+
+      (values.additionalProfiles || []).forEach((profile) => {
+        payload[profile.type] = profile.link;
+      });
+
       onComplete?.();
 
       await updateResumeDetails({
@@ -88,8 +154,28 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
   };
 
   const handleAddProfile = () => {
-    const newId = Date.now().toString();
-    setAdditionalProfiles([...additionalProfiles, { id: newId }]);
+    const profileItems =
+      formData?.personalInfoAndSocial?.additionalProfiles || [];
+    const newId = profileItems.length + 1;
+
+    dispatch(
+      updateFormData({
+        formId: FORM_ID,
+        data: {
+          personalInfoAndSocial: {
+            ...formData?.personalInfoAndSocial,
+            additionalProfiles: [...profileItems, { id: newId }],
+          },
+        },
+      })
+    );
+  };
+
+  const handleValuesChange = (changedValues, allValues) => {
+    updateFormData({
+      formId: FORM_ID,
+      data: { personalInfoAndSocial: allValues },
+    });
   };
 
   const selectBefore = (
@@ -103,9 +189,19 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
     />
   );
 
+  if (!isFormInitialized) {
+    return <Spin />;
+  }
   return (
     <Space direction="vertical" size={24}>
-      <Form form={form} onFinish={handleFinish} layout="vertical" size="large">
+      <Form
+        form={form}
+        onFinish={handleFinish}
+        layout="vertical"
+        size="large"
+        initialValues={formData?.personalInfoAndSocial}
+        onValuesChange={handleValuesChange}
+      >
         <Space direction="vertical" size={16} style={{ width: '100%' }}>
           <Form.Item
             label="Full Name"
@@ -186,31 +282,39 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
             <Input prefix={<CodeOutlined />} />
           </Form.Item>
 
-          {additionalProfiles.map((profile, index) => (
-            <Flex key={profile.id} gap={16}>
-              <Form.Item
-                label="Profile Type"
-                name={`additionalProfiles.${index}.type`}
-                style={{ flex: 1 }}
-                className={styles.formItem + ' ' + styles.customProfile}
-              >
-                <Select
-                  options={[
-                    { label: 'LinkedIn', value: 'linkedin' },
-                    { label: 'GitHub', value: 'github' },
-                    { label: 'Personal Website', value: 'personalWebsite' },
-                  ]}
-                />
-              </Form.Item>
-              <Form.Item
-                label="Link"
-                name={`additionalProfiles.${index}.link`}
-                className={styles.formItem + ' ' + styles.customProfile}
-              >
-                <Input />
-              </Form.Item>
-            </Flex>
-          ))}
+          <Form.Item name="additionalProfiles">
+            {(formData?.personalInfoAndSocial?.additionalProfiles || []).map(
+              (profile, index) => (
+                <Flex key={profile.id} gap={16}>
+                  <Form.Item
+                    label="Profile Type"
+                    name={['additionalProfiles', index, 'type']}
+                    style={{ flex: 1 }}
+                    className={styles.formItem + ' ' + styles.customProfile}
+                  >
+                    <Select
+                      options={[
+                        { label: 'Codeforces', value: 'codeforces' },
+                        { label: 'HackerRank', value: 'hackerrank' },
+                        { label: 'Codechef', value: 'codechef' },
+                        { label: 'HackerEarth', value: 'hackerearth' },
+                        { label: 'Geeksforgeeks', value: 'geeksforgeeks' },
+                        { label: 'Leetcode', value: 'leetcode' },
+                        { label: 'Scaler', value: 'scaler' },
+                      ]}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    label="Link"
+                    name={['additionalProfiles', index, 'link']}
+                    className={styles.formItem + ' ' + styles.customProfile}
+                  >
+                    <Input />
+                  </Form.Item>
+                </Flex>
+              )
+            )}
+          </Form.Item>
         </Space>
 
         <Space

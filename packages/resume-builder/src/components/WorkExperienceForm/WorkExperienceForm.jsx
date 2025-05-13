@@ -1,52 +1,111 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useMemo } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Space, Button, Flex, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import WorkExperienceFormItem from './WorkExperienceFormItem';
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
+import { initializeForm, updateFormData } from '../../store/formStoreSlice';
+import dayjs from 'dayjs';
+
+const FORM_ID = 'workExperienceForm';
+
+const initialFormData = {
+  workExperienceItems: [
+    {
+      id: 1,
+      completed: false,
+      saved: false,
+      expanded: true,
+      formData: {
+        workCompany: '',
+        workPosition: '',
+        workStartDate: '',
+        workEndDate: '',
+        workKeyPoints: '',
+        workLocation: '',
+        workCurrentWorking: false,
+      },
+    },
+  ],
+};
 
 const WorkExperienceForm = ({ onComplete, required = false }) => {
-  const [workExperienceItems, setWorkExperienceItems] = useState([
-    { id: 1, completed: false, saved: false, expanded: true },
-  ]);
-
-  const [updateResumeDetails] = useUpdateResumeDetailsMutation();
+  const dispatch = useDispatch();
   const resumeData = useSelector(
     (state) => state.scalantResumeBuilder.resumeBuilder.resumeData
   );
+  const formData = useSelector(
+    (state) => state.scalantResumeBuilder.formStore.forms[FORM_ID]
+  );
+  const isFormInitialized = useSelector(
+    (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
+  );
+  const [updateResumeDetails] = useUpdateResumeDetailsMutation();
+
+  const initialValues = useMemo(
+    () =>
+      resumeData?.experience
+        ? {
+            workExperienceItems: resumeData.experience.map((item, index) => ({
+              id: index,
+              completed: true,
+              saved: true,
+              expanded: false,
+              formData: {
+                workCompany: item.company,
+                workPosition: item.position,
+                workStartDate: item.from ? dayjs(item.from) : null,
+                workEndDate: item.to ? dayjs(item.to) : null,
+                workLocation: item.location,
+                workKeyPoints: item.short_description,
+                workCurrentWorking: item.is_current,
+              },
+            })),
+          }
+        : initialFormData,
+    [resumeData?.experience]
+  );
 
   useEffect(() => {
-    if (resumeData?.experience) {
-      setWorkExperienceItems(
-        resumeData.experience.map((item, index) => ({
-          id: index,
-          completed: true,
-          saved: true,
-          expanded: false,
-          formData: {
-            workCompany: item.company,
-            workPosition: item.position,
-            workStartDate: item.from,
-            workEndDate: item.to,
-            workLocation: item.location,
-            workKeyPoints: item.short_description,
-            workCurrentWorking: item.is_current,
-          },
-        }))
+    if (!isFormInitialized) {
+      dispatch(
+        initializeForm({
+          formId: FORM_ID,
+          initialData: initialValues,
+        })
       );
     }
-  }, [resumeData.experience]);
+  }, [dispatch, isFormInitialized, initialValues]);
 
   const handleAddWorkExperience = () => {
-    setWorkExperienceItems([
-      ...workExperienceItems,
-      {
-        id: workExperienceItems.length + 1,
-        completed: false,
-        saved: false,
-        expanded: true,
-      },
-    ]);
+    const currentItems = formData?.workExperienceItems || [];
+    const newId = currentItems.length + 1;
+
+    dispatch(
+      updateFormData({
+        formId: FORM_ID,
+        data: {
+          workExperienceItems: [
+            ...currentItems,
+            {
+              id: newId,
+              completed: false,
+              saved: false,
+              expanded: true,
+              formData: {
+                workCompany: '',
+                workPosition: '',
+                workStartDate: '',
+                workEndDate: '',
+                workKeyPoints: '',
+                workLocation: '',
+                workCurrentWorking: false,
+              },
+            },
+          ],
+        },
+      })
+    );
   };
 
   const createWorkExperiencePayload = (workExperienceItems) => {
@@ -78,6 +137,7 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
   };
 
   const handleMarkAsCompleted = async () => {
+    const workExperienceItems = formData?.workExperienceItems || [];
     const hasUnsavedItems = workExperienceItems.some((item) => !item.saved);
 
     if (hasUnsavedItems) {
@@ -118,12 +178,11 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
     <Flex vertical gap={16}>
       <Space direction="vertical" style={{ width: '100%' }}>
         <Flex vertical gap={16}>
-          {workExperienceItems.map((item) => (
+          {(formData?.workExperienceItems || []).map((item) => (
             <WorkExperienceFormItem
               key={item.id}
               item={item}
-              setWorkExperienceItems={setWorkExperienceItems}
-              workExperienceItems={workExperienceItems}
+              formId={FORM_ID}
               required={required}
             />
           ))}
