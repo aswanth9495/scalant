@@ -105,7 +105,8 @@ const EducationFormItem = ({ item, formId, required = false }) => {
             <Text>
               {item.formData?.degree && `${item.formData.degree}, `}
               <Divider />
-              {item.formData?.graduation && `${item.formData.graduation}`}
+              {item.formData?.graduation &&
+                `${item.formData.graduation.format('YYYY-MM-DD')}`}
             </Text>
           </Flex>
           <DownOutlined onClick={handleExpand} />

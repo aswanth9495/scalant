@@ -1,12 +1,21 @@
 import React, { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector, batch } from 'react-redux';
 import { nextStep } from '../../store/resumeBuilderSlice';
-import { Typography, Flex, Form, InputNumber, Select, Button } from 'antd';
+import {
+  Typography,
+  Flex,
+  Form,
+  InputNumber,
+  Select,
+  Button,
+  message,
+} from 'antd';
 import PageHeader from '../PageHeader';
-import { setResumePersonaData } from '../../store/resumePersonaSlice';
+// import { setResumePersonaData } from '../../store/resumePersonaSlice';
 import { initializeForm, updateFormData } from '../../store/formStoreSlice';
 import styles from './ResumeBasicQuestions.module.scss';
 import { PROGRAM_JOB_ROLES } from '../../utils/constants';
+import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 
 const { Text } = Typography;
 
@@ -43,6 +52,8 @@ const ResumeBasicQuestions = () => {
   );
   const basicQuestionsData = resumeData?.personal_details;
   const jobRoles = getJobRoles('academy');
+
+  const [updateResumeDetails] = useUpdateResumeDetailsMutation();
 
   const initialValues = useMemo(
     () =>
@@ -90,7 +101,7 @@ const ResumeBasicQuestions = () => {
     );
   };
 
-  const handleFinish = (values) => {
+  const handleFinish = async (values) => {
     const totalExperience =
       values?.totalWorkExperience?.yearsExperience * 12 +
       values?.totalWorkExperience?.monthsExperience;
@@ -98,20 +109,44 @@ const ResumeBasicQuestions = () => {
       values?.totalWorkExperienceInTech?.yearsExperienceInTech * 12 +
       values?.totalWorkExperienceInTech?.monthsExperienceInTech;
 
+    const payload = {
+      form_stage: 'preferences_details_form',
+      total_experience: totalExperience,
+      experience: techExperience,
+      job_title: values?.currentJobRole,
+    };
+
+    try {
+      await updateResumeDetails({
+        resumeId: resumeData?.resume_details?.id,
+        payload,
+      }).unwrap();
+      message.success('Preference details updated successfully');
+    } catch (error) {
+      message.error(`Failed to update preference details: ${error.message}`);
+    }
+
     batch(() => {
-      dispatch(
-        setResumePersonaData({
-          totalExperience,
-          techExperience,
-          currentJobRole: values?.currentJobRole,
-          program: 'academy',
-        })
-      );
+      // dispatch(
+      //   setResumePersonaData({
+      //     totalExperience,
+      //     techExperience,
+      //     currentJobRole: values?.currentJobRole,
+      //     program: 'academy',
+      //   })
+      // );
+
+      const formData = {
+        totalExperience,
+        techExperience,
+        currentJobRole: values?.currentJobRole,
+        program: 'academy',
+      };
 
       dispatch(
         updateFormData({
           formId: FORM_ID,
-          data: values,
+          data: formData,
         })
       );
       dispatch(nextStep());

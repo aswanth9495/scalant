@@ -2,10 +2,20 @@ import React, { useEffect, useMemo } from 'react';
 import PageHeader from '../PageHeader';
 import { useDispatch, useSelector } from 'react-redux';
 import { nextStep } from '../../store/resumeBuilderSlice';
-import { Form, Input, Select, Radio, Button, Flex, Checkbox } from 'antd';
-import { PREFERRED_JOB_LOCATIONS, PREFERRED_JOB_ROLES } from './constants';
+import {
+  Form,
+  Input,
+  Select,
+  Radio,
+  Button,
+  Flex,
+  Checkbox,
+  message,
+} from 'antd';
+import { PREFERRED_JOB_ROLES } from './constants';
 import styles from './PreferenceSettings.module.scss';
 import { initializeForm, updateFormData } from '../../store/formStoreSlice';
+import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 
 const FORM_ID = 'preferenceSettings';
 
@@ -33,13 +43,21 @@ const PreferenceSettings = () => {
     (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
   );
   const preferenceData = resumeData?.user_company_profile;
+  const preferredJobLocationValues = useSelector(
+    (state) => state.scalantResumeBuilder.metaData.meta.job_locations
+  );
+  const [updateResumeDetails] = useUpdateResumeDetailsMutation();
+
+  const { role_types } = useSelector(
+    (state) => state.scalantResumeBuilder.metaData.meta
+  );
 
   const initialValues = useMemo(
     () =>
       preferenceData
         ? {
-            preferredLocations: preferenceData?.preferred_location,
-            preferredRoles: [preferenceData?.preferred_role],
+            preferredLocations: preferenceData?.preferred_location.split('/'),
+            preferredRoles: preferenceData?.preferred_role.split('/'),
             ctc: preferenceData?.expected_ctc,
             notice: preferenceData?.notice_period,
             negotiable: preferenceData?.buyout_notice ? 'yes' : 'no',
@@ -66,6 +84,39 @@ const PreferenceSettings = () => {
     form.setFieldsValue(formData);
   }, [form, formData]);
 
+  const createPreferencePayload = () => {
+    let preferredRolesTypes = role_types;
+    if (!form.getFieldsValue().internship) {
+      preferredRolesTypes = role_types.filter(
+        (role) => role.label !== 'internship'
+      );
+    }
+    // If preferred locations is an array, convert it to a string separated by /
+    // If preferred roles is an array, convert it to a string separated by /
+    let preferredLocations = form.getFieldsValue().preferredLocations;
+    let preferredRoles = form.getFieldsValue().preferredRoles;
+    if (Array.isArray(preferredLocations)) {
+      preferredLocations = preferredLocations.join('/');
+    }
+    if (Array.isArray(preferredRoles)) {
+      preferredRoles = preferredRoles.join('/');
+    }
+
+    return {
+      form_stage: 'preferences_details_form',
+      preferred_location: preferredLocations,
+      preferred_role: preferredRoles,
+      expected_ctc: form.getFieldsValue().ctc,
+      ctc_currency: 'INR',
+      notice_period: form.getFieldsValue().notice,
+      buyout_notice: form.getFieldsValue().negotiable === 'yes',
+      rpo_consent: 'true',
+      isPopulated: true,
+      preferred_role_types: preferredRolesTypes,
+      relevancy_alert: form.getFieldsValue().acknowledge,
+    };
+  };
+
   const handleValuesChange = (changedValues, allValues) => {
     dispatch(
       updateFormData({
@@ -75,7 +126,18 @@ const PreferenceSettings = () => {
     );
   };
 
-  const handleFinish = () => {
+  const handleFinish = async () => {
+    const payload = createPreferencePayload();
+
+    try {
+      await updateResumeDetails({
+        resumeId: resumeData?.resume_details?.id,
+        payload,
+      }).unwrap();
+      message.success('Preference details updated successfully');
+    } catch (error) {
+      message.error(`Failed to update preference details: ${error.message}`);
+    }
     dispatch(nextStep());
   };
 
@@ -103,7 +165,7 @@ const PreferenceSettings = () => {
           <Select
             mode="multiple"
             allowClear
-            options={PREFERRED_JOB_LOCATIONS}
+            options={preferredJobLocationValues}
           />
         </Form.Item>
 
