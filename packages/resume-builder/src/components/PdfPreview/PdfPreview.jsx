@@ -64,7 +64,7 @@ const PdfPreview = ({
   const handleDownload = () => {
     downloadFile(pdfLink, `resume.pdf`);
   };
-
+  console.log(isLoading, isFetching, !pdfLink);
   // Show loading state for initial load or refetching
   if (isLoading || isFetching || !pdfLink) {
     return (

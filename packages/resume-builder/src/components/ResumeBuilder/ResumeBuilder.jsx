@@ -24,7 +24,12 @@ const ResumeBuilderContent = ({
   isOnboarding = true,
   resumeData,
   onBackButtonClick,
-  resumeManager,
+  resumeList,
+  onResumeClick,
+  onAddResumeClick,
+  onManageResumesClick,
+  onEditClick,
+  onDeleteClick,
 }) => {
   const dispatch = useDispatch();
   const { currentStep, steps } = useSelector(
@@ -106,8 +111,12 @@ const ResumeBuilderContent = ({
       case RESUME_BUILDER_STEPS.RESUME_STEPS.component:
         return (
           <ResumePreview
-            resumeSelected={resumeManager}
-            resumeData={resumeData}
+            resumeList={resumeList}
+            onResumeClick={onResumeClick}
+            onAddResumeClick={onAddResumeClick}
+            onManageResumesClick={onManageResumesClick}
+            onEditClick={onEditClick}
+            onDeleteClick={onDeleteClick}
           />
         );
       default:
@@ -139,6 +148,12 @@ const ResumeBuilder = ({
   resumeData,
   onBackButtonClick,
   resumeManager,
+  resumeList,
+  onResumeClick,
+  onAddResumeClick,
+  onManageResumesClick,
+  onEditClick,
+  onDeleteClick,
 }) => {
   const storeState = useSelector((state) => state);
   console.log('storeState', storeState);
@@ -148,6 +163,12 @@ const ResumeBuilder = ({
       resumeData={resumeData}
       onBackButtonClick={onBackButtonClick}
       resumeManager={resumeManager}
+      resumeList={resumeList}
+      onResumeClick={onResumeClick}
+      onAddResumeClick={onAddResumeClick}
+      onManageResumesClick={onManageResumesClick}
+      onEditClick={onEditClick}
+      onDeleteClick={onDeleteClick}
     />
   );
 };

@@ -1,0 +1,24 @@
+.container {
+  padding: 8rem; 
+}
+
+.floatButtonGroup {
+  position: static;
+  margin-left: 0.5rem;
+}
+
+.disabledButton {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.dropdown {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dropdownIcon {
+  font-size: 1rem;
+}
