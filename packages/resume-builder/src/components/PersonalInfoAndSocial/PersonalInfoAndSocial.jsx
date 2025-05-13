@@ -142,7 +142,7 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
       onComplete?.();
 
       await updateResumeDetails({
-        resumeId: resumeData?.id,
+        resumeId: resumeData?.resume_details?.id,
         payload,
       }).unwrap();
       message.success('Personal details updated successfully');

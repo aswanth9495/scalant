@@ -162,7 +162,7 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
       onComplete?.();
 
       await updateResumeDetails({
-        resumeId: resumeData?.id,
+        resumeId: resumeData?.resume_details?.id,
         payload,
       }).unwrap();
       message.success('Work experience details updated successfully');
