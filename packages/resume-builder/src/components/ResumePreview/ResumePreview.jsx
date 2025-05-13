@@ -42,6 +42,11 @@ const ResumePreview = ({
     (resume) => resume.id === resumeData?.resume_details?.id
   )?.default;
 
+  console.log('resumeData', resumeData);
+  console.log('resumeList', resumeList);
+  console.log('isDefaultResume', isDefaultResume);
+  console.log('resumeData?.resume_details?.id', resumeData?.resume_details?.id);
+
   return (
     <Flex align="flex-start" className={styles.container}>
       <PdfPreview

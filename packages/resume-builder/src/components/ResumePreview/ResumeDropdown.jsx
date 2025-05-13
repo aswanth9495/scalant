@@ -4,7 +4,7 @@ import { DownOutlined } from '@ant-design/icons';
 
 import styles from './ResumePreview.module.scss';
 
-const MAX_RESUMES = 3;
+const MAX_RESUMES = 5;
 
 const ResumeDropdown = ({
   onAddResumeClick,
