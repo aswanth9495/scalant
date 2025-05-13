@@ -1,6 +1,7 @@
 import ResumeBuilder from './ResumeBuilder';
 import resumeData from '../../dummyData/resumeData.json';
-import { STEPS_ORDER } from '../../utils/constants';
+import resumeData1 from '../../dummyData/resumeData1.json';
+import { useState } from 'react';
 
 export default {
   title: 'ResumeBuilder',
@@ -15,10 +16,46 @@ const dummyResumeList = [
 
 export const OnboardingFlow = () => <ResumeBuilder isOnboarding={true} />;
 export const ResumeFlow = () => <ResumeBuilder isOnboarding={false} />;
-export const WithDummyData = () => (
+export const WithDummyData = () => {
+  const [useResumeData1, setUseResumeData1] = useState(false);
+  
+  return (
+    <div>
+      <button 
+        onClick={() => setUseResumeData1(!useResumeData1)}
+        style={{ marginBottom: '20px', padding: '8px 16px' }}
+      >
+        Switch to {useResumeData1 ? 'Resume Data' : 'Resume Data 1'}
+      </button>
+      <ResumeBuilder
+        isOnboarding={true}
+        resumeData={useResumeData1 ? resumeData1 : resumeData}
+        resumeList={dummyResumeList}
+        onResumeClick={(id) => {
+          console.log('Resume with id', id, 'clicked');
+        }}
+        onAddResumeClick={() => {
+          console.log('Add Resume clicked');
+        }}
+        onManageResumesClick={() => {
+          console.log('Manage Resumes clicked');
+        }}
+        onEditClick={() => {
+          console.log('Edit clicked');
+        }}
+        onDeleteClick={() => {
+          console.log('Delete clicked');
+        }}
+        baseUrl="https://cf1d948b-f96c-4781-8235-53d3293f0a70.mock.pstmn.io"
+      />
+    </div>
+  );
+};
+
+export const WithDummyData1 = () => (
   <ResumeBuilder
     isOnboarding={true}
-    resumeData={resumeData}
+    resumeData={resumeData1}
     resumeList={dummyResumeList}
     onResumeClick={(id) => {
       console.log('Resume with id', id, 'clicked');

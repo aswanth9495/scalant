@@ -40,10 +40,21 @@ const formStoreSlice = createSlice({
       delete state.forms[formId];
       delete state.initializedForms[formId];
     },
+
+    // Reset all forms
+    resetAllForms: (state) => {
+      state.forms = {};
+      state.initializedForms = {};
+    },
   },
 });
 
-export const { initializeForm, updateFormData, resetFormData, removeForm } =
-  formStoreSlice.actions;
+export const {
+  initializeForm,
+  updateFormData,
+  resetFormData,
+  removeForm,
+  resetAllForms,
+} = formStoreSlice.actions;
 
 export default formStoreSlice.reducer;

@@ -31,6 +31,10 @@ const resumeBuilderSlice = createSlice({
     setResumeData: (state, action) => {
       state.resumeData = action.payload;
     },
+    resetSteps: (state) => {
+      state.currentStep = 0;
+      state.steps = STEPS_ORDER;
+    },
   },
 });
 
@@ -40,5 +44,6 @@ export const {
   nextStep,
   previousStep,
   setResumeData,
+  resetSteps,
 } = resumeBuilderSlice.actions;
 export default resumeBuilderSlice.reducer;

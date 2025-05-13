@@ -1,15 +1,21 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  setOnboarding,
   setCurrentStep,
   setResumeData,
+  resetSteps,
 } from '../../store/resumeBuilderSlice';
+import { resetAllForms } from '../../store/formStoreSlice';
 
 import {
   RESUME_BUILDER_STEPS,
   PREFERENCE_SETTINGS_IMAGE,
 } from '../../utils/constants';
+import {
+  shouldShowOnboarding,
+  markOnboardingCompleted,
+  isFinalOnboardingStep,
+} from '../../utils/onboardingUtils';
 import ResumeLayout from '../../layout/ResumeLayout';
 import Acknowledgement from '../Acknowledgement';
 import PreferenceSettings from '../PreferenceSettings';
@@ -35,22 +41,35 @@ const ResumeBuilderContent = ({
   const { currentStep, steps } = useSelector(
     (state) => state.scalantResumeBuilder.resumeBuilder
   );
-  useEffect(() => {
-    dispatch(setOnboarding(isOnboarding));
-    if (!isOnboarding) {
-      // If not onboarding, directly show ResumeSteps
-      const resumeStepsIndex = steps.findIndex(
-        (step) => step.key === RESUME_BUILDER_STEPS.RESUME_STEPS.key
-      );
-      dispatch(setCurrentStep(resumeStepsIndex));
-    }
-  }, [isOnboarding, dispatch, steps]);
 
   useEffect(() => {
     if (resumeData) {
+      const resumeId = resumeData?.resume_details?.id;
+
       dispatch(setResumeData(resumeData));
+      dispatch(resetSteps());
+      dispatch(resetAllForms());
+
+      const shouldShow = isOnboarding ? shouldShowOnboarding(resumeId) : false;
+
+      if (!shouldShow) {
+        const resumeStepsIndex = steps.findIndex(
+          (step) => step.key === RESUME_BUILDER_STEPS.RESUME_STEPS.key
+        );
+        dispatch(setCurrentStep(resumeStepsIndex));
+      }
     }
-  }, [resumeData, dispatch]);
+  }, [resumeData, dispatch, steps, isOnboarding]);
+
+  useEffect(() => {
+    const currentStepData = steps[currentStep];
+    if (isFinalOnboardingStep(currentStepData.key)) {
+      const resumeId = resumeData?.resume_details?.id;
+      if (resumeId) {
+        markOnboardingCompleted(resumeId);
+      }
+    }
+  }, [currentStep, steps, resumeData]);
 
   // const handleNext = () => {
   //   dispatch(nextStep());
@@ -155,8 +174,6 @@ const ResumeBuilder = ({
   onEditClick,
   onDeleteClick,
 }) => {
-  const storeState = useSelector((state) => state);
-  console.log('storeState', storeState);
   return (
     <ResumeBuilderContent
       isOnboarding={isOnboarding}

@@ -1,7 +1,7 @@
 {
   "resume_details": {
-    "id": 1,
-    "name": "AswanthDefaultResume",
+    "id": 2,
+    "name": "Aswanths New Resume",
     "default": true,
     "status": "active",
     "meta": {
@@ -22,8 +22,8 @@
   },
   "application_stage": 3,
   "personal_details": {
-    "name": "Aswanth",
-    "email": "aswanth@scaler.com",
+    "name": "Aswanth koleri",
+    "email": "aswanth123@scaler.com",
     "gender": "male",
     "phone_number": "+91-8075153299",
     "experience": 12,
@@ -51,7 +51,7 @@
     {
       "id": 180,
       "user_id": 984868,
-      "university": "IIT Kanpur 1123",
+      "university": "IIT Kanpur",
       "degree": "BE/B.Tech/BS",
       "graduation_date": "2035-01-01",
       "field": "Computer Science",
@@ -77,7 +77,7 @@
     {
       "id": 177,
       "user_id": 984868,
-      "university": "Scaler 123",
+      "university": "Scaler",
       "degree": "Specialized in Software Development & Problem Solving",
       "graduation_date": "2020-04-11",
       "field": null,
