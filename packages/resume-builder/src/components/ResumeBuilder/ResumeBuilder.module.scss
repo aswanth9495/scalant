@@ -9,3 +9,24 @@
   height: 100%;
   object-fit: cover;
 }
+
+
+.loadingContainer {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+
+.loadingSpin {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+
+

@@ -148,8 +148,10 @@ const ResumeBuilderContent = ({
   if (!resumeData || isLoading) {
     return (
       <div className={styles.loadingContainer}>
-        <Spin size="large" />
-        <p>Loading your resume builder...</p>
+        <div className={styles.loadingSpin}>
+          <Spin size="large" />
+          <h1>Loading resume builder...</h1>
+        </div>
       </div>
     );
   }
