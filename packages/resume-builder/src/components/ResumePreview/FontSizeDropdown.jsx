@@ -18,12 +18,11 @@ const FontSizeDropdown = ({ onFontSizeChange }) => {
     selectedFontSize || DEFAULT_FONT_SIZE
   );
 
-  const { mutate: updateResumePreferences } =
-    useUpdateResumePreferencesMutation();
+  const [updateResumePreferences] = useUpdateResumePreferencesMutation();
 
-  const handleFontSizeChange = ({ key }) => {
+  const handleFontSizeChange = async ({ key }) => {
     setFontSize(key);
-    updateResumePreferences({
+    await updateResumePreferences({
       resume_id: resumeData?.resume_details?.id,
       payload: {
         scaler_resume_template_font_choice: key,
