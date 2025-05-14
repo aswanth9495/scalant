@@ -127,13 +127,13 @@ const SkillsAndToolkit = ({ onComplete }) => {
         form_stage: 'skills_and_toolkit_form',
         skills: allSelectedSkills,
       };
+      onComplete?.();
 
       await updateResumeDetails({
         resumeId: resumeData?.resume_details?.id,
         payload,
       }).unwrap();
       message.success('Skills and toolkit updated successfully');
-      onComplete?.();
     } catch (error) {
       message.error('Failed to update skills and toolkit');
 

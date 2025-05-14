@@ -6,13 +6,12 @@ import {
   Card,
   Flex,
   Divider,
-  Tag,
   Typography,
   Checkbox,
   DatePicker,
-  Button,
 } from 'antd';
-import { DownOutlined, DeleteOutlined } from '@ant-design/icons';
+import { DownOutlined, DeleteOutlined, UpOutlined } from '@ant-design/icons';
+import { WORK_EXPERIENCE_FORM_REQUIRED_FIELDS } from '../../utils/constants';
 import { updateFormData } from '../../store/formStoreSlice';
 
 const { Text } = Typography;
@@ -26,9 +25,17 @@ const WorkExperienceFormItem = ({ item, formId, required = false }) => {
 
   const handleValuesChange = (changedValues, allValues) => {
     const currentItems = formData?.workExperienceItems || [];
+
+    // If all required fields are filled mark completed
     const updatedItems = currentItems.map((workExperienceItem) =>
       workExperienceItem.id === item.id
-        ? { ...workExperienceItem, formData: allValues, saved: true }
+        ? {
+            ...workExperienceItem,
+            formData: allValues,
+            completed: WORK_EXPERIENCE_FORM_REQUIRED_FIELDS.every(
+              (field) => allValues[field]
+            ),
+          }
         : workExperienceItem
     );
 
@@ -72,22 +79,24 @@ const WorkExperienceFormItem = ({ item, formId, required = false }) => {
     );
   };
 
-  if (item.saved && !item.expanded) {
+  if (!item.expanded) {
     return (
       <Card key={item.id}>
         <Flex justify="space-between" align="center">
           <Flex vertical gap={4}>
-            <Text strong>{item.formData?.workCompany}</Text>
+            <Text strong>{item.formData?.company}</Text>
             <Text>
-              {item.formData?.workPosition &&
-                `${item.formData?.workPosition}, `}
-              <Divider />
-              {item.formData?.workStartDate &&
-                `${item.formData?.workStartDate.format('YYYY-MM-DD')}`}
+              {item.formData?.position ? `${item.formData?.position}, ` : '---'}
+              <Divider type="vertical" />
+              {item.formData?.from
+                ? `${item.formData?.from.format('YYYY')}`
+                : '---'}
               -
-              {item.formData?.workEndDate
-                ? `${item.formData?.workEndDate.format('YYYY-MM-DD')}`
-                : `Present`}
+              {item.formData?.to
+                ? `${item.formData?.to.format('YYYY')}`
+                : item.formData?.is_current
+                  ? `Present`
+                  : '---'}
             </Text>
           </Flex>
           <DownOutlined onClick={handleExpand} />
@@ -101,11 +110,11 @@ const WorkExperienceFormItem = ({ item, formId, required = false }) => {
       <Flex gap={16} justify="space-between">
         <Flex gap={4}>
           <Text>Work Experience {item.id}</Text>
-          {item.saved && <Tag color="success">Saved</Tag>}
+          {(formData?.workExperienceItems || []).length > 1 && (
+            <DeleteOutlined onClick={handleDelete} style={{ color: 'red' }} />
+          )}
         </Flex>
-        {(formData?.workExperienceItems || []).length > 1 && (
-          <DeleteOutlined onClick={handleDelete} />
-        )}
+        <UpOutlined onClick={handleExpand} />
       </Flex>
       <Form
         form={form}
@@ -114,52 +123,47 @@ const WorkExperienceFormItem = ({ item, formId, required = false }) => {
         onValuesChange={handleValuesChange}
       >
         <Form.Item
-          name={`workCompany`}
+          name={`company`}
           label="Company"
           rules={[{ required: required }]}
         >
           <Input placeholder="Enter Company" />
         </Form.Item>
         <Form.Item
-          name={`workPosition`}
+          name={`position`}
           label="Position"
           rules={[{ required: required }]}
         >
           <Input placeholder="Enter Position" />
         </Form.Item>
-        <Form.Item name={`workCurrentWorking`} valuePropName="checked">
+        <Form.Item name={`is_current`} valuePropName="checked">
           <Checkbox>I am currently working here</Checkbox>
         </Form.Item>
         <Flex gap={16}>
           <Form.Item
-            name={`workStartDate`}
+            name={`from`}
             label="Start Date"
             rules={[{ required: required }]}
           >
             <DatePicker format="YYYY-MM-DD" />
           </Form.Item>
           <Form.Item
-            name={`workEndDate`}
+            name={`to`}
             label="End Date"
-            rules={[{ required: required }]}
+            rules={[{ required: required && !item.formData?.is_current }]}
           >
-            <DatePicker format="YYYY-MM-DD" />
+            <DatePicker
+              format="YYYY-MM-DD"
+              disabled={item.formData?.is_current}
+            />
           </Form.Item>
         </Flex>
-        <Form.Item name={`workLocation`} label="Location">
+        <Form.Item name={`location`} label="Location">
           <Input />
         </Form.Item>
-        <Form.Item name={`workKeyPoints`} label="Key Points">
+        <Form.Item name={`short_description`} label="Key Points">
           <Input.TextArea placeholder="Enter Key Points" />
         </Form.Item>
-        <Flex gap={16}>
-          <Button type="primary" block onClick={handleExpand}>
-            Save
-          </Button>
-          <Button type="default" block onClick={handleExpand}>
-            Cancel
-          </Button>
-        </Flex>
       </Form>
     </Card>
   );

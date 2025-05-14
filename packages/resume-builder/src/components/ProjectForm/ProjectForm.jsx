@@ -15,12 +15,11 @@ const initialFormData = {
     {
       id: 1,
       completed: false,
-      saved: false,
       expanded: true,
       formData: {
-        projectName: '',
-        projectLink: '',
-        projectDescription: '',
+        title: '',
+        project_link: '',
+        description: '',
       },
     },
   ],
@@ -40,10 +39,6 @@ const ProjectForm = ({ onComplete, required = false }) => {
   );
   const [updateResumeDetails] = useUpdateResumeDetailsMutation();
 
-  // const [projectItems, setProjectItems] = useState([
-  //   { id: 1, completed: false, saved: false, expanded: true },
-  // ]);
-
   const initialValues = useMemo(
     () =>
       resumeData?.projects
@@ -51,12 +46,11 @@ const ProjectForm = ({ onComplete, required = false }) => {
             projectItems: resumeData.projects.map((item, index) => ({
               id: index,
               completed: true,
-              saved: true,
               expanded: false,
               formData: {
-                projectName: item.title,
-                projectLink: item.project_link,
-                projectDescription: item.description,
+                title: item.title,
+                project_link: item.project_link,
+                description: item.description,
               },
             })),
           }
@@ -84,16 +78,15 @@ const ProjectForm = ({ onComplete, required = false }) => {
         formId: FORM_ID,
         data: {
           projectItems: [
-            ...currentItems,
+            ...currentItems.map((item) => ({ ...item, expanded: false })),
             {
               id: newId,
               completed: false,
-              saved: false,
               expanded: true,
               formData: {
-                projectName: '',
-                projectLink: '',
-                projectDescription: '',
+                title: '',
+                project_link: '',
+                description: '',
               },
             },
           ],
@@ -105,9 +98,9 @@ const ProjectForm = ({ onComplete, required = false }) => {
   const createProjectsPayload = (projectItems) => {
     return projectItems.map((item) => ({
       id: item.id,
-      title: item.formData.projectName,
-      description: item.formData.projectDescription,
-      project_link: item.formData.projectLink,
+      title: item.formData.title,
+      description: item.formData.description,
+      project_link: item.formData.project_link,
       data_source: 'careers_hub',
       workplace_type: null,
       workplace_id: null,
@@ -117,10 +110,10 @@ const ProjectForm = ({ onComplete, required = false }) => {
 
   const handleMarkAsCompleted = async () => {
     const projectItems = formData?.projectItems || [];
-    const hasUnsavedItems = projectItems.some((item) => !item.saved);
+    const hasUncompletedItems = projectItems.some((item) => !item.completed);
 
-    if (hasUnsavedItems) {
-      message.error('Please save all project items before marking as complete');
+    if (hasUncompletedItems) {
+      message.error('Please fill all project items before marking as complete');
       return;
     }
 
