@@ -6,6 +6,7 @@ import {
   resetSteps,
 } from '../../store/resumeBuilderSlice';
 import { resetAllForms } from '../../store/formStoreSlice';
+import { Spin } from 'antd';
 
 import {
   RESUME_BUILDER_STEPS,
@@ -36,6 +37,7 @@ const ResumeBuilderContent = ({
   onManageResumesClick,
   onEditClick,
   onDeleteClick,
+  isLoading = false,
 }) => {
   const dispatch = useDispatch();
   const { currentStep, steps } = useSelector(
@@ -142,6 +144,16 @@ const ResumeBuilderContent = ({
         return null;
     }
   };
+
+  if (!resumeData || isLoading) {
+    return (
+      <div className={styles.loadingContainer}>
+        <Spin size="large" />
+        <p>Loading your resume builder...</p>
+      </div>
+    );
+  }
+
   return (
     <ResumeLayout onBackButtonClick={onBackButtonClick} preview={previewUi()}>
       {renderComponent()}
@@ -173,6 +185,7 @@ const ResumeBuilder = ({
   onManageResumesClick,
   onEditClick,
   onDeleteClick,
+  isLoading = false,
 }) => {
   return (
     <ResumeBuilderContent
@@ -186,6 +199,7 @@ const ResumeBuilder = ({
       onManageResumesClick={onManageResumesClick}
       onEditClick={onEditClick}
       onDeleteClick={onDeleteClick}
+      isLoading={isLoading}
     />
   );
 };
