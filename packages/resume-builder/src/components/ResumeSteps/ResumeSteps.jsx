@@ -70,11 +70,14 @@ const ResumeTimeline = () => {
   };
 
   const handleFormCompletion = useCallback(() => {
-    const updatedIncompleteForms = incompleteForms.filter(
-      (form) => form !== currentIncompleteForm
-    );
+    let updatedIncompleteForms = [...incompleteForms];
+    if (expandedStep === currentIncompleteForm) {
+      updatedIncompleteForms = updatedIncompleteForms.filter(
+        (form) => form !== currentIncompleteForm
+      );
 
-    dispatch(setIncompleteForms(updatedIncompleteForms));
+      dispatch(setIncompleteForms(updatedIncompleteForms));
+    }
 
     if (updatedIncompleteForms.length > 0) {
       const nextForm = updatedIncompleteForms[0];
@@ -83,7 +86,7 @@ const ResumeTimeline = () => {
     } else {
       setExpandedStep(null);
     }
-  }, [incompleteForms, currentIncompleteForm, dispatch]);
+  }, [incompleteForms, currentIncompleteForm, dispatch, expandedStep]);
 
   useEffect(() => {
     if (resumePersonaData && incompleteForms.length > 0) {

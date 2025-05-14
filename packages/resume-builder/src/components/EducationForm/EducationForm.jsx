@@ -15,16 +15,15 @@ const initialFormData = {
     {
       id: 1,
       completed: false,
-      saved: false,
       expanded: true,
       formData: {
-        institute: '',
+        university: '',
         degree: '',
-        branch: '',
-        grades: '',
-        gradeType: '',
-        graduation: '',
-        description: '',
+        field: '',
+        marks: '',
+        marks_type: '',
+        graduation_date: '',
+        short_description: '',
       },
     },
   ],
@@ -50,15 +49,14 @@ const EducationForm = ({ onComplete, required = false }) => {
             educationItems: resumeData.education.map((item, index) => ({
               id: index,
               completed: true,
-              saved: true,
               expanded: false,
               formData: {
-                institute: item.university,
+                university: item.university,
                 degree: item.degree,
-                branch: item.field,
-                grades: item.marks,
-                gradeType: item.marks_type,
-                graduation: item.graduation_date
+                field: item.field,
+                marks: item.marks,
+                marks_type: item.marks_type,
+                graduation_date: item.graduation_date
                   ? dayjs(item.graduation_date)
                   : null,
                 description: item.short_description,
@@ -93,16 +91,15 @@ const EducationForm = ({ onComplete, required = false }) => {
             {
               id: newId,
               completed: false,
-              saved: false,
               expanded: true,
               formData: {
-                institute: '',
+                university: '',
                 degree: '',
-                branch: '',
-                grades: '',
-                gradeType: '',
-                graduation: '',
-                description: '',
+                field: '',
+                marks: '',
+                marks_type: '',
+                graduation_date: '',
+                short_description: '',
               },
             },
           ],
@@ -142,11 +139,11 @@ const EducationForm = ({ onComplete, required = false }) => {
 
   const handleMarkAsCompleted = async () => {
     const educationItems = formData?.educationItems || [];
-    const hasUnsavedItems = educationItems.some((item) => !item.saved);
+    const hasUncompletedItems = educationItems.some((item) => !item.completed);
 
-    if (hasUnsavedItems) {
+    if (hasUncompletedItems) {
       message.error(
-        'Please save all education items before marking as complete'
+        'Please fill all education items before marking as complete'
       );
       return;
     }
@@ -159,13 +156,13 @@ const EducationForm = ({ onComplete, required = false }) => {
         isPopulated: true,
         education: educationPayload,
       };
+      onComplete?.();
 
       await updateResumeDetails({
         resumeId: resumeData?.resume_details?.id,
         payload,
       }).unwrap();
       message.success('Education details updated successfully');
-      onComplete?.();
     } catch (error) {
       message.error(`Failed to update education details: ${error.message}`);
     }

@@ -14,16 +14,15 @@ const initialFormData = {
     {
       id: 1,
       completed: false,
-      saved: false,
       expanded: true,
       formData: {
-        workCompany: '',
-        workPosition: '',
-        workStartDate: '',
-        workEndDate: '',
-        workKeyPoints: '',
-        workLocation: '',
-        workCurrentWorking: false,
+        company: '',
+        position: '',
+        from: '',
+        to: '',
+        short_description: '',
+        location: '',
+        is_current: false,
       },
     },
   ],
@@ -49,16 +48,15 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
             workExperienceItems: resumeData.experience.map((item, index) => ({
               id: index,
               completed: true,
-              saved: true,
               expanded: false,
               formData: {
-                workCompany: item.company,
-                workPosition: item.position,
-                workStartDate: item.from ? dayjs(item.from) : null,
-                workEndDate: item.to ? dayjs(item.to) : null,
-                workLocation: item.location,
-                workKeyPoints: item.short_description,
-                workCurrentWorking: item.is_current,
+                company: item.company,
+                position: item.position,
+                from: item.from ? dayjs(item.from) : null,
+                to: item.to ? dayjs(item.to) : null,
+                location: item.location,
+                short_description: item.short_description,
+                is_current: item.is_current,
               },
             })),
           }
@@ -81,25 +79,25 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
     const currentItems = formData?.workExperienceItems || [];
     const newId = currentItems.length + 1;
 
+    // Close all already expanded items
     dispatch(
       updateFormData({
         formId: FORM_ID,
         data: {
           workExperienceItems: [
-            ...currentItems,
+            ...currentItems.map((item) => ({ ...item, expanded: false })),
             {
               id: newId,
               completed: false,
-              saved: false,
               expanded: true,
               formData: {
-                workCompany: '',
-                workPosition: '',
-                workStartDate: '',
-                workEndDate: '',
-                workKeyPoints: '',
-                workLocation: '',
-                workCurrentWorking: false,
+                company: '',
+                position: '',
+                from: '',
+                to: '',
+                short_description: '',
+                location: '',
+                is_current: false,
               },
             },
           ],
@@ -112,18 +110,18 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
     return workExperienceItems.map((item) => ({
       id: item.id,
       user_id: resumeData?.user_id,
-      company: item.formData.workCompany,
-      position: item.formData.workPosition,
-      from: item.formData.workStartDate,
-      to: item.formData.workEndDate,
-      short_description: item.formData.workKeyPoints,
+      company: item.formData.company,
+      position: item.formData.position,
+      from: item.formData.from,
+      to: item.formData.to,
+      short_description: item.formData.short_description,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
-      is_current: item.formData.workCurrentWorking,
+      is_current: item.formData.is_current,
       creator: 'candidate',
       experience_type: null,
       projects: null,
-      location: '',
+      location: item.formData.location,
       freetext_position: null,
       base_ctc: 0,
       variable_ctc: 0,
@@ -138,11 +136,13 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
 
   const handleMarkAsCompleted = async () => {
     const workExperienceItems = formData?.workExperienceItems || [];
-    const hasUnsavedItems = workExperienceItems.some((item) => !item.saved);
+    const hasUncompletedItems = workExperienceItems.some(
+      (item) => !item.completed
+    );
 
-    if (hasUnsavedItems) {
+    if (hasUncompletedItems) {
       message.error(
-        'Please save all work experience items before marking as complete'
+        'Please fill all work experience items before marking as complete'
       );
       return;
     }

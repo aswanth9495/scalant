@@ -13,8 +13,9 @@ import {
   Button,
   InputNumber,
 } from 'antd';
-import { DownOutlined, DeleteOutlined } from '@ant-design/icons';
+import { DownOutlined, DeleteOutlined, UpOutlined } from '@ant-design/icons';
 import { updateFormData } from '../../store/formStoreSlice';
+import { EDUCATION_FORM_REQUIRED_FIELDS } from '../../utils/constants';
 import styles from './EducationForm.module.scss';
 
 const { Text } = Typography;
@@ -33,7 +34,9 @@ const EducationFormItem = ({ item, formId, required = false }) => {
         ? {
             ...educationItem,
             formData: allValues,
-            saved: true,
+            completed: EDUCATION_FORM_REQUIRED_FIELDS.every(
+              (field) => allValues[field]
+            ),
           }
         : educationItem
     );
@@ -96,17 +99,20 @@ const EducationFormItem = ({ item, formId, required = false }) => {
     </Form.Item>
   );
 
-  if (item.saved && !item.expanded) {
+  if (!item.expanded) {
     return (
       <Card key={item.id}>
         <Flex justify="space-between" align="center">
           <Flex vertical gap={4}>
-            <Text strong>{item.formData?.institute}</Text>
+            <Text strong>
+              {item.formData?.university ? item.formData?.university : '---'}
+            </Text>
             <Text>
-              {item.formData?.degree && `${item.formData.degree}, `}
-              <Divider />
-              {item.formData?.graduation &&
-                `${item.formData.graduation.format('YYYY-MM-DD')}`}
+              {item.formData?.degree ? `${item.formData.degree}, ` : '---'}
+              <Divider type="vertical" />
+              {item.formData?.graduation_date
+                ? `${item.formData.graduation_date.format('YYYY')}`
+                : '---'}
             </Text>
           </Flex>
           <DownOutlined onClick={handleExpand} />
@@ -120,11 +126,11 @@ const EducationFormItem = ({ item, formId, required = false }) => {
       <Flex gap={16} justify="space-between">
         <Flex gap={4}>
           <Text strong>Education {item.id}</Text>
-          {item.saved && <Tag color="success">Saved</Tag>}
+          {(formData?.educationItems || []).length > 1 && (
+            <DeleteOutlined onClick={handleDelete} />
+          )}
         </Flex>
-        {(formData?.educationItems || []).length > 1 && (
-          <DeleteOutlined onClick={handleDelete} />
-        )}
+        <UpOutlined onClick={handleExpand} />
       </Flex>
       <Form
         form={form}
@@ -136,11 +142,11 @@ const EducationFormItem = ({ item, formId, required = false }) => {
         }}
       >
         <Form.Item
-          name="institute"
-          label="Institute Name"
+          name="university"
+          label="University Name"
           rules={[{ required }]}
         >
-          <Input placeholder="Enter Institute Name" />
+          <Input placeholder="Enter University Name" />
         </Form.Item>
         <Flex gap={16}>
           <Form.Item
@@ -163,9 +169,13 @@ const EducationFormItem = ({ item, formId, required = false }) => {
               ]}
             />
           </Form.Item>
-          <Form.Item name="branch" label="Branch" className={styles.midWidth}>
+          <Form.Item
+            name="field"
+            label="Field of Study"
+            className={styles.midWidth}
+          >
             <Select
-              placeholder="Select Branch"
+              placeholder="Select Field of Study"
               options={[
                 { label: 'Computer Science', value: 'computer-science' },
                 {
@@ -206,15 +216,15 @@ const EducationFormItem = ({ item, formId, required = false }) => {
         </Flex>
         <Flex gap={16} className={styles.fullWidth}>
           <Form.Item
-            name="grades"
-            label="Grades (Final/Current)"
+            name="marks"
+            label="Marks (Final/Current)"
             rules={[{ required }]}
             className={styles.midWidth}
           >
-            <InputNumber placeholder="Enter Grades" addonAfter={selectAfter} />
+            <InputNumber placeholder="Enter Marks" addonAfter={selectAfter} />
           </Form.Item>
           <Form.Item
-            name="graduation"
+            name="graduation_date"
             label="Graduation (Actual/Expected)"
             rules={[{ required }]}
             className={styles.midWidth}
@@ -225,18 +235,10 @@ const EducationFormItem = ({ item, formId, required = false }) => {
             />
           </Form.Item>
         </Flex>
-        <Form.Item name="description" label="Description">
+        <Form.Item name="short_description" label="Description">
           <Input.TextArea placeholder="Enter Description" />
         </Form.Item>
       </Form>
-      <Flex gap={16}>
-        <Button type="primary" block onClick={handleExpand}>
-          Save
-        </Button>
-        <Button type="default" block onClick={handleExpand}>
-          Cancel
-        </Button>
-      </Flex>
     </Card>
   );
 };

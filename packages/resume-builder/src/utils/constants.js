@@ -29,6 +29,33 @@ export const RESUME_BUILDER_STEPS = {
   },
 };
 
+export const PROJECT_FORM_REQUIRED_FIELDS = [
+  'title',
+  'project_link',
+  'description',
+];
+
+export const PERSONAL_DETAILS_FORM_REQUIRED_FIELDS = [
+  'name',
+  'phone_number',
+  'email',
+  'gender',
+  'linkedin',
+];
+
+export const WORK_EXPERIENCE_FORM_REQUIRED_FIELDS = [
+  'company',
+  'position',
+  'from',
+];
+
+export const EDUCATION_FORM_REQUIRED_FIELDS = [
+  'university',
+  'degree',
+  'marks',
+  'graduation_date',
+];
+
 export const STEPS_ORDER = [
   RESUME_BUILDER_STEPS.ACKNOWLEDGEMENT,
   RESUME_BUILDER_STEPS.PREFERENCE_SETTINGS,
