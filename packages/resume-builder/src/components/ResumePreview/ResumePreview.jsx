@@ -4,10 +4,10 @@ import { Flex, FloatButton, Tooltip } from 'antd';
 import {
   DeleteOutlined,
   ExportOutlined,
-  FontSizeOutlined,
   EditOutlined,
 } from '@ant-design/icons';
 
+import FontSizeDropdown from './FontSizeDropdown';
 import ResumeDropdown from './ResumeDropdown';
 import { useGetResumeLinkQuery } from '../../services/resumeBuilderApi';
 import PdfPreview from '../PdfPreview';
@@ -64,40 +64,39 @@ const ResumePreview = ({
         isFetching={isFetching}
         isError={isError}
       />
-      <Flex vertical>
-        <FloatButton.Group shape="square" className={styles.floatButtonGroup}>
-          <Tooltip title={TOOLTIPS.AI_EVALUATOR} placement="right">
-            <FloatButton
-              icon={<ExportOutlined />}
-              onClick={() =>
-                // eslint-disable-next-line no-undef
-                window.open('https://google.com', '_blank')
+      {!isLoading && !isFetching && !isError && (
+        <Flex vertical>
+          <FloatButton.Group shape="square" className={styles.floatButtonGroup}>
+            <Tooltip title={TOOLTIPS.AI_EVALUATOR} placement="right">
+              <FloatButton
+                icon={<ExportOutlined />}
+                onClick={() =>
+                  // eslint-disable-next-line no-undef
+                  window.open('https://google.com', '_blank')
+                }
+              />
+            </Tooltip>
+            {/* TODO: Add the functionality for font size */}
+            <FontSizeDropdown onFontSizeChange={onFontSizeClick} />
+            <Tooltip title={TOOLTIPS.EDIT} placement="right">
+              <FloatButton onClick={onEditClick} icon={<EditOutlined />} />
+            </Tooltip>
+            <Tooltip
+              title={
+                isDefaultResume ? TOOLTIPS.DELETE_DISABLED : TOOLTIPS.DELETE
               }
-            />
-          </Tooltip>
-          {/* TODO: Add the functionality for font size */}
-          <Tooltip title={TOOLTIPS.FONT_SIZE} placement="right">
-            <FloatButton
-              onClick={onFontSizeClick}
-              icon={<FontSizeOutlined />}
-            />
-          </Tooltip>
-          <Tooltip title={TOOLTIPS.EDIT} placement="right">
-            <FloatButton onClick={onEditClick} icon={<EditOutlined />} />
-          </Tooltip>
-          <Tooltip
-            title={isDefaultResume ? TOOLTIPS.DELETE_DISABLED : TOOLTIPS.DELETE}
-            placement="right"
-          >
-            <FloatButton
-              onClick={onDeleteClick}
-              icon={<DeleteOutlined />}
-              disabled={isDefaultResume}
-              className={isDefaultResume ? styles.disabledButton : ''}
-            />
-          </Tooltip>
-        </FloatButton.Group>
-      </Flex>
+              placement="right"
+            >
+              <FloatButton
+                onClick={onDeleteClick}
+                icon={<DeleteOutlined />}
+                disabled={isDefaultResume}
+                className={isDefaultResume ? styles.disabledButton : ''}
+              />
+            </Tooltip>
+          </FloatButton.Group>
+        </Flex>
+      )}
     </Flex>
   );
 };

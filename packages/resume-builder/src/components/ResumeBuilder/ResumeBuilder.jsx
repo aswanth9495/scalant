@@ -6,7 +6,7 @@ import {
   resetSteps,
 } from '../../store/resumeBuilderSlice';
 import { resetAllForms } from '../../store/formStoreSlice';
-import { Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
 
 import {
   RESUME_BUILDER_STEPS,
@@ -148,10 +148,8 @@ const ResumeBuilderContent = ({
   if (!resumeData || isLoading) {
     return (
       <div className={styles.loadingContainer}>
-        <div className={styles.loadingSpin}>
-          <Spin size="large" />
-          <h1>Loading resume builder...</h1>
-        </div>
+        <LoadingOutlined className={styles.loadingIcon} size="large" />
+        <h1>Loading your resume...</h1>
       </div>
     );
   }

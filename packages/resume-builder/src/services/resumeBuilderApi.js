@@ -36,6 +36,17 @@ export const resumeBuilderApi = createApi({
         { type: 'ResumeLink', id: resumeId },
       ],
     }),
+    updateResumePreferences: builder.mutation({
+      query: ({ resumeId, payload }) => ({
+        url: `/resume/preferences/update`,
+        method: 'PUT',
+        body: {
+          resume_id: resumeId,
+          ...payload,
+        },
+      }),
+      invalidatesTags: ['ResumeLink'],
+    }),
   }),
 });
 
@@ -45,7 +56,10 @@ export const setBaseUrl = (url) => {
   }
 };
 
-export const { useUpdateResumeDetailsMutation, useGetResumeLinkQuery } =
-  resumeBuilderApi;
+export const {
+  useUpdateResumeDetailsMutation,
+  useGetResumeLinkQuery,
+  useUpdateResumePreferencesMutation,
+} = resumeBuilderApi;
 
 export default resumeBuilderApi;

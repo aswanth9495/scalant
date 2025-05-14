@@ -64,17 +64,6 @@ const PdfPreview = ({
   const handleDownload = () => {
     downloadFile(pdfLink, `resume.pdf`);
   };
-  // Show loading state for initial load or refetching
-  if (isLoading || isFetching || !pdfLink) {
-    return (
-      <LoadingLayout
-        message={
-          isLoading ? MESSAGES.loading.initial : MESSAGES.loading.refreshing
-        }
-      />
-    );
-  }
-
   // Show error state if needed
   if (isError) {
     return (
@@ -89,6 +78,16 @@ const PdfPreview = ({
           image={Empty.PRESENTED_IMAGE_SIMPLE}
         />
       </Flex>
+    );
+  }
+  // Show loading state for initial load or refetching
+  if (isLoading || isFetching || !pdfLink) {
+    return (
+      <LoadingLayout
+        message={
+          isLoading ? MESSAGES.loading.initial : MESSAGES.loading.refreshing
+        }
+      />
     );
   }
 
