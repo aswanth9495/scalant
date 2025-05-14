@@ -1,27 +1,63 @@
-import React, { useState } from 'react';
+import React, { useMemo, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Space, Button, Flex, message } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
 import CustomFormItem from './CustomFormItem';
+import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
+import { initializeForm } from '../../store/formStoreSlice';
+import AiSuggestionBanner from '../AiSuggestionBanner';
+const FORM_ID = 'achievementsForm';
 
-const CustomForm = ({ onComplete }) => {
-  const [customFormItems, setCustomFormItems] = useState([
-    { id: 1, completed: false, saved: false, expanded: true },
-  ]);
-
-  const handleAddCustomForm = () => {
-    setCustomFormItems([
-      ...customFormItems,
-      {
-        id: customFormItems.length + 1,
-        completed: false,
-        saved: false,
-        expanded: true,
+const initialFormData = {
+  achievementsItems: [
+    {
+      id: 1,
+      completed: false,
+      saved: false,
+      formData: {
+        description: '',
       },
-    ]);
-  };
+    },
+  ],
+};
+const CustomForm = ({ onComplete }) => {
+  const dispatch = useDispatch();
+  const resumeData = useSelector(
+    (state) => state.scalantResumeBuilder.resumeBuilder.resumeData
+  );
+  const formData = useSelector(
+    (state) => state.scalantResumeBuilder.formStore.forms[FORM_ID]
+  );
+  const isFormInitialized = useSelector(
+    (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
+  );
+  const [updateResumeDetails] = useUpdateResumeDetailsMutation();
 
-  const handleMarkAsCompleted = () => {
-    const hasUnsavedItems = customFormItems.some((item) => !item.saved);
+  const initialValues = useMemo(
+    () =>
+      resumeData?.achievements
+        ? {
+            achievementsItems: resumeData.achievements.map((achievement) => ({
+              id: achievement.id,
+              completed: true,
+              saved: true,
+              formData: {
+                description: achievement.description,
+              },
+            })),
+          }
+        : initialFormData,
+    [resumeData?.achievements]
+  );
+
+  useEffect(() => {
+    if (!isFormInitialized) {
+      dispatch(initializeForm({ formId: FORM_ID, initialData: initialValues }));
+    }
+  }, [dispatch, isFormInitialized, initialValues]);
+
+  const handleMarkAsCompleted = async () => {
+    const achievementsItems = formData?.achievementsItems || [];
+    const hasUnsavedItems = achievementsItems.some((item) => !item.saved);
 
     if (hasUnsavedItems) {
       message.error(
@@ -30,49 +66,38 @@ const CustomForm = ({ onComplete }) => {
       return;
     }
 
-    const customFormData = customFormItems
-      .filter((item) => item.saved)
-      .map((item) => {
-        const formData = item.formData || {};
+    const achievements = achievementsItems.map((item) => ({
+      id: item.id,
+      description: item.formData.description,
+    }));
 
-        return {
-          id: item.id,
-          saved: item.saved,
-          customFormHeading: formData[`custom_${item.id}_customFormHeading`],
-          customFormDescription:
-            formData[`custom_${item.id}_customFormDescription`],
-          customFormDate: formData[`custom_${item.id}_customFormDate`],
-          customFormLocation: formData[`custom_${item.id}_customFormLocation`],
-        };
-      });
+    try {
+      const payload = {
+        form_stage: 'professional_details_form',
+        isPopulated: true,
+        achievements: achievements,
+      };
+      onComplete?.();
 
-    // eslint-disable-next-line no-console, no-undef
-    console.log(customFormData);
-    message.success('Custom form updated successfully');
-    onComplete?.();
+      await updateResumeDetails({
+        resumeId: resumeData?.resume_details?.id,
+        payload,
+      }).unwrap();
+
+      message.success('Achievements updated successfully');
+    } catch (error) {
+      message.error(`Failed to update achievements: ${error.message}`);
+    }
   };
 
   return (
     <Flex vertical gap={16}>
       <Space direction="vertical" style={{ width: '100%' }}>
         <Flex vertical gap={16}>
-          {customFormItems.map((item) => (
-            <CustomFormItem
-              key={item.id}
-              item={item}
-              setCustomFormItems={setCustomFormItems}
-              customFormItems={customFormItems}
-            />
+          {(formData?.achievementsItems || []).map((item) => (
+            <CustomFormItem key={item.id} item={item} formId={FORM_ID} />
           ))}
         </Flex>
-        <Button
-          type="dashed"
-          block
-          icon={<PlusOutlined />}
-          onClick={handleAddCustomForm}
-        >
-          Add Custom Form
-        </Button>
         <Flex gap={16}>
           <Button type="primary" block onClick={handleMarkAsCompleted}>
             Mark as completed
@@ -82,6 +107,7 @@ const CustomForm = ({ onComplete }) => {
           </Button>
         </Flex>
       </Space>
+      <AiSuggestionBanner />
     </Flex>
   );
 };

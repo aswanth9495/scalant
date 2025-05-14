@@ -27,7 +27,9 @@ const ResumeBuilderContent = ({
   resumeManager,
 }) => {
   const dispatch = useDispatch();
-  const { currentStep, steps } = useSelector((state) => state.resumeBuilder);
+  const { currentStep, steps } = useSelector(
+    (state) => state.scalantResumeBuilder.resumeBuilder
+  );
   useEffect(() => {
     dispatch(setOnboarding(isOnboarding));
     if (!isOnboarding) {

@@ -1,68 +1,127 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useMemo } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Space, Button, Flex, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import WorkExperienceFormItem from './WorkExperienceFormItem';
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
+import { initializeForm, updateFormData } from '../../store/formStoreSlice';
+import dayjs from 'dayjs';
+
+const FORM_ID = 'workExperienceForm';
+
+const initialFormData = {
+  workExperienceItems: [
+    {
+      id: 1,
+      completed: false,
+      expanded: true,
+      formData: {
+        company: '',
+        position: '',
+        from: '',
+        to: '',
+        short_description: '',
+        location: '',
+        is_current: false,
+      },
+    },
+  ],
+};
 
 const WorkExperienceForm = ({ onComplete, required = false }) => {
-  const [workExperienceItems, setWorkExperienceItems] = useState([
-    { id: 1, completed: false, saved: false, expanded: true },
-  ]);
-
+  const dispatch = useDispatch();
+  const resumeData = useSelector(
+    (state) => state.scalantResumeBuilder.resumeBuilder.resumeData
+  );
+  const formData = useSelector(
+    (state) => state.scalantResumeBuilder.formStore.forms[FORM_ID]
+  );
+  const isFormInitialized = useSelector(
+    (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
+  );
   const [updateResumeDetails] = useUpdateResumeDetailsMutation();
-  const resumeData = useSelector((state) => state.resumeBuilder.resumeData);
+
+  const initialValues = useMemo(
+    () =>
+      resumeData?.experience
+        ? {
+            workExperienceItems: resumeData.experience.map((item, index) => ({
+              id: index,
+              completed: true,
+              expanded: false,
+              formData: {
+                company: item.company,
+                position: item.position,
+                from: item.from ? dayjs(item.from) : null,
+                to: item.to ? dayjs(item.to) : null,
+                location: item.location,
+                short_description: item.short_description,
+                is_current: item.is_current,
+              },
+            })),
+          }
+        : initialFormData,
+    [resumeData?.experience]
+  );
 
   useEffect(() => {
-    if (resumeData?.experience) {
-      setWorkExperienceItems(
-        resumeData.experience.map((item, index) => ({
-          id: index,
-          completed: true,
-          saved: true,
-          expanded: false,
-          formData: {
-            workCompany: item.company,
-            workPosition: item.position,
-            workStartDate: item.from,
-            workEndDate: item.to,
-            workLocation: item.location,
-            workKeyPoints: item.short_description,
-            workCurrentWorking: item.is_current,
-          },
-        }))
+    if (!isFormInitialized) {
+      dispatch(
+        initializeForm({
+          formId: FORM_ID,
+          initialData: initialValues,
+        })
       );
     }
-  }, [resumeData.experience]);
+  }, [dispatch, isFormInitialized, initialValues]);
 
   const handleAddWorkExperience = () => {
-    setWorkExperienceItems([
-      ...workExperienceItems,
-      {
-        id: workExperienceItems.length + 1,
-        completed: false,
-        saved: false,
-        expanded: true,
-      },
-    ]);
+    const currentItems = formData?.workExperienceItems || [];
+    const newId = currentItems.length + 1;
+
+    // Close all already expanded items
+    dispatch(
+      updateFormData({
+        formId: FORM_ID,
+        data: {
+          workExperienceItems: [
+            ...currentItems.map((item) => ({ ...item, expanded: false })),
+            {
+              id: newId,
+              completed: false,
+              expanded: true,
+              formData: {
+                company: '',
+                position: '',
+                from: '',
+                to: '',
+                short_description: '',
+                location: '',
+                is_current: false,
+              },
+            },
+          ],
+        },
+      })
+    );
   };
 
   const createWorkExperiencePayload = (workExperienceItems) => {
     return workExperienceItems.map((item) => ({
       id: item.id,
       user_id: resumeData?.user_id,
-      company: item.formData.workCompany,
-      position: item.formData.workPosition,
-      from: item.formData.workStartDate,
-      to: item.formData.workEndDate,
-      short_description: item.formData.workKeyPoints,
+      company: item.formData.company,
+      position: item.formData.position,
+      from: item.formData.from,
+      to: item.formData.to,
+      short_description: item.formData.short_description,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
-      is_current: item.formData.workCurrentWorking,
+      is_current: item.formData.is_current,
       creator: 'candidate',
       experience_type: null,
       projects: null,
-      location: '',
+      location: item.formData.location,
       freetext_position: null,
       base_ctc: 0,
       variable_ctc: 0,
@@ -76,11 +135,14 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
   };
 
   const handleMarkAsCompleted = async () => {
-    const hasUnsavedItems = workExperienceItems.some((item) => !item.saved);
+    const workExperienceItems = formData?.workExperienceItems || [];
+    const hasUncompletedItems = workExperienceItems.some(
+      (item) => !item.completed
+    );
 
-    if (hasUnsavedItems) {
+    if (hasUncompletedItems) {
       message.error(
-        'Please save all work experience items before marking as complete'
+        'Please fill all work experience items before marking as complete'
       );
       return;
     }
@@ -116,12 +178,11 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
     <Flex vertical gap={16}>
       <Space direction="vertical" style={{ width: '100%' }}>
         <Flex vertical gap={16}>
-          {workExperienceItems.map((item) => (
+          {(formData?.workExperienceItems || []).map((item) => (
             <WorkExperienceFormItem
               key={item.id}
               item={item}
-              setWorkExperienceItems={setWorkExperienceItems}
-              workExperienceItems={workExperienceItems}
+              formId={FORM_ID}
               required={required}
             />
           ))}

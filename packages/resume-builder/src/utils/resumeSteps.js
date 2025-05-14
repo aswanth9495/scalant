@@ -13,30 +13,12 @@ import EducationForm from '../components/EducationForm';
 import WorkExperienceForm from '../components/WorkExperienceForm';
 import CustomForm from '../components/CustomForm';
 import React from 'react';
-
-const PERSONAL_DETAILS_FORM_REQUIRED_FIELDS = [
-  'name',
-  'phone_number',
-  'email',
-  'gender',
-  'linkedin',
-];
-
-const PROJECT_FORM_REQUIRED_FIELDS = ['title', 'project_link', 'description'];
-
-const WORK_EXPERIENCE_FORM_REQUIRED_FIELDS = [
-  'company',
-  'position',
-  'from',
-  'to',
-];
-
-const EDUCATION_FORM_REQUIRED_FIELDS = [
-  'university',
-  'degree',
-  'marks',
-  'graduation_date',
-];
+import {
+  PROJECT_FORM_REQUIRED_FIELDS,
+  PERSONAL_DETAILS_FORM_REQUIRED_FIELDS,
+  WORK_EXPERIENCE_FORM_REQUIRED_FIELDS,
+  EDUCATION_FORM_REQUIRED_FIELDS,
+} from './constants';
 
 const ALL_FORMS_KEYS = {
   personal_details: 'personalDetails',
@@ -85,8 +67,8 @@ const FORM_STEPS = [
   },
   {
     key: 'achievements',
-    title: 'Custom Form',
-    subtitle: 'Add custom form',
+    title: 'Achievements',
+    subtitle: 'Add your achievements',
     icon: FormOutlined,
     component: CustomForm,
   },

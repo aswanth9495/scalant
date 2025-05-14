@@ -8,7 +8,9 @@ import { STEPS_ORDER } from '../../utils/constants';
 
 const createTestStore = (preloadedState = {}) => {
   return configureStore({
-    reducer: rootReducer,
+    reducer: {
+      scalantResumeBuilder: rootReducer,
+    },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(resumeBuilderApi.middleware),
     preloadedState,

@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useMemo } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { initializeForm, updateFormData } from '../../store/formStoreSlice';
 
 import { Space, Button, Flex, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
@@ -7,49 +8,99 @@ import ProjectFormItem from './ProjectFormItem';
 
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 
-const ProjectForm = ({ onComplete, required = false }) => {
-  const [projectItems, setProjectItems] = useState([
-    { id: 1, completed: false, saved: false, expanded: true },
-  ]);
+const FORM_ID = 'projectForm';
 
-  const resumeData = useSelector((state) => state.resumeBuilder.resumeData);
+const initialFormData = {
+  projectItems: [
+    {
+      id: 1,
+      completed: false,
+      expanded: true,
+      formData: {
+        title: '',
+        project_link: '',
+        description: '',
+      },
+    },
+  ],
+};
+
+const ProjectForm = ({ onComplete, required = false }) => {
+  const dispatch = useDispatch();
+  const resumeData = useSelector(
+    (state) => state.scalantResumeBuilder.resumeBuilder.resumeData
+  );
+
+  const formData = useSelector(
+    (state) => state.scalantResumeBuilder.formStore.forms[FORM_ID]
+  );
+  const isFormInitialized = useSelector(
+    (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
+  );
   const [updateResumeDetails] = useUpdateResumeDetailsMutation();
+
+  const initialValues = useMemo(
+    () =>
+      resumeData?.projects
+        ? {
+            projectItems: resumeData.projects.map((item, index) => ({
+              id: index,
+              completed: true,
+              expanded: false,
+              formData: {
+                title: item.title,
+                project_link: item.project_link,
+                description: item.description,
+              },
+            })),
+          }
+        : initialFormData,
+    [resumeData?.projects]
+  );
+
   useEffect(() => {
-    if (resumeData?.projects) {
-      setProjectItems(
-        resumeData.projects.map((item, index) => ({
-          id: index,
-          completed: true,
-          saved: true,
-          expanded: false,
-          formData: {
-            projectName: item.title,
-            projectLink: item.project_link,
-            projectDescription: item.description,
-          },
-        }))
+    if (!isFormInitialized) {
+      dispatch(
+        initializeForm({
+          formId: FORM_ID,
+          initialData: initialValues,
+        })
       );
     }
-  }, [resumeData?.projects]);
+  }, [dispatch, isFormInitialized, initialValues]);
 
   const handleAddProject = () => {
-    setProjectItems([
-      ...projectItems,
-      {
-        id: projectItems.length + 1,
-        completed: false,
-        saved: false,
-        expanded: true,
-      },
-    ]);
+    const currentItems = formData?.projectItems || [];
+    const newId = currentItems.length + 1;
+
+    dispatch(
+      updateFormData({
+        formId: FORM_ID,
+        data: {
+          projectItems: [
+            ...currentItems.map((item) => ({ ...item, expanded: false })),
+            {
+              id: newId,
+              completed: false,
+              expanded: true,
+              formData: {
+                title: '',
+                project_link: '',
+                description: '',
+              },
+            },
+          ],
+        },
+      })
+    );
   };
 
   const createProjectsPayload = (projectItems) => {
     return projectItems.map((item) => ({
       id: item.id,
-      title: item.formData.projectName,
-      description: item.formData.projectDescription,
-      project_link: item.formData.projectLink,
+      title: item.formData.title,
+      description: item.formData.description,
+      project_link: item.formData.project_link,
       data_source: 'careers_hub',
       workplace_type: null,
       workplace_id: null,
@@ -58,10 +109,11 @@ const ProjectForm = ({ onComplete, required = false }) => {
   };
 
   const handleMarkAsCompleted = async () => {
-    const hasUnsavedItems = projectItems.some((item) => !item.saved);
+    const projectItems = formData?.projectItems || [];
+    const hasUncompletedItems = projectItems.some((item) => !item.completed);
 
-    if (hasUnsavedItems) {
-      message.error('Please save all project items before marking as complete');
+    if (hasUncompletedItems) {
+      message.error('Please fill all project items before marking as complete');
       return;
     }
 
@@ -92,12 +144,11 @@ const ProjectForm = ({ onComplete, required = false }) => {
     <Flex vertical gap={16}>
       <Space direction="vertical" style={{ width: '100%' }}>
         <Flex vertical gap={16}>
-          {projectItems.map((item) => (
+          {(formData?.projectItems || []).map((item) => (
             <ProjectFormItem
               key={item.id}
               item={item}
-              setProjectItems={setProjectItems}
-              projectItems={projectItems}
+              formId={FORM_ID}
               required={required}
             />
           ))}
