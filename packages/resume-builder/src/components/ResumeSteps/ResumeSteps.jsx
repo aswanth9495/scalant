@@ -14,6 +14,7 @@ import {
   setCurrentIncompleteForm,
 } from '../../store/resumeFormsSlice';
 import { useBasicQuestionsForm } from '../../hooks/useBasicQuestionsForm';
+import ResumeProfileCard from '../ResumeProfileCard';
 
 const ResumeTimeline = () => {
   const dispatch = useDispatch();
@@ -107,39 +108,51 @@ const ResumeTimeline = () => {
       {steps && steps.length > 0 ? (
         <Timeline
           mode="left"
-          items={steps.map((step) => {
-            let dotIcon;
-            if (step.key === expandedStep) {
-              dotIcon = <LoadingOutlined className={styles.activeIcon} />;
-            } else if (step.status === 'complete') {
-              dotIcon = <CheckCircleOutlined className={styles.completeIcon} />;
-            } else {
-              dotIcon = (
-                <ClockCircleOutlined className={styles.incompleteIcon} />
-              );
-            }
-
-            return {
-              dot: dotIcon,
+          items={[
+            {
+              dot: <CheckCircleOutlined className={styles.completeIcon} />,
               children: (
-                <div ref={(el) => (stepRefs.current[step.key] = el)}>
-                  <ResumeStepCard
-                    key={step.key}
-                    title={step.title}
-                    subtitle={step.subtitle}
-                    icon={step.icon}
-                    status={step.status}
-                    isActive={step.key === expandedStep}
-                    expanded={step.key === expandedStep}
-                    onClick={() => handleStepClick(step.key)}
-                    required={step.required}
-                  >
-                    {step.component}
-                  </ResumeStepCard>
+                <div>
+                  <ResumeProfileCard resumePersonaData={resumePersonaData} />
                 </div>
               ),
-            };
-          })}
+            },
+            ...steps.map((step) => {
+              let dotIcon;
+              if (step.key === expandedStep) {
+                dotIcon = <LoadingOutlined className={styles.activeIcon} />;
+              } else if (step.status === 'complete') {
+                dotIcon = (
+                  <CheckCircleOutlined className={styles.completeIcon} />
+                );
+              } else {
+                dotIcon = (
+                  <ClockCircleOutlined className={styles.incompleteIcon} />
+                );
+              }
+
+              return {
+                dot: dotIcon,
+                children: (
+                  <div ref={(el) => (stepRefs.current[step.key] = el)}>
+                    <ResumeStepCard
+                      key={step.key}
+                      title={step.title}
+                      subtitle={step.subtitle}
+                      icon={step.icon}
+                      status={step.status}
+                      isActive={step.key === expandedStep}
+                      expanded={step.key === expandedStep}
+                      onClick={() => handleStepClick(step.key)}
+                      required={step.required}
+                    >
+                      {step.component}
+                    </ResumeStepCard>
+                  </div>
+                ),
+              };
+            }),
+          ]}
         />
       ) : (
         <Spin />
