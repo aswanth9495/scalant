@@ -2,15 +2,24 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Button } from 'antd';
 
-import { getResumeTemplateByJobRole } from '../../utils/constants';
+import { getSampleResume } from '../../utils/sampleResumeUtils';
 
 import styles from './SampleResumePreview.module.scss';
 
 const SampleResumePreview = () => {
-  const { currentJobRole } = useSelector(
+  const { currentJobRole, techExperience } = useSelector(
     (state) => state.scalantResumeBuilder.formStore.forms.basicQuestions
   );
-  const { preview, pdfLink } = getResumeTemplateByJobRole(currentJobRole);
+  const program = useSelector(
+    (state) => state.scalantResumeBuilder.resumeBuilder.program
+  );
+
+  const { preview, pdfLink } = getSampleResume(
+    currentJobRole,
+    techExperience,
+    program
+  );
+
   return (
     <div className={styles.container}>
       <img className={styles.previewImage} src={preview} alt="resume-preview" />

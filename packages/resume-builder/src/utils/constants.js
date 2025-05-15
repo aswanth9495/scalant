@@ -1,3 +1,8 @@
+export const PROGRAM_TYPES = {
+  ACADEMY: 'academy',
+  DSML: 'dsml',
+};
+
 export const PREFERENCE_SETTINGS_IMAGE =
   'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/124/609/original/image_%281%29.png?1746936231';
 
@@ -67,6 +72,49 @@ export const STEPS_ORDER = [
 const RESUME_PREVIEW_BASE_URL =
   'https://content.interviewbit.com/Resume+Repo+resumes';
 
+export const JOB_ROLES = {
+  fresher: 'Fresher',
+  nonTech: 'Non-Tech',
+  qualityAssuranceOrSdeInTesting: 'Quality Assurance / SDE in Testing',
+  salesforceOrServicenowOrRpa: 'Salesforce / Servicenow / RPA',
+  embeddedSystemsEngineer: 'Embedded Systems Engineer',
+  mobileEngineer: 'Mobile Engineer',
+  frontendOrFullStack: 'Frontend/Full-stack',
+  backendOrBackendHeavyFullStack: 'Backend / Backend Heavy Full-stack',
+  devopsOrNetworkEngineer: 'DevOps / Network Engineer',
+  dataEngineer: 'Data Engineer',
+  engineeringLeadership: 'Engineering Leadership',
+  nonDeveloperAndItProfessional: 'Non-Developer & IT Professional',
+  developer: 'Developer',
+  dataAnalystOrBusinessAnalyst: 'Data Analyst / Business Analyst',
+  dataScientistOrMachineLearningEngineer:
+    'Data Scientist / Machine Learning Engineer',
+};
+
+export const JOB_ROLES_BY_PROGRAM = {
+  academy: [
+    JOB_ROLES.fresher,
+    JOB_ROLES.nonTech,
+    JOB_ROLES.qualityAssuranceOrSdeInTesting,
+    JOB_ROLES.salesforceOrServicenowOrRpa,
+    JOB_ROLES.embeddedSystemsEngineer,
+    JOB_ROLES.mobileEngineer,
+    JOB_ROLES.frontendOrFullStack,
+    JOB_ROLES.backendOrBackendHeavyFullStack,
+    JOB_ROLES.devopsOrNetworkEngineer,
+    JOB_ROLES.dataEngineer,
+    JOB_ROLES.engineeringLeadership,
+  ],
+  dsml: [
+    JOB_ROLES.fresher,
+    JOB_ROLES.nonTech,
+    JOB_ROLES.nonDeveloperAndItProfessional,
+    JOB_ROLES.developer,
+    JOB_ROLES.dataAnalystOrBusinessAnalyst,
+    JOB_ROLES.dataScientistOrMachineLearningEngineer,
+  ],
+};
+
 // Resume PDF link key constants
 export const RESUME_PDF_LINK_KEYS = {
   FRESHER: 'fresher',
@@ -78,29 +126,15 @@ export const RESUME_PDF_LINK_KEYS = {
   NON_TECH_BACKGROUND: 'non-tech-background',
   DATA_ANALYST: 'data-analyst',
   DATA_SCIENTIST: 'data-scientist',
-};
-
-// Job role to resume PDF link key mapping
-export const JOB_ROLE_TO_RESUME_PDF_KEY = {
-  Fresher: RESUME_PDF_LINK_KEYS.FRESHER,
-  'Non-Tech': RESUME_PDF_LINK_KEYS.NON_TECH,
-  'Engineering Leadership': RESUME_PDF_LINK_KEYS.ENGG_MANAGER,
-  'Data Analyst / Business Analyst': RESUME_PDF_LINK_KEYS.DATA_ANALYST,
-  'Data Scientist / Machine Learning Engineer':
-    RESUME_PDF_LINK_KEYS.DATA_SCIENTIST,
-  'Non-Developer & IT Professional': RESUME_PDF_LINK_KEYS.NON_TECH_BACKGROUND,
-  'Backend / Backend Heavy Full-stack': RESUME_PDF_LINK_KEYS.JUNIOR_BACKEND,
-  'Frontend/Full-stack': RESUME_PDF_LINK_KEYS.JUNIOR_FRONTEND,
-  'Quality Assurance / SDE in Testing': RESUME_PDF_LINK_KEYS.FRESHER,
-  'Salesforce / Servicenow / RPA': RESUME_PDF_LINK_KEYS.FRESHER,
-  'Embedded Systems Engineer': RESUME_PDF_LINK_KEYS.FRESHER,
-  'Mobile Engineer': RESUME_PDF_LINK_KEYS.JUNIOR_FRONTEND,
-  'DevOps / Network Engineer': RESUME_PDF_LINK_KEYS.JUNIOR_BACKEND,
-  'Data Engineer': RESUME_PDF_LINK_KEYS.DATA_ANALYST,
-  Developer: RESUME_PDF_LINK_KEYS.FRESHER,
+  DSML_FRESHER: 'dsml-fresher',
 };
 
 export const RESUME_PDF_LINKS = {
+  [RESUME_PDF_LINK_KEYS.DSML_FRESHER]: {
+    preview: `${RESUME_PREVIEW_BASE_URL}/DSML/fresher/preview/preview-after.png`,
+    pdfLink:
+      'https://drive.google.com/file/d/1lfjG9TkvhP6tja9reMmsiYYRndlkCJD7/view',
+  },
   [RESUME_PDF_LINK_KEYS.FRESHER]: {
     preview: `${RESUME_PREVIEW_BASE_URL}/fresher/preview/preview-after.png`,
     pdfLink:
