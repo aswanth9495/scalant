@@ -3,9 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   setCurrentStep,
   setResumeData,
+  setProgram,
   resetSteps,
 } from '../../store/resumeBuilderSlice';
 import { resetAllForms } from '../../store/formStoreSlice';
+import { getResumeProgram } from '../../utils/resumeUtils';
 import { LoadingOutlined } from '@ant-design/icons';
 
 import {
@@ -37,6 +39,7 @@ const ResumeBuilderContent = ({
   onManageResumesClick,
   onEditClick,
   onDeleteClick,
+  courseProduct,
   isLoading = false,
 }) => {
   const dispatch = useDispatch();
@@ -49,6 +52,7 @@ const ResumeBuilderContent = ({
       const resumeId = resumeData?.resume_details?.id;
 
       dispatch(setResumeData(resumeData));
+      dispatch(setProgram(getResumeProgram(courseProduct)));
       dispatch(resetSteps());
       dispatch(resetAllForms());
 
@@ -61,7 +65,7 @@ const ResumeBuilderContent = ({
         dispatch(setCurrentStep(resumeStepsIndex));
       }
     }
-  }, [resumeData, dispatch, steps, isOnboarding]);
+  }, [resumeData, dispatch, steps, isOnboarding, courseProduct]);
 
   useEffect(() => {
     const currentStepData = steps[currentStep];
@@ -149,7 +153,7 @@ const ResumeBuilderContent = ({
     return (
       <div className={styles.loadingContainer}>
         <LoadingOutlined className={styles.loadingIcon} size="large" />
-        <h1>Loading your resume...</h1>
+        <h1>Loading your resume data...</h1>
       </div>
     );
   }

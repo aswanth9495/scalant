@@ -1,7 +1,7 @@
 import { RESUME_PERSONAS } from './constants';
 
-export const getResumeTips = (resumePersonaData) => {
-  const { techExperience, program, currentJobRole } = resumePersonaData;
+export const getResumeTips = (resumePersonaData, program) => {
+  const { techExperience, currentJobRole } = resumePersonaData;
   let tips;
 
   if (program === 'academy' && currentJobRole === 'Fresher') {

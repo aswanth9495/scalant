@@ -93,7 +93,6 @@ const ResumeBasicQuestions = () => {
         totalExperience,
         techExperience,
         currentJobRole: values?.currentJobRole,
-        program: 'academy',
       };
 
       dispatch(

@@ -319,11 +319,12 @@ export const getAllIncompleteForms = (resumeData) => {
 export const getFormSteps = (
   resumePersonaData,
   incompleteForms,
-  onComplete
+  onComplete,
+  program
 ) => {
   if (!resumePersonaData) return [];
 
-  const { program, currentJobRole } = resumePersonaData;
+  const { currentJobRole } = resumePersonaData;
 
   const formOrderDetails = getFormOrderDetails(program, currentJobRole);
 

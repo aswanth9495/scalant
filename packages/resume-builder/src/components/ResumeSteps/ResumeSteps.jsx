@@ -17,6 +17,9 @@ import { useBasicQuestionsForm } from '../../hooks/useBasicQuestionsForm';
 
 const ResumeTimeline = () => {
   const dispatch = useDispatch();
+  const program = useSelector(
+    (state) => state.scalantResumeBuilder.resumeBuilder.program
+  );
   const [expandedStep, setExpandedStep] = useState(null);
   const [steps, setSteps] = useState([]);
   const resumeData = useSelector(
@@ -93,11 +96,12 @@ const ResumeTimeline = () => {
       const formSteps = getFormSteps(
         resumePersonaData,
         incompleteForms,
-        handleFormCompletion
+        handleFormCompletion,
+        program
       );
       setSteps(formSteps);
     }
-  }, [resumePersonaData, incompleteForms, handleFormCompletion]);
+  }, [resumePersonaData, incompleteForms, handleFormCompletion, program]);
   return (
     <div className={styles.container}>
       {steps && steps.length > 0 ? (

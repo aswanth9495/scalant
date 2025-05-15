@@ -13,14 +13,17 @@ const ResumeTips = () => {
   const resumePersonaData = useSelector(
     (state) => state.scalantResumeBuilder.formStore.forms.basicQuestions
   );
+  const program = useSelector(
+    (state) => state.scalantResumeBuilder.resumeBuilder.program
+  );
 
   const [tips, setTips] = useState([]);
 
   useEffect(() => {
     if (resumePersonaData) {
-      setTips(getResumeTips(resumePersonaData));
+      setTips(getResumeTips(resumePersonaData, program));
     }
-  }, [resumePersonaData]);
+  }, [resumePersonaData, program]);
 
   const handleStartBuilding = () => {
     dispatch(nextStep());

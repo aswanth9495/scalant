@@ -44,11 +44,8 @@ export const useBasicQuestionsForm = (basicQuestionsData) => {
     [basicQuestionsData]
   );
 
-  console.log('initialValues', initialValues);
-
   useEffect(() => {
     if (!isFormInitialized) {
-      console.log('initializing form');
       dispatch(
         initializeForm({
           formId: FORM_ID,
