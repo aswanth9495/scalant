@@ -39,7 +39,7 @@ export const resumeBuilderApi = createApi({
     updateResumePreferences: builder.mutation({
       query: ({ resumeId, payload }) => ({
         url: `/resume/preferences/update`,
-        method: 'PUT',
+        method: 'PATCH',
         body: {
           resume_id: resumeId,
           ...payload,
