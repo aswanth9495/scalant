@@ -15,7 +15,6 @@ const ResumeProfileCard = ({ resumePersonaData }) => {
     (state) => state.scalantResumeBuilder.resumeBuilder.resumeData
   );
   const fullName = resumeData?.personal_details?.name;
-  const { currentJobRole, totalWorkExperienceInTech } = resumePersonaData;
 
   const handleEditProfile = () => {
     dispatch(
@@ -26,6 +25,12 @@ const ResumeProfileCard = ({ resumePersonaData }) => {
       )
     );
   };
+
+  if (!resumePersonaData) {
+    return null;
+  }
+  const { currentJobRole, totalWorkExperienceInTech } = resumePersonaData;
+
   return (
     <Card>
       <Flex justify="space-between" align="center">
