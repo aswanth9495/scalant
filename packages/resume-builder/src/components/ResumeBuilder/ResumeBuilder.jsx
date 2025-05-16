@@ -57,8 +57,7 @@ const ResumeBuilderContent = ({
       dispatch(resetSteps());
       dispatch(resetAllForms());
 
-      let shouldShow = isOnboarding ? shouldShowOnboarding(resumeId) : false;
-      shouldShow = true;
+      const shouldShow = isOnboarding ? shouldShowOnboarding(resumeId) : false;
       if (!shouldShow) {
         const resumeStepsIndex = steps.findIndex(
           (step) => step.key === RESUME_BUILDER_STEPS.RESUME_STEPS.key
