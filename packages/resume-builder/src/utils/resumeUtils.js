@@ -5,12 +5,15 @@ export const getResumeProgram = (courseProduct) => {
   return 'academy';
 };
 
-export const formatExperience = (years, months) => {
+export const formatExperience = (years, months, shortFormat = false) => {
+  const yearLabel = shortFormat ? 'yrs' : 'years';
+  const monthLabel = shortFormat ? 'Mon' : 'months';
+
   if (years === 0) {
-    return `${months} months`;
+    return `${months} ${monthLabel}`;
   }
   if (months === 0) {
-    return `${years} years`;
+    return `${years} ${yearLabel}`;
   }
-  return `${years} years ${months} months`;
+  return `${years} ${yearLabel} ${months} ${monthLabel}`;
 };

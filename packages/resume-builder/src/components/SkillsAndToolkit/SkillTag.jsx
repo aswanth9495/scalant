@@ -10,6 +10,8 @@ import {
   Flex,
 } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
+import { formatExperience } from '../../utils/resumeUtils';
+
 import styles from './SkillsAndToolkit.module.scss';
 
 const { Text } = Typography;
@@ -23,22 +25,6 @@ const SkillTag = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [form] = Form.useForm();
-
-  // Format months into years and months for display
-  const getFormattedExperience = () => {
-    const years = experience.years;
-    const months = experience.months;
-
-    if (years === 0 && months === 0) {
-      return '';
-    } else if (years === 0 && months !== 0) {
-      return `(${months}Mon)`;
-    } else if (years !== 0 && months === 0) {
-      return `(${years}Yrs)`;
-    } else {
-      return `(${years}Yrs ${months}M)`;
-    }
-  };
 
   // Set initial form values if experience exists
   useEffect(() => {
@@ -70,7 +56,9 @@ const SkillTag = ({
         months: 0,
       }}
     >
-      <Text>Enter your experience with {skill.name} (years and months):</Text>
+      <Text>
+        Enter your experience with {skill.subtopic} (years and months):
+      </Text>
       <Flex gap={4}>
         <Form.Item name="years">
           <InputNumber placeholder="Years" min={0} />
@@ -96,16 +84,14 @@ const SkillTag = ({
       <Tag
         className={`${styles.skillTag} ${isSelected ? styles.selected : ''}`}
         onClick={() => {
-          if (!isSelected) {
-            setOpen(true);
-          }
+          setOpen(true);
         }}
       >
         <span>
-          {skill.name}
+          {skill.subtopic}
           {isSelected &&
             experience !== undefined &&
-            ` ${getFormattedExperience()}`}
+            ` ${formatExperience(experience.years, experience.months, true)}`}
         </span>
         {isSelected && (
           <CloseOutlined
@@ -116,17 +102,6 @@ const SkillTag = ({
       </Tag>
     </Popover>
   );
-};
-
-SkillTag.propTypes = {
-  skill: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    experience: PropTypes.string,
-  }).isRequired,
-  isSelected: PropTypes.bool.isRequired,
-  onClick: PropTypes.func.isRequired,
-  onExperienceUpdate: PropTypes.func.isRequired,
-  experienceMonths: PropTypes.number,
 };
 
 export default SkillTag;
