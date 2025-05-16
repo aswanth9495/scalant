@@ -27,6 +27,7 @@ import ResumeTips from '../ResumeTips';
 import ResumeSteps from '../ResumeSteps';
 import ResumePreview from '../ResumePreview';
 import SampleResumePreview from '../SampleResumePreview';
+import ResumeHighlightPreview from '../ResumeHighlightPreview';
 import styles from './ResumeBuilder.module.scss';
 
 const ResumeBuilderContent = ({
@@ -56,8 +57,8 @@ const ResumeBuilderContent = ({
       dispatch(resetSteps());
       dispatch(resetAllForms());
 
-      const shouldShow = isOnboarding ? shouldShowOnboarding(resumeId) : false;
-
+      let shouldShow = isOnboarding ? shouldShowOnboarding(resumeId) : false;
+      shouldShow = true;
       if (!shouldShow) {
         const resumeStepsIndex = steps.findIndex(
           (step) => step.key === RESUME_BUILDER_STEPS.RESUME_STEPS.key
@@ -76,14 +77,6 @@ const ResumeBuilderContent = ({
       }
     }
   }, [currentStep, steps, resumeData]);
-
-  // const handleNext = () => {
-  //   dispatch(nextStep());
-  // };
-
-  // const handlePrevious = () => {
-  //   dispatch(previousStep());
-  // };
 
   const renderComponent = () => {
     const currentStepData = steps[currentStep];
@@ -123,13 +116,7 @@ const ResumeBuilderContent = ({
           />
         );
       case RESUME_BUILDER_STEPS.RESUME_BASIC_QUESTIONS.component:
-        return (
-          <img
-            src={PREFERENCE_SETTINGS_IMAGE}
-            className={styles.previewImage}
-            alt="preference-settings"
-          />
-        );
+        return <ResumeHighlightPreview />;
       case RESUME_BUILDER_STEPS.RESUME_TIPS.component:
         return <SampleResumePreview />;
 

@@ -362,3 +362,98 @@ export const SOCIAL_LINKS = [
   'leetcode',
   'scaler',
 ];
+
+export const RESUME_HIGHLIGHT_IMAGES = {
+  default: {
+    imageLink:
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/126/271/original/Resume_Default_from_Figma_%281%29.png?1747392412',
+    recommendation: 'Recommendations based on your persona will appear here',
+  },
+  fresherNonTech: {
+    imageLink:
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/126/272/original/Fresher_Non-Tech_Resume.png?1747392498',
+    recommendation:
+      'The Projects section needs to be the main focus of your resume. Build and Include 2-3 impactful projects to showcase your skills.',
+  },
+  qualityAssurance: {
+    imageLink:
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/126/273/original/Quality_Assurance_Resume_Builder.png?1747392566',
+    recommendation: `The Projects section needs to be the main focus of your resume. Build and Include 2-3 impactful projects to showcase your skills.
+
+In Work Experience, keep it short and include test automation /  coding-type tasks with the impact and tools used. 
+
+In the Skills section, include popular languages, libraries and tools used hands-on at work.`,
+  },
+  allExceptEngineeringLeadership: {
+    imageLink:
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/126/274/original/Resume_Builder_All_Except_Engineering_Leadership.png?1747392602',
+    recommendation: `Work Experience needs to be the main focus of your resume. 
+
+Include key and impactful tasks / projects with numbers across your work experience with the Programming languages, frameworks and tools used. 
+
+In the Skills section, include popular Programming languages, libraries and tools used hands-on at work. 
+
+Include complex / elaborate Projects done outside work if your tech work experience is under 2 years and you do not have enough impactful work-related items.
+`,
+  },
+  engineeringLeadership: {
+    imageLink:
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/126/276/original/Engineering_Leadership_Resume.png?1747392633',
+    recommendation: `Work Experience needs to be the major focus of your resume. 
+
+Include work experiences and promotions from most recent to oldest. 
+Include impactful tasks and projects with numbers across your work experience with the programming languages, frameworks and tools used.
+Include impactful non-technical (leadership, managerial) as well as technical initiatives. 
+
+In the Skills section, include popular languages, libraries and tools used at work by you / your team.
+
+`,
+  },
+  dsmlFresherNonTech: {
+    imageLink:
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/126/278/original/DSML_Fresher_Non-Tech_Resume.png?1747392793',
+    recommendation: `The Projects section needs to be the main focus of your resume. 
+
+Build and Include 2-3 impactful projects / elaborate business cases to showcase your technical proficiency, and analytical skills. Include relevant business insights and impact metrics in each project along with the Programming languages, frameworks and tools used to do the project.
+
+`,
+  },
+  dsmlNonDeveloperAndItProfessional: {
+    imageLink:
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/126/279/original/DSML_Non-Developer___IT_Professional.png?1747392822',
+    recommendation: `The Projects section needs to be the main focus of your resume. 
+
+Build and Include 2-3 impactful projects / elaborate business cases to showcase your technical proficiency, and analytical skills. Include relevant business insights and impact metrics in each project along with the Programming languages, frameworks and tools used to do the project.
+ 
+In Work Experience, keep it short and include test automation / coding-type tasks with impact and tools used.
+`,
+  },
+  dsmlDeveloper: {
+    imageLink:
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/126/280/original/DSML_Developer_Resume.png?1747392847',
+    recommendation: `Work Experience and Projects are both important components of your resume.
+
+Build and Include 2-3 impactful projects / elaborate business cases to showcase your technical proficiency, and analytical skills. Include relevant business insights and impact metrics in each project along with the Programming languages, frameworks and tools used to do the project.
+
+
+In Work Experience, Include key impactful tasks and projects with numbers across your work experience with the Programming languages, frameworks and tools used.
+
+In the Skills section, include popular languages, libraries and tools used at work by you / your team.
+
+Your resume should highlight your experience as a developer and ability as a data analyst - Combining Technical competence with analytical skills and understanding of businesses / business metrics across key industries.
+
+`,
+  },
+  dsmlDataAnalyst: {
+    imageLink:
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/126/281/original/DSML_Data_Analyst_Resume.png?1747392883',
+    recommendation: `Work Experience needs to be the main focus of your resume. 
+
+Include key and impactful tasks / projects with business metrics, and impact numbers across your work experience with the Programming languages, frameworks and tools used. 
+
+In the Skills section, include popular Programming languages, libraries and tools used hands-on at work.
+
+Include elaborate Projects or Business Cases done outside work if your tech work experience is under 2 years and you do not have enough impactful work-related items.
+`,
+  },
+};

@@ -1,7 +1,8 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Form, Card, Input } from 'antd';
+import { Form, Card } from 'antd';
 import { updateFormData } from '../../store/formStoreSlice';
+import RichTextEditor from '../RichTextEditor';
 
 const CustomFormItem = ({ item, formId }) => {
   const dispatch = useDispatch();
@@ -27,18 +28,21 @@ const CustomFormItem = ({ item, formId }) => {
   };
 
   return (
-    <Card key={item.id}>
-      <Form
-        form={form}
-        layout="vertical"
-        onValuesChange={handleValuesChange}
-        initialValues={item.formData}
-      >
-        <Form.Item name="description" label="Achievements description">
-          <Input.TextArea placeholder="Enter Section Heading" />
-        </Form.Item>
-      </Form>
-    </Card>
+    <Form
+      key={item.id}
+      form={form}
+      layout="vertical"
+      onValuesChange={handleValuesChange}
+      initialValues={item.formData}
+    >
+      <Form.Item name="description" label="">
+        <RichTextEditor
+          form={form}
+          fieldName="description"
+          placeholder="Enter your achievements description"
+        />
+      </Form.Item>
+    </Form>
   );
 };
 

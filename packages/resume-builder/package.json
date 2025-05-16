@@ -11,7 +11,8 @@
     "dist"
   ],
   "dependencies": {
-    "react-pdf": "5.7.2"
+    "react-pdf": "5.7.2",
+    "react-quill": "^2.0.0"
   },
   "exports": {
     "import": "./dist/resume-builder.es.js",

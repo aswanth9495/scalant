@@ -1,16 +1,18 @@
-import React, { useMemo, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Space, Button, Flex, message } from 'antd';
-import CustomFormItem from './CustomFormItem';
+import { Button, Flex, message, Space } from 'antd';
+import React, { useEffect, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 import { initializeForm } from '../../store/formStoreSlice';
 import AiSuggestionBanner from '../AiSuggestionBanner';
+import CustomFormItem from './CustomFormItem';
+
 const FORM_ID = 'achievementsForm';
 
 const initialFormData = {
   achievementsItems: [
     {
-      id: 1,
+      id: null,
       completed: false,
       saved: false,
       formData: {

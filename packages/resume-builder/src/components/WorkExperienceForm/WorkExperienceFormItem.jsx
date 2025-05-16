@@ -13,6 +13,7 @@ import {
 import { DownOutlined, DeleteOutlined, UpOutlined } from '@ant-design/icons';
 import { WORK_EXPERIENCE_FORM_REQUIRED_FIELDS } from '../../utils/constants';
 import { updateFormData } from '../../store/formStoreSlice';
+import RichTextEditor from '../RichTextEditor';
 
 const { Text } = Typography;
 
@@ -162,7 +163,11 @@ const WorkExperienceFormItem = ({ item, formId, required = false }) => {
           <Input />
         </Form.Item>
         <Form.Item name={`short_description`} label="Key Points">
-          <Input.TextArea placeholder="Enter Key Points" />
+          <RichTextEditor
+            form={form}
+            fieldName="short_description"
+            placeholder="Enter Key Points"
+          />
         </Form.Item>
       </Form>
     </Card>

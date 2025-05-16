@@ -59,7 +59,7 @@ const EducationForm = ({ onComplete, required = false }) => {
                 graduation_date: item.graduation_date
                   ? dayjs(item.graduation_date)
                   : null,
-                description: item.short_description,
+                short_description: item.short_description,
               },
             })),
           }
@@ -116,8 +116,8 @@ const EducationForm = ({ onComplete, required = false }) => {
       field: item.formData.branch,
       marks: item.formData.grades,
       marks_type: item.formData.gradeType,
-      graduation_date: item.formData.graduation,
-      short_description: item.formData.description,
+      graduation_date: item.formData.graduation_date,
+      short_description: item.formData.short_description,
       data_source: 'careers_hub',
       university_city: null,
       math_score: null,

@@ -4,6 +4,7 @@ import { Form, Card, Flex, Typography, Input, Button } from 'antd';
 import { DownOutlined, DeleteOutlined, UpOutlined } from '@ant-design/icons';
 import { PROJECT_FORM_REQUIRED_FIELDS } from '../../utils/constants';
 import { updateFormData } from '../../store/formStoreSlice';
+import RichTextEditor from '../RichTextEditor';
 
 const { Text } = Typography;
 
@@ -111,7 +112,11 @@ const ProjectFormItem = ({ item, formId, required = false }) => {
           label="Key Points"
           rules={[{ required: required }]}
         >
-          <Input.TextArea placeholder="Enter Key Points" />
+          <RichTextEditor
+            form={form}
+            fieldName="description"
+            placeholder="Enter Key Points"
+          />
         </Form.Item>
         <Flex gap={16}>
           <Button type="primary" onClick={handleExpand}>

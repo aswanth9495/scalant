@@ -6,17 +6,16 @@ import {
   Flex,
   Divider,
   Form,
-  Tag,
   Input,
   Select,
   DatePicker,
-  Button,
   InputNumber,
 } from 'antd';
 import { DownOutlined, DeleteOutlined, UpOutlined } from '@ant-design/icons';
 import { updateFormData } from '../../store/formStoreSlice';
 import { EDUCATION_FORM_REQUIRED_FIELDS } from '../../utils/constants';
 import styles from './EducationForm.module.scss';
+import RichTextEditor from '../RichTextEditor/RichTextEditor';
 
 const { Text } = Typography;
 
@@ -236,7 +235,11 @@ const EducationFormItem = ({ item, formId, required = false }) => {
           </Form.Item>
         </Flex>
         <Form.Item name="short_description" label="Description">
-          <Input.TextArea placeholder="Enter Description" />
+          <RichTextEditor
+            form={form}
+            fieldName="short_description"
+            placeholder="Enter Description"
+          />
         </Form.Item>
       </Form>
     </Card>
