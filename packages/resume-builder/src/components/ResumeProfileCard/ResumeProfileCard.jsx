@@ -7,6 +7,8 @@ import { formatExperience } from '../../utils/resumeUtils';
 import { setCurrentStep } from '../../store/resumeBuilderSlice';
 import { RESUME_BUILDER_STEPS, STEPS_ORDER } from '../../utils/constants';
 
+import styles from './ResumeProfileCard.module.scss';
+
 const { Title, Text } = Typography;
 
 const ResumeProfileCard = ({ resumePersonaData }) => {
@@ -35,7 +37,11 @@ const ResumeProfileCard = ({ resumePersonaData }) => {
     <Card>
       <Flex justify="space-between" align="center">
         <Flex align="center" gap={16}>
-          <Avatar size="large" icon={<UserOutlined />} />
+          <Avatar
+            className={styles.avatar}
+            size="large"
+            icon={<UserOutlined />}
+          />
           <Flex vertical>
             <Title level={5} style={{ marginBottom: 0 }}>
               {fullName}
