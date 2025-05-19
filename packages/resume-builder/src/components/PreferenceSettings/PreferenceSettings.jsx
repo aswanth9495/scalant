@@ -103,7 +103,7 @@ const PreferenceSettings = () => {
     }
 
     return {
-      form_stage: 'preferences_details_form',
+      form_stage: 'preferences_details_v1_form',
       preferred_location: preferredLocations,
       preferred_role: preferredRoles,
       expected_ctc: form.getFieldsValue().ctc,

@@ -75,7 +75,7 @@ const CustomForm = ({ onComplete }) => {
 
     try {
       const payload = {
-        form_stage: 'professional_details_form',
+        form_stage: 'achievement_details_form',
         isPopulated: true,
         achievements: achievements,
       };
@@ -102,10 +102,10 @@ const CustomForm = ({ onComplete }) => {
         </Flex>
         <Flex gap={16}>
           <Button type="primary" block onClick={handleMarkAsCompleted}>
-            Mark as completed
+            Save and Compile
           </Button>
-          <Button type="default" block>
-            Cancel
+          <Button type="default" onClick={handleMarkAsCompleted} block>
+            Save and Next
           </Button>
         </Flex>
       </Space>

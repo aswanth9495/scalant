@@ -129,7 +129,7 @@ const SkillsAndToolkit = ({ onComplete }) => {
 
     try {
       const payload = {
-        form_stage: 'personal_details_form',
+        form_stage: 'skills_details_form',
         skills: selectedSkills,
       };
       onComplete?.();
@@ -171,10 +171,13 @@ const SkillsAndToolkit = ({ onComplete }) => {
           className={`${styles.button} ${styles.primary}`}
           onClick={handleMarkAsComplete}
         >
-          Mark as Complete
+          Save and Compile
         </button>
-        <button className={`${styles.button} ${styles.secondary}`}>
-          Cancel
+        <button
+          onClick={handleMarkAsComplete}
+          className={`${styles.button} ${styles.secondary}`}
+        >
+          Save and Next
         </button>
       </div>
     </Space>

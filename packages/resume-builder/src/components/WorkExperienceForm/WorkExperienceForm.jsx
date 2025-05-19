@@ -152,7 +152,7 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
 
     try {
       const payload = {
-        form_stage: 'professional_details_form',
+        form_stage: 'work_experience_details_form',
         isPopulated: true,
         upgrade: false,
         previous_experience: workExperiencePayload,
@@ -194,10 +194,10 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
         </Button>
         <Flex gap={16}>
           <Button type="primary" block onClick={handleMarkAsCompleted}>
-            Mark as completed
+            Save and Compile
           </Button>
-          <Button type="default" block>
-            Cancel
+          <Button type="default" onClick={handleMarkAsCompleted} block>
+            Save and Next
           </Button>
         </Flex>
       </Space>

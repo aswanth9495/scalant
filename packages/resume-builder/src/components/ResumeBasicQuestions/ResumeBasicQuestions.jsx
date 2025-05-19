@@ -63,7 +63,7 @@ const ResumeBasicQuestions = () => {
       values?.totalWorkExperienceInTech?.monthsExperienceInTech;
 
     const payload = {
-      form_stage: 'preferences_details_form',
+      form_stage: 'resume_preference_details_form',
       total_experience: totalExperience,
       experience: techExperience,
       job_title: values?.currentJobRole,

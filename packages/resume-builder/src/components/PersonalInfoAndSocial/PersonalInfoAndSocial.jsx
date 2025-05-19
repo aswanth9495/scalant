@@ -3,7 +3,6 @@ import {
   GithubOutlined,
   LinkedinOutlined,
   CodeOutlined,
-  PlusOutlined,
 } from '@ant-design/icons';
 import {
   Form,
@@ -20,7 +19,6 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 import { initializeForm, updateFormData } from '../../store/formStoreSlice';
-import { SOCIAL_LINKS } from '../../utils/constants';
 
 import styles from './PersonalInfoAndSocial.module.scss';
 
@@ -38,7 +36,6 @@ const initialFormData = {
     linkedIn: '',
     github: '',
     personalWebsite: '',
-    additionalProfiles: [],
   },
 };
 
@@ -57,20 +54,6 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
 
   const [form] = Form.useForm();
 
-  const getAdditionalProfiles = useMemo(() => {
-    const additionalProfiles = [];
-    SOCIAL_LINKS.forEach((link) => {
-      if (resumeData.personal_details[link]) {
-        additionalProfiles.push({
-          type: link,
-          link: resumeData.personal_details[link],
-          id: additionalProfiles.length + 1,
-        });
-      }
-    });
-    return additionalProfiles;
-  }, [resumeData]);
-
   const initialValues = useMemo(
     () =>
       resumeData?.personal_details
@@ -87,11 +70,10 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
               linkedIn: resumeData.personal_details.linkedin,
               github: resumeData.personal_details.github,
               personalWebsite: resumeData.personal_details.portfolio,
-              additionalProfiles: getAdditionalProfiles,
             },
           }
         : initialFormData,
-    [resumeData?.personal_details, getAdditionalProfiles]
+    [resumeData?.personal_details]
   );
 
   useEffect(() => {
@@ -115,7 +97,7 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
 
     try {
       const payload = {
-        form_stage: 'personal_details_form',
+        form_stage: 'personal_details_v1_form',
         name: values.fullName,
         email: values.emailAddress,
         phone_number: values.contactNumber,
@@ -125,19 +107,13 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
         linkedin: values.linkedIn,
         github: values.github,
         portfolio: values.personalWebsite,
-        skills: resumeData?.skills || [],
         scaler_resume_template_structure:
           resumeData?.scaler_resume_template_structure || {},
         isPopulated: true,
         bio: '',
-        job_title: resumeData?.personal_details?.job_title || '',
         upgrade: false,
         ctc_currency: 0,
       };
-
-      (values.additionalProfiles || []).forEach((profile) => {
-        payload[profile.type] = profile.link;
-      });
 
       onComplete?.();
 
@@ -153,29 +129,13 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
     }
   };
 
-  const handleAddProfile = () => {
-    const profileItems =
-      formData?.personalInfoAndSocial?.additionalProfiles || [];
-    const newId = profileItems.length + 1;
-
+  const handleValuesChange = (changedValues, allValues) => {
     dispatch(
       updateFormData({
         formId: FORM_ID,
-        data: {
-          personalInfoAndSocial: {
-            ...formData?.personalInfoAndSocial,
-            additionalProfiles: [...profileItems, { id: newId }],
-          },
-        },
+        data: { personalInfoAndSocial: allValues },
       })
     );
-  };
-
-  const handleValuesChange = (changedValues, allValues) => {
-    updateFormData({
-      formId: FORM_ID,
-      data: { personalInfoAndSocial: allValues },
-    });
   };
 
   const selectBefore = (
@@ -282,40 +242,6 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
           >
             <Input prefix={<CodeOutlined />} />
           </Form.Item>
-
-          <Form.Item name="additionalProfiles">
-            {(formData?.personalInfoAndSocial?.additionalProfiles || []).map(
-              (profile, index) => (
-                <Flex key={profile.id} gap={16}>
-                  <Form.Item
-                    label="Profile Type"
-                    name={['additionalProfiles', index, 'type']}
-                    style={{ flex: 1 }}
-                    className={styles.formItem + ' ' + styles.customProfile}
-                  >
-                    <Select
-                      options={[
-                        { label: 'Codeforces', value: 'codeforces' },
-                        { label: 'HackerRank', value: 'hackerrank' },
-                        { label: 'Codechef', value: 'codechef' },
-                        { label: 'HackerEarth', value: 'hackerearth' },
-                        { label: 'Geeksforgeeks', value: 'geeksforgeeks' },
-                        { label: 'Leetcode', value: 'leetcode' },
-                        { label: 'Scaler', value: 'scaler' },
-                      ]}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    label="Link"
-                    name={['additionalProfiles', index, 'link']}
-                    className={styles.formItem + ' ' + styles.customProfile}
-                  >
-                    <Input />
-                  </Form.Item>
-                </Flex>
-              )
-            )}
-          </Form.Item>
         </Space>
 
         <Space
@@ -323,20 +249,12 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
           size={16}
           className={styles.buttonContainer}
         >
-          <Button
-            type="dashed"
-            block
-            icon={<PlusOutlined />}
-            onClick={handleAddProfile}
-          >
-            Add more Social Profiles
-          </Button>
           <Flex gap={16}>
             <Button type="primary" htmlType="submit" block loading={isLoading}>
-              Mark as complete
+              Save and compile
             </Button>
-            <Button type="default" block>
-              Cancel
+            <Button type="default" htmlType="submit" block loading={isLoading}>
+              Save and Next
             </Button>
           </Flex>
         </Space>
