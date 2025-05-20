@@ -51,6 +51,7 @@ const SampleResumePreview = () => {
             open={true}
             trigger="hover"
             arrow={{ pointAtCenter: true }}
+            autoAdjustOverflow={false}
           >
             <div style={{ width: 0, height: 0 }} />
           </Popover>
