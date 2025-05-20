@@ -116,6 +116,7 @@ const ProjectFormItem = ({ item, formId, required = false }) => {
             form={form}
             fieldName="description"
             placeholder="Enter Key Points"
+            onValuesChange={handleValuesChange}
           />
         </Form.Item>
         <Flex gap={16}>

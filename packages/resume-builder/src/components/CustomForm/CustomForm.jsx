@@ -67,6 +67,7 @@ const CustomForm = ({ onComplete }) => {
       );
       return;
     }
+    console.log(achievementsItems);
 
     const achievements = achievementsItems.map((item) => ({
       id: item.id,
@@ -96,7 +97,19 @@ const CustomForm = ({ onComplete }) => {
     <Flex vertical gap={16}>
       <Space direction="vertical" style={{ width: '100%' }}>
         <Flex vertical gap={16}>
-          {(formData?.achievementsItems || []).map((item) => (
+          {(formData?.achievementsItems?.length
+            ? formData.achievementsItems
+            : [
+                {
+                  id: null,
+                  completed: false,
+                  saved: false,
+                  formData: {
+                    description: '',
+                  },
+                },
+              ]
+          ).map((item) => (
             <CustomFormItem key={item.id} item={item} formId={FORM_ID} />
           ))}
         </Flex>

@@ -167,6 +167,7 @@ const WorkExperienceFormItem = ({ item, formId, required = false }) => {
             form={form}
             fieldName="short_description"
             placeholder="Enter Key Points"
+            onValuesChange={handleValuesChange}
           />
         </Form.Item>
       </Form>

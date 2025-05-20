@@ -5,7 +5,12 @@ import PropTypes from 'prop-types';
 
 import styles from './RichTextEditor.module.scss';
 
-const RichTextEditor = ({ form, fieldName, placeholder = 'Enter text...' }) => {
+const RichTextEditor = ({
+  form,
+  fieldName,
+  placeholder = 'Enter text...',
+  onValuesChange,
+}) => {
   const modules = {
     toolbar: [
       [{ header: [1, 2, 3, false] }],
@@ -37,10 +42,8 @@ const RichTextEditor = ({ form, fieldName, placeholder = 'Enter text...' }) => {
       value={form.getFieldValue(fieldName)}
       onChange={(content) => {
         form.setFieldsValue({ [fieldName]: content });
-        // Trigger form's onValuesChange if it exists
-        const onValuesChange = form.getFieldsValue();
-        if (form.onValuesChange) {
-          form.onValuesChange({ [fieldName]: content }, onValuesChange);
+        if (onValuesChange) {
+          onValuesChange({ [fieldName]: content }, form.getFieldsValue());
         }
       }}
     />
@@ -51,6 +54,7 @@ RichTextEditor.propTypes = {
   form: PropTypes.object.isRequired,
   fieldName: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
+  onValuesChange: PropTypes.func,
 };
 
 export default RichTextEditor;

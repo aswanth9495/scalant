@@ -154,7 +154,7 @@ const EducationForm = ({ onComplete, required = false }) => {
       const payload = {
         form_stage: 'education_details_form',
         isPopulated: true,
-        education: educationPayload,
+        educations: educationPayload,
       };
       onComplete?.();
 

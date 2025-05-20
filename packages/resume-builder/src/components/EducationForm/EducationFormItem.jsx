@@ -239,6 +239,7 @@ const EducationFormItem = ({ item, formId, required = false }) => {
             form={form}
             fieldName="short_description"
             placeholder="Enter Description"
+            onValuesChange={handleValuesChange}
           />
         </Form.Item>
       </Form>

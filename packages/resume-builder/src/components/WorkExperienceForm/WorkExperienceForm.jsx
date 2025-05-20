@@ -155,9 +155,7 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
         form_stage: 'work_experience_details_form',
         isPopulated: true,
         upgrade: false,
-        previous_experience: workExperiencePayload,
-        projects: [],
-        achievements: [],
+        previous_experiences: workExperiencePayload,
       };
       onComplete?.();
 
