@@ -139,7 +139,8 @@ const SkillsAndToolkit = ({ onComplete }) => {
         payload,
       }).unwrap();
       message.success('Skills and toolkit updated successfully');
-    } catch () {
+      // eslint-disable-next-line no-unused-vars
+    } catch (error) {
       message.error('Failed to update skills and toolkit');
     }
   };
