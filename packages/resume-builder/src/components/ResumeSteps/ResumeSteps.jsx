@@ -93,7 +93,7 @@ const ResumeTimeline = () => {
   }, [incompleteForms, currentIncompleteForm, dispatch, expandedStep]);
 
   useEffect(() => {
-    if (resumePersonaData && incompleteForms.length > 0) {
+    if (resumePersonaData) {
       const formSteps = getFormSteps(
         resumePersonaData,
         incompleteForms,
@@ -103,6 +103,7 @@ const ResumeTimeline = () => {
       setSteps(formSteps);
     }
   }, [resumePersonaData, incompleteForms, handleFormCompletion, program]);
+
   return (
     <div className={styles.container}>
       {steps && steps.length > 0 ? (
