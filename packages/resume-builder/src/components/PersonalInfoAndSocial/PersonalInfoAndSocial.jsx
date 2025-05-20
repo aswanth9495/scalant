@@ -107,12 +107,7 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
         linkedin: values.linkedIn,
         github: values.github,
         portfolio: values.personalWebsite,
-        scaler_resume_template_structure:
-          resumeData?.scaler_resume_template_structure || {},
         isPopulated: true,
-        bio: '',
-        upgrade: false,
-        ctc_currency: 0,
       };
 
       onComplete?.();

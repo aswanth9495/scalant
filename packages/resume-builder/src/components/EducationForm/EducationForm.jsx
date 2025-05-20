@@ -118,7 +118,6 @@ const EducationForm = ({ onComplete, required = false }) => {
       marks_type: item.formData.grade_type,
       graduation_date: item.formData.graduation_date,
       short_description: item.formData.short_description,
-      data_source: 'careers_hub',
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     }));

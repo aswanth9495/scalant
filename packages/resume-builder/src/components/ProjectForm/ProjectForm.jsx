@@ -101,9 +101,6 @@ const ProjectForm = ({ onComplete, required = false }) => {
       title: item.formData.title,
       description: item.formData.description,
       project_link: item.formData.project_link,
-      data_source: 'careers_hub',
-      workplace_type: null,
-      workplace_id: null,
       user_id: resumeData?.user_id,
     }));
   };

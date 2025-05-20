@@ -139,7 +139,7 @@ const SkillsAndToolkit = ({ onComplete }) => {
         payload,
       }).unwrap();
       message.success('Skills and toolkit updated successfully');
-    } catch (error) {
+    } catch () {
       message.error('Failed to update skills and toolkit');
     }
   };

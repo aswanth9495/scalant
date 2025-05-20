@@ -13,7 +13,10 @@ import {
 import PageHeader from '../PageHeader';
 import { updateFormData } from '../../store/formStoreSlice';
 import styles from './ResumeBasicQuestions.module.scss';
-import { PROGRAM_JOB_ROLES } from '../../utils/constants';
+import {
+  PROGRAM_JOB_ROLES,
+  DEFAULT_TEMPLATE_CONFIG,
+} from '../../utils/constants';
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 import { useBasicQuestionsForm } from '../../hooks/useBasicQuestionsForm';
 
@@ -67,6 +70,7 @@ const ResumeBasicQuestions = () => {
       total_experience: totalExperience,
       experience: techExperience,
       job_title: values?.currentJobRole,
+      scaler_resume_template_structure: DEFAULT_TEMPLATE_CONFIG,
     };
 
     try {
