@@ -20,6 +20,13 @@ module.exports = {
       '@components': path.resolve(__dirname, '../../components/src'),
     };
 
+    // Handle plain CSS files
+    config.module.rules.push({
+      test: /\.css$/,
+      use: ['style-loader', 'css-loader'],
+      include: path.resolve(__dirname, '../'),
+    });
+
     config.module.rules.push({
       test: /\.s[ac]ss$/i,
       exclude: /\.module\.s[ac]ss$/, // Exclude CSS Modules

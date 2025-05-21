@@ -1,0 +1,25 @@
+.container {
+  background: linear-gradient(44deg, var(--Colors-Base-Blue-5, #148EFF) -9.48%, var(--Colors-Base-Blue-10, #081E4D) 141.77%);
+  padding: 0.8rem 1.6rem;
+  border-radius: 0.8rem;
+}
+
+.title {
+  color: #fff;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+  background-color: #ecf8ff;
+  border: 0.1rem solid #d9d9d9;
+  border-radius: 0.8rem;
+  color: #0e65d0;
+}
+
+.bold {
+  font-weight: 600;
+}

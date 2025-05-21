@@ -1,21 +1,47 @@
-import { Row, Col, Layout } from 'antd';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { Row, Col, Layout, Typography, Flex } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 const { Header, Content } = Layout;
+
+const { Text } = Typography;
 
 import styles from './ResumeLayout.module.scss';
 
 const LOGO_URL =
-  // eslint-disable-next-line max-len
   'https://assets.fp.scaler.com/seo/_next/static/media/scaler-light.6def257e.svg';
 
-const ResumeLayout = ({ onBackClick, children, preview }) => {
+const ResumeLayout = ({ onBackButtonClick, children, preview }) => {
+  const { currentStep } = useSelector(
+    (state) => state.scalantResumeBuilder.resumeBuilder
+  );
+
+  const incompleteForms = useSelector(
+    (state) => state.scalantResumeBuilder.resumeForms.incompleteForms
+  );
+
   return (
     <Row>
       <Col span={12} className={styles.left}>
         <Layout className={styles.layout}>
           <Header className={styles.header}>
-            <ArrowLeftOutlined onClick={onBackClick} />
-            <img className={styles.logo} src={LOGO_URL} alt="logo" />
+            <Flex
+              justify="space-between"
+              align="center"
+              style={{ width: '55%' }}
+            >
+              <div>
+                <ArrowLeftOutlined
+                  className={styles.backButton}
+                  onClick={onBackButtonClick}
+                />
+                <img className={styles.logo} src={LOGO_URL} alt="logo" />
+              </div>
+              {currentStep >= 2 && <Text>Resume Builder</Text>}
+            </Flex>
+            {currentStep === 4 && (
+              <Text>{6 - incompleteForms.length} of 6 sections completed</Text>
+            )}
           </Header>
           <Content className={styles.content}>
             {' '}
@@ -23,7 +49,9 @@ const ResumeLayout = ({ onBackClick, children, preview }) => {
           </Content>
         </Layout>
       </Col>
-      <Col span={12}>{preview}</Col>
+      <Col className={styles.right} span={12}>
+        {preview}
+      </Col>
     </Row>
   );
 };

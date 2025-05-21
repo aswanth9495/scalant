@@ -1,80 +1,90 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Card,
   Typography,
   Flex,
   Divider,
   Form,
-  Tag,
   Input,
   Select,
   DatePicker,
-  Button,
-  message,
   InputNumber,
 } from 'antd';
-import { DownOutlined, DeleteOutlined } from '@ant-design/icons';
-import dayjs from 'dayjs';
+import { DownOutlined, DeleteOutlined, UpOutlined } from '@ant-design/icons';
+import { updateFormData } from '../../store/formStoreSlice';
+import { EDUCATION_FORM_REQUIRED_FIELDS } from '../../utils/constants';
 import styles from './EducationForm.module.scss';
+import RichTextEditor from '../RichTextEditor/RichTextEditor';
 
 const { Text } = Typography;
 
-const EducationFormItem = ({ item, setEducationItems, educationItems }) => {
+const EducationFormItem = ({ item, formId, required = false }) => {
+  const dispatch = useDispatch();
+  const formData = useSelector(
+    (state) => state.scalantResumeBuilder.formStore.forms[formId]
+  );
   const [form] = Form.useForm();
 
-  useEffect(() => {
-    if (item.formData) {
-      const formData = { ...item.formData };
-      // Convert string date to dayjs object if it exists
-      if (formData.graduation) {
-        formData.graduation = dayjs(formData.graduation);
-      }
-      form.setFieldsValue(formData);
-    }
-  }, [item.formData, form]);
+  const handleValuesChange = (changedValues, allValues) => {
+    const currentItems = formData?.educationItems || [];
+    const updatedItems = currentItems.map((educationItem) =>
+      educationItem.id === item.id
+        ? {
+            ...educationItem,
+            formData: allValues,
+            completed: EDUCATION_FORM_REQUIRED_FIELDS.every(
+              (field) => allValues[field]
+            ),
+          }
+        : educationItem
+    );
 
-  const validateAndSave = async (id) => {
-    try {
-      await form.validateFields();
-
-      const formData = form.getFieldsValue();
-      // Convert dayjs object to YYYY-MM-DD string
-      if (formData.graduation) {
-        formData.graduation = formData.graduation.format('YYYY-MM-DD');
-      }
-
-      setEducationItems(
-        educationItems.map((item) =>
-          item.id === id
-            ? { ...item, saved: true, expanded: false, formData }
-            : item
-        )
-      );
-
-      message.success('Education saved successfully');
-    } catch (error) {
-      message.error(`Failed to save education: ${error}`);
-    }
-  };
-
-  const handleCancel = (id) => {
-    setEducationItems(
-      educationItems.map((item) =>
-        item.id === id ? { ...item, expanded: false } : item
-      )
+    dispatch(
+      updateFormData({
+        formId,
+        data: {
+          educationItems: updatedItems,
+        },
+      })
     );
   };
 
-  const handleExpand = (id) => {
-    setEducationItems(
-      educationItems.map((item) =>
-        item.id === id ? { ...item, expanded: true } : item
-      )
+  const handleExpand = () => {
+    const currentItems = formData?.educationItems || [];
+    const updatedItems = currentItems.map((educationItem) =>
+      educationItem.id === item.id
+        ? {
+            ...educationItem,
+            expanded: !educationItem.expanded,
+          }
+        : educationItem
+    );
+
+    dispatch(
+      updateFormData({
+        formId,
+        data: {
+          educationItems: updatedItems,
+        },
+      })
     );
   };
 
-  const handleDelete = (id) => {
-    setEducationItems(educationItems.filter((item) => item.id !== id));
+  const handleDelete = () => {
+    const currentItems = formData?.educationItems || [];
+    const updatedItems = currentItems.filter(
+      (educationItem) => educationItem.id !== item.id
+    );
+
+    dispatch(
+      updateFormData({
+        formId,
+        data: {
+          educationItems: updatedItems,
+        },
+      })
+    );
   };
 
   const selectAfter = (
@@ -88,19 +98,23 @@ const EducationFormItem = ({ item, setEducationItems, educationItems }) => {
     </Form.Item>
   );
 
-  if (item.saved && !item.expanded) {
+  if (!item.expanded) {
     return (
       <Card key={item.id}>
         <Flex justify="space-between" align="center">
           <Flex vertical gap={4}>
-            <Text strong>{item.formData?.institute}</Text>
+            <Text strong>
+              {item.formData?.university ? item.formData?.university : '---'}
+            </Text>
             <Text>
-              {item.formData?.degree && `${item.formData.degree}, `}
-              <Divider />
-              {item.formData?.graduation && `${item.formData.graduation}`}
+              {item.formData?.degree ? `${item.formData.degree}, ` : '---'}
+              <Divider type="vertical" />
+              {item.formData?.graduation_date
+                ? `${item.formData.graduation_date.format('YYYY')}`
+                : '---'}
             </Text>
           </Flex>
-          <DownOutlined onClick={() => handleExpand(item.id)} />
+          <DownOutlined onClick={handleExpand} />
         </Flex>
       </Card>
     );
@@ -111,51 +125,89 @@ const EducationFormItem = ({ item, setEducationItems, educationItems }) => {
       <Flex gap={16} justify="space-between">
         <Flex gap={4}>
           <Text strong>Education {item.id}</Text>
-          {item.saved && <Tag color="success">Saved</Tag>}
+          {(formData?.educationItems || []).length > 1 && (
+            <DeleteOutlined onClick={handleDelete} />
+          )}
         </Flex>
-        {educationItems.length > 1 && (
-          <DeleteOutlined onClick={() => handleDelete(item.id)} />
-        )}
+        <UpOutlined onClick={handleExpand} />
       </Flex>
       <Form
         form={form}
         layout="vertical"
+        onValuesChange={handleValuesChange}
         initialValues={{
           grade_type: 'cgpa',
           ...item.formData,
         }}
       >
         <Form.Item
-          name="institute"
-          label="Institute Name"
-          rules={[{ required: true, message: 'Institute Name is required' }]}
+          name="university"
+          label="University Name"
+          rules={[{ required }]}
         >
-          <Input placeholder="Enter Institute Name" />
+          <Input placeholder="Enter University Name" />
         </Form.Item>
         <Flex gap={16}>
           <Form.Item
             name="degree"
             label="Degree Type"
-            rules={[{ required: true, message: 'Degree Type is required' }]}
+            rules={[{ required }]}
             className={styles.midWidth}
           >
             <Select
               placeholder="Select Degree Type"
               options={[
-                { label: 'Bachelor', value: 'bachelor' },
-                { label: 'Master', value: 'master' },
-                { label: 'PhD', value: 'phd' },
+                { label: 'BE/B.Tech/Bs', value: 'bachelor' },
+                { label: 'ME/M.Tech', value: 'master' },
+                { label: 'Dual Degree - BE + ME', value: 'dual' },
+                { label: 'Ms', value: 'ms' },
+                { label: 'MBA', value: 'mba' },
+                { label: 'MCA/BCA', value: 'mca_bca' },
+                { label: 'BE + MBA', value: 'be_mba' },
+                { label: 'Other', value: 'other' },
               ]}
             />
           </Form.Item>
-          <Form.Item name="branch" label="Branch" className={styles.midWidth}>
+          <Form.Item
+            name="field"
+            label="Field of Study"
+            className={styles.midWidth}
+          >
             <Select
-              placeholder="Select Branch"
+              placeholder="Select Field of Study"
               options={[
                 { label: 'Computer Science', value: 'computer-science' },
                 {
-                  label: 'Electrical Engineering',
-                  value: 'electrical-engineering',
+                  label: 'Information Technology',
+                  value: 'information-technology',
+                },
+                {
+                  label: 'Mathematics and Computing',
+                  value: 'mathematics-and-computing',
+                },
+                {
+                  label: 'Electronics',
+                  value: 'electronics',
+                },
+                {
+                  label: 'Mechanical',
+                  value: 'mechanical',
+                },
+                {
+                  label: 'Civil',
+                  value: 'civil',
+                },
+                {
+                  label: 'MBA',
+                  value: 'mba',
+                },
+                {
+                  label: 'Electical',
+                  value: 'electrical',
+                },
+                {
+                  label: 'Other',
+                  value: 'other',
                 },
               ]}
             />
@@ -163,17 +215,17 @@ const EducationFormItem = ({ item, setEducationItems, educationItems }) => {
         </Flex>
         <Flex gap={16} className={styles.fullWidth}>
           <Form.Item
-            name="grades"
-            label="Grades (Final/Current)"
-            rules={[{ required: true, message: 'Grades are required' }]}
+            name="marks"
+            label="Marks (Final/Current)"
+            rules={[{ required }]}
             className={styles.midWidth}
           >
-            <InputNumber placeholder="Enter Grades" addonAfter={selectAfter} />
+            <InputNumber placeholder="Enter Marks" addonAfter={selectAfter} />
           </Form.Item>
           <Form.Item
-            name="graduation"
+            name="graduation_date"
             label="Graduation (Actual/Expected)"
-            rules={[{ required: true, message: 'Graduation is required' }]}
+            rules={[{ required }]}
             className={styles.midWidth}
           >
             <DatePicker
@@ -182,18 +234,15 @@ const EducationFormItem = ({ item, setEducationItems, educationItems }) => {
             />
           </Form.Item>
         </Flex>
-        <Form.Item name="description" label="Description">
-          <Input.TextArea placeholder="Enter Description" />
+        <Form.Item name="short_description" label="Description">
+          <RichTextEditor
+            form={form}
+            fieldName="short_description"
+            placeholder="Enter Description"
+            onValuesChange={handleValuesChange}
+          />
         </Form.Item>
       </Form>
-      <Flex gap={16}>
-        <Button type="primary" block onClick={() => validateAndSave(item.id)}>
-          Save
-        </Button>
-        <Button type="default" block onClick={() => handleCancel(item.id)}>
-          Cancel
-        </Button>
-      </Flex>
     </Card>
   );
 };

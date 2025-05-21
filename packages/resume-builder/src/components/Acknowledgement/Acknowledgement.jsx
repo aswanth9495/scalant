@@ -1,24 +1,21 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Checkbox, Button, Typography } from 'antd';
+import { useDispatch } from 'react-redux';
+import { nextStep } from '../../store/resumeBuilderSlice';
 import PageHeader from '../PageHeader';
 import styles from './Acknowledgement.module.scss';
 
 const { Paragraph } = Typography;
 
 const Acknowledgement = () => {
+  const dispatch = useDispatch();
   const [checked1, setChecked1] = useState(false);
   const [checked2, setChecked2] = useState(false);
 
   const handleContinue = () => {
     if (checked1 && checked2) {
-      // eslint-disable-next-line no-console, no-undef
-      console.log('Continue');
+      dispatch(nextStep());
     }
-  };
-
-  const handleLater = () => {
-    // eslint-disable-next-line no-console, no-undef
-    console.log('Later');
   };
 
   return (
@@ -60,14 +57,6 @@ const Acknowledgement = () => {
           onClick={handleContinue}
         >
           I Understand, Continue
-        </Button>
-        <Button
-          type="link"
-          block
-          className={styles.laterText}
-          onClick={handleLater}
-        >
-          I will do this later
         </Button>
       </div>
     </>
