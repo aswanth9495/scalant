@@ -34,6 +34,15 @@ export const RESUME_BUILDER_STEPS = {
   },
 };
 
+export const ADDITIONAL_PROFILES = [
+  { label: 'LeetCode', value: 'leetcode' },
+  { label: 'Codeforces', value: 'codeforces' },
+  { label: 'Codechef', value: 'codechef' },
+  { label: 'HackerRank', value: 'hackerrank' },
+  { label: 'HackerEarth', value: 'hackerearth' },
+  { label: 'Geeksforgeeks', value: 'geeksforgeeks' },
+];
+
 export const PROJECT_FORM_REQUIRED_FIELDS = [
   'title',
   'project_link',
