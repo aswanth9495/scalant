@@ -1,5 +1,5 @@
-import { Space, message } from 'antd';
-import React, { useEffect, useMemo } from 'react';
+import { Button, Flex, Space, message } from 'antd';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
@@ -46,6 +46,7 @@ const SkillsAndToolkit = ({ onComplete }) => {
     useSelector((state) => state.scalantResumeBuilder.metaData.meta);
 
   const [updateResumeDetails] = useUpdateResumeDetailsMutation();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const initialValues = useMemo(
     () =>
@@ -124,7 +125,8 @@ const SkillsAndToolkit = ({ onComplete }) => {
     }
   };
 
-  const handleMarkAsComplete = async () => {
+  const handleFinish = async () => {
+    setIsSubmitting(true);
     const selectedSkills = formData?.selectedSkills || [];
 
     try {
@@ -132,7 +134,6 @@ const SkillsAndToolkit = ({ onComplete }) => {
         form_stage: 'skills_details_form',
         skills: selectedSkills,
       };
-      onComplete?.();
 
       await updateResumeDetails({
         resumeId: resumeData?.resume_details?.id,
@@ -142,7 +143,14 @@ const SkillsAndToolkit = ({ onComplete }) => {
       // eslint-disable-next-line no-unused-vars
     } catch (error) {
       message.error('Failed to update skills and toolkit');
+    } finally {
+      setIsSubmitting(false);
     }
+  };
+
+  const handleSaveAndNext = () => {
+    handleFinish();
+    onComplete?.();
   };
 
   const renderSkillSection = (section) => {
@@ -167,20 +175,24 @@ const SkillsAndToolkit = ({ onComplete }) => {
   return (
     <Space direction="vertical" size={24} className={styles.container}>
       {Object.values(SKILL_SECTIONS).map(renderSkillSection)}
-      <div className={styles.buttonContainer}>
-        <button
-          className={`${styles.button} ${styles.primary}`}
-          onClick={handleMarkAsComplete}
+      <Flex gap={16}>
+        <Button
+          type="primary"
+          block
+          onClick={handleFinish}
+          disabled={isSubmitting}
         >
           Save and Compile
-        </button>
-        <button
-          onClick={handleMarkAsComplete}
-          className={`${styles.button} ${styles.secondary}`}
+        </Button>
+        <Button
+          type="default"
+          block
+          onClick={handleSaveAndNext}
+          disabled={isSubmitting}
         >
           Save and Next
-        </button>
-      </div>
+        </Button>
+      </Flex>
     </Space>
   );
 };

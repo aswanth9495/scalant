@@ -39,25 +39,5 @@
 .buttonContainer {
   width: 100%;
   display: flex;
-  justify-content: space-between;
-  gap: 16px;
 }
 
-.button {
-  flex: 1;
-  padding: 8px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  border: none;
-
-  &.primary {
-    background-color: #1890ff;
-    color: white;
-  }
-
-  &.secondary {
-    background-color: white;
-    color: #1890ff;
-    border: 1px solid #1890ff;
-  }
-}

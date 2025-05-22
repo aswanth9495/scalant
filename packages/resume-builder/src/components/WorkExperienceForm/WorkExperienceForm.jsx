@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Space, Button, Flex, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
@@ -40,6 +40,7 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
     (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
   );
   const [updateResumeDetails] = useUpdateResumeDetailsMutation();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const initialValues = useMemo(
     () =>
@@ -134,7 +135,8 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
     }));
   };
 
-  const handleMarkAsCompleted = async () => {
+  const handleFinish = async () => {
+    setIsSubmitting(true);
     const workExperienceItems = formData?.workExperienceItems || [];
     const hasUncompletedItems = workExperienceItems.some(
       (item) => !item.completed
@@ -156,7 +158,6 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
         isPopulated: true,
         previous_experiences: workExperiencePayload,
       };
-      onComplete?.();
 
       await updateResumeDetails({
         resumeId: resumeData?.resume_details?.id,
@@ -165,7 +166,14 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
       message.success('Work experience details updated successfully');
     } catch (error) {
       message.error(`Failed to update work experience details: ${error}`);
+    } finally {
+      setIsSubmitting(false);
     }
+  };
+
+  const handleSaveAndNext = () => {
+    handleFinish();
+    onComplete?.();
   };
 
   return (
@@ -190,10 +198,20 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
           Add another experience
         </Button>
         <Flex gap={16}>
-          <Button type="primary" block onClick={handleMarkAsCompleted}>
+          <Button
+            type="primary"
+            block
+            onClick={handleFinish}
+            disabled={isSubmitting}
+          >
             Save and Compile
           </Button>
-          <Button type="default" onClick={handleMarkAsCompleted} block>
+          <Button
+            type="default"
+            onClick={handleSaveAndNext}
+            block
+            disabled={isSubmitting}
+          >
             Save and Next
           </Button>
         </Flex>
