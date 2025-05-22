@@ -1,62 +1,169 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Space, Button, Flex, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import EducationFormItem from './EducationFormItem';
-const EducationForm = () => {
-  const [educationItems, setEducationItems] = useState([
-    { id: 1, completed: false, saved: false, expanded: true },
-  ]);
+
+import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
+import { initializeForm, updateFormData } from '../../store/formStoreSlice';
+import dayjs from 'dayjs';
+
+const FORM_ID = 'educationForm';
+
+const initialFormData = {
+  educationItems: [
+    {
+      id: 1,
+      completed: false,
+      expanded: true,
+      formData: {
+        university: '',
+        degree: '',
+        field: '',
+        marks: '',
+        marks_type: '',
+        graduation_date: '',
+        short_description: '',
+      },
+    },
+  ],
+};
+
+const EducationForm = ({ onComplete, required = false }) => {
+  const dispatch = useDispatch();
+  const resumeData = useSelector(
+    (state) => state.scalantResumeBuilder.resumeBuilder.resumeData
+  );
+  const formData = useSelector(
+    (state) => state.scalantResumeBuilder.formStore.forms[FORM_ID]
+  );
+  const isFormInitialized = useSelector(
+    (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
+  );
+  const [updateResumeDetails] = useUpdateResumeDetailsMutation();
+
+  const initialValues = useMemo(
+    () =>
+      resumeData?.education
+        ? {
+            educationItems: resumeData.education.map((item, index) => ({
+              id: index,
+              completed: true,
+              expanded: false,
+              formData: {
+                university: item.university,
+                degree: item.degree,
+                field: item.field,
+                marks: item.marks,
+                marks_type: item.marks_type,
+                graduation_date: item.graduation_date
+                  ? dayjs(item.graduation_date)
+                  : null,
+                short_description: item.short_description,
+              },
+            })),
+          }
+        : initialFormData,
+    [resumeData?.education]
+  );
+
+  useEffect(() => {
+    if (!isFormInitialized) {
+      dispatch(
+        initializeForm({
+          formId: FORM_ID,
+          initialData: initialValues,
+        })
+      );
+    }
+  }, [dispatch, isFormInitialized, initialValues]);
 
   const handleAddEducation = () => {
-    const newId = educationItems.length + 1;
-    setEducationItems([
-      ...educationItems,
-      { id: newId, completed: false, saved: false, expanded: true },
-    ]);
+    const currentItems = formData?.educationItems || [];
+    const newId = currentItems.length + 1;
+
+    dispatch(
+      updateFormData({
+        formId: FORM_ID,
+        data: {
+          educationItems: [
+            ...currentItems,
+            {
+              id: newId,
+              completed: false,
+              expanded: true,
+              formData: {
+                university: '',
+                degree: '',
+                field: '',
+                marks: '',
+                marks_type: '',
+                graduation_date: '',
+                short_description: '',
+              },
+            },
+          ],
+        },
+      })
+    );
   };
 
-  const handleMarkAsCompleted = () => {
-    const hasUnsavedItems = educationItems.some((item) => !item.saved);
+  const createEducationPayload = (educationItems) => {
+    return educationItems.map((item) => ({
+      id: item.id,
+      university: item.formData.university,
+      degree: item.formData.degree,
+      field: item.formData.field,
+      marks: item.formData.marks,
+      marks_type: item.formData.grade_type,
+      graduation_date: item.formData.graduation_date,
+      short_description: item.formData.short_description,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    }));
+  };
 
-    if (hasUnsavedItems) {
+  const handleMarkAsCompleted = async () => {
+    const educationItems = formData?.educationItems || [];
+    const hasUncompletedItems = educationItems.some((item) => !item.completed);
+
+    if (hasUncompletedItems) {
       message.error(
-        'Please save all education items before marking as complete'
+        'Please fill all education items before marking as complete'
       );
       return;
     }
 
-    const educationData = educationItems
-      .filter((item) => item.saved)
-      .map((item) => {
-        const formData = item.formData || {};
+    const educationPayload = createEducationPayload(educationItems);
 
-        return {
-          id: item.id,
-          saved: item.saved,
-          institute: formData[`education_${item.id}_institute`],
-          degree: formData[`education_${item.id}_degree`],
-          branch: formData[`education_${item.id}_branch`],
-          grades: formData[`education_${item.id}_grades`],
-          gradeType: formData[`education_${item.id}_grade_type`],
-          graduation: formData[`education_${item.id}_graduation`],
-          description: formData[`education_${item.id}_description`],
-        };
-      });
+    try {
+      const payload = {
+        form_stage: 'education_details_form',
+        isPopulated: true,
+        educations: educationPayload,
+      };
+      onComplete?.();
 
-    // eslint-disable-next-line no-console, no-undef
-    console.log(educationData);
+      await updateResumeDetails({
+        resumeId: resumeData?.resume_details?.id,
+        payload,
+      }).unwrap();
+      message.success('Education details updated successfully');
+    } catch (error) {
+      message.error(`Failed to update education details: ${error.message}`);
+    }
   };
 
   return (
     <Flex vertical gap={16}>
       <Space direction="vertical" style={{ width: '100%' }}>
         <Flex vertical gap={16}>
-          {educationItems.map((item) => (
+          {(formData?.educationItems || []).map((item) => (
             <EducationFormItem
               key={item.id}
               item={item}
-              setEducationItems={setEducationItems}
-              educationItems={educationItems}
+              formId={FORM_ID}
+              required={required}
             />
           ))}
         </Flex>
@@ -66,16 +173,16 @@ const EducationForm = () => {
           icon={<PlusOutlined />}
           onClick={handleAddEducation}
         >
-          {educationItems.length === 1
+          {(formData?.educationItems || []).length === 1
             ? 'Add secondary education'
             : 'Add another education'}
         </Button>
         <Flex gap={16}>
           <Button type="primary" block onClick={handleMarkAsCompleted}>
-            Mark as completed
+            Save and Compile
           </Button>
-          <Button type="default" block>
-            Cancel
+          <Button type="default" onClick={handleMarkAsCompleted} block>
+            Save and Next
           </Button>
         </Flex>
       </Space>

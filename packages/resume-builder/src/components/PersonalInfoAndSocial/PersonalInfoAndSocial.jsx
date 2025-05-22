@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import {
   GithubOutlined,
   LinkedinOutlined,
   CodeOutlined,
-  PlusOutlined,
 } from '@ant-design/icons';
 import {
   Form,
@@ -14,22 +13,124 @@ import {
   Typography,
   Button,
   Space,
+  message,
+  Spin,
 } from 'antd';
+import { useSelector, useDispatch } from 'react-redux';
+import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
+import { initializeForm, updateFormData } from '../../store/formStoreSlice';
+
 import styles from './PersonalInfoAndSocial.module.scss';
+
 const { Text } = Typography;
 
-const PersonalInfoAndSocial = () => {
-  const [form] = Form.useForm();
-  const [additionalProfiles, setAdditionalProfiles] = useState([]);
+const FORM_ID = 'personalInfoAndSocialForm';
 
-  const handleFinish = (values) => {
-    // eslint-disable-next-line no-console, no-undef
-    console.log(values);
+const initialFormData = {
+  personalInfoAndSocial: {
+    fullName: '',
+    contactNumber: '',
+    emailAddress: '',
+    gender: '',
+    currentCity: '',
+    linkedIn: '',
+    github: '',
+    personalWebsite: '',
+  },
+};
+
+const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
+  const dispatch = useDispatch();
+  const resumeData = useSelector(
+    (state) => state.scalantResumeBuilder.resumeBuilder.resumeData
+  );
+  const formData = useSelector(
+    (state) => state.scalantResumeBuilder.formStore.forms[FORM_ID]
+  );
+  const isFormInitialized = useSelector(
+    (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
+  );
+  const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
+
+  const [form] = Form.useForm();
+
+  const initialValues = useMemo(
+    () =>
+      resumeData?.personal_details
+        ? {
+            personalInfoAndSocial: {
+              fullName: resumeData.personal_details.name,
+              contactNumber: resumeData.personal_details.phone_number.replace(
+                '+91-',
+                ''
+              ),
+              emailAddress: resumeData.personal_details.email,
+              gender: resumeData.personal_details.gender,
+              currentCity: resumeData.personal_details.city,
+              linkedIn: resumeData.personal_details.linkedin,
+              github: resumeData.personal_details.github,
+              personalWebsite: resumeData.personal_details.portfolio,
+            },
+          }
+        : initialFormData,
+    [resumeData?.personal_details]
+  );
+
+  useEffect(() => {
+    if (!isFormInitialized) {
+      dispatch(
+        initializeForm({
+          formId: FORM_ID,
+          initialData: initialValues,
+        })
+      );
+    }
+  }, [dispatch, isFormInitialized, initialValues]);
+
+  const handleFinish = async (values) => {
+    updateFormData({
+      formId: FORM_ID,
+      data: {
+        personalInfoAndSocial: values,
+      },
+    });
+
+    try {
+      const payload = {
+        form_stage: 'personal_details_v1_form',
+        name: values.fullName,
+        email: values.emailAddress,
+        phone_number: values.contactNumber,
+        city: values.currentCity,
+        show_user_city: true,
+        gender: values.gender,
+        linkedin: values.linkedIn,
+        github: values.github,
+        portfolio: values.personalWebsite,
+        isPopulated: true,
+      };
+
+      onComplete?.();
+
+      await updateResumeDetails({
+        resumeId: resumeData?.resume_details?.id,
+        payload,
+      }).unwrap();
+      message.success('Personal details updated successfully');
+    } catch (error) {
+      message.error('Failed to update personal details');
+      // eslint-disable-next-line no-console, no-undef
+      console.error('Error updating personal details:', error);
+    }
   };
 
-  const handleAddProfile = () => {
-    const newId = Date.now().toString();
-    setAdditionalProfiles([...additionalProfiles, { id: newId }]);
+  const handleValuesChange = (changedValues, allValues) => {
+    dispatch(
+      updateFormData({
+        formId: FORM_ID,
+        data: { personalInfoAndSocial: allValues },
+      })
+    );
   };
 
   const selectBefore = (
@@ -39,8 +140,13 @@ const PersonalInfoAndSocial = () => {
         { label: '+91', value: '+91' },
         { label: '+1', value: '+1' },
       ]}
+      disabled
     />
   );
+
+  if (!isFormInitialized) {
+    return <Spin />;
+  }
 
   return (
     <Space direction="vertical" size={24}>
@@ -49,22 +155,14 @@ const PersonalInfoAndSocial = () => {
         onFinish={handleFinish}
         layout="vertical"
         size="large"
-        initialValues={{
-          fullName: 'John Doe',
-          contactNumber: '+91 9876543210',
-          emailAddress: 'john.doe@example.com',
-          gender: 'male',
-          currentCity: 'Mumbai',
-          linkedIn: 'https://www.linkedin.com/in/john-doe',
-          github: 'https://www.github.com/john-doe',
-          personalWebsite: 'https://www.john-doe.com',
-        }}
+        initialValues={formData?.personalInfoAndSocial}
+        onValuesChange={handleValuesChange}
       >
         <Space direction="vertical" size={16} style={{ width: '100%' }}>
           <Form.Item
             label="Full Name"
             name="fullName"
-            rules={[{ required: true }]}
+            rules={[{ required: required }]}
             className={styles.formItem}
           >
             <Input />
@@ -72,24 +170,26 @@ const PersonalInfoAndSocial = () => {
           <Form.Item
             label="Contact Number"
             name="contactNumber"
-            rules={[{ required: true }]}
+            rules={[{ required: required }]}
             className={styles.formItem}
+            tooltip="You can update this in the profile section"
           >
-            <InputNumber addonBefore={selectBefore} />
+            <InputNumber addonBefore={selectBefore} disabled />
           </Form.Item>
           <Form.Item
             label="Email Address"
             name="emailAddress"
-            rules={[{ required: true }]}
+            rules={[{ required: required }]}
             className={styles.formItem}
+            tooltip="You can update this in the profile section"
           >
-            <Input />
+            <Input disabled />
           </Form.Item>
           <Flex gap={16}>
             <Form.Item
               label="Gender"
               name="gender"
-              rules={[{ required: true }]}
+              rules={[{ required: required }]}
               style={{ flex: 1 }}
               className={styles.formItem}
             >
@@ -108,16 +208,7 @@ const PersonalInfoAndSocial = () => {
               style={{ flex: 1 }}
               className={styles.formItem}
             >
-              <Select
-                options={[
-                  { label: 'Mumbai', value: 'mumbai' },
-                  { label: 'Delhi', value: 'delhi' },
-                  { label: 'Bangalore', value: 'bangalore' },
-                  { label: 'Chennai', value: 'chennai' },
-                  { label: 'Hyderabad', value: 'hyderabad' },
-                  { label: 'Kolkata', value: 'kolkata' },
-                ]}
-              />
+              <Input />
             </Form.Item>
           </Flex>
         </Space>
@@ -131,17 +222,12 @@ const PersonalInfoAndSocial = () => {
           <Form.Item
             label="LinkedIn"
             name="linkedIn"
-            rules={[{ required: true }]}
+            rules={[{ required: required }]}
             className={styles.formItem}
           >
             <Input prefix={<LinkedinOutlined />} />
           </Form.Item>
-          <Form.Item
-            label="GitHub"
-            name="github"
-            rules={[{ required: true }]}
-            className={styles.formItem}
-          >
+          <Form.Item label="GitHub" name="github" className={styles.formItem}>
             <Input prefix={<GithubOutlined />} />
           </Form.Item>
           <Form.Item
@@ -151,32 +237,6 @@ const PersonalInfoAndSocial = () => {
           >
             <Input prefix={<CodeOutlined />} />
           </Form.Item>
-
-          {additionalProfiles.map((profile, index) => (
-            <Flex key={profile.id} gap={16}>
-              <Form.Item
-                label="Profile Type"
-                name={`additionalProfiles.${index}.type`}
-                style={{ flex: 1 }}
-                className={styles.formItem + ' ' + styles.customProfile}
-              >
-                <Select
-                  options={[
-                    { label: 'LinkedIn', value: 'linkedin' },
-                    { label: 'GitHub', value: 'github' },
-                    { label: 'Personal Website', value: 'personalWebsite' },
-                  ]}
-                />
-              </Form.Item>
-              <Form.Item
-                label="Link"
-                name={`additionalProfiles.${index}.link`}
-                className={styles.formItem + ' ' + styles.customProfile}
-              >
-                <Input />
-              </Form.Item>
-            </Flex>
-          ))}
         </Space>
 
         <Space
@@ -184,20 +244,12 @@ const PersonalInfoAndSocial = () => {
           size={16}
           className={styles.buttonContainer}
         >
-          <Button
-            type="dashed"
-            block
-            icon={<PlusOutlined />}
-            onClick={handleAddProfile}
-          >
-            Add more Social Profiles
-          </Button>
           <Flex gap={16}>
-            <Button type="primary" htmlType="submit" block>
-              Mark as complete
+            <Button type="primary" htmlType="submit" block loading={isLoading}>
+              Save and compile
             </Button>
-            <Button type="default" block>
-              Cancel
+            <Button type="default" htmlType="submit" block loading={isLoading}>
+              Save and Next
             </Button>
           </Flex>
         </Space>

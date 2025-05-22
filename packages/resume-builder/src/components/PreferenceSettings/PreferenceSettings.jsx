@@ -1,16 +1,144 @@
+import React, { useEffect, useMemo } from 'react';
 import PageHeader from '../PageHeader';
-
-import { Form, Input, Select, Radio, Button } from 'antd';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { nextStep } from '../../store/resumeBuilderSlice';
+import {
+  Form,
+  Input,
+  Select,
+  Radio,
+  Button,
+  Flex,
+  Checkbox,
+  message,
+} from 'antd';
+import { PREFERRED_JOB_ROLES } from './constants';
 import styles from './PreferenceSettings.module.scss';
+import { initializeForm, updateFormData } from '../../store/formStoreSlice';
+import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
+
+const FORM_ID = 'preferenceSettings';
+
+const initialFormData = {
+  preferredLocations: [],
+  preferredRoles: [],
+  ctc: '',
+  notice: '',
+  negotiable: 'no',
+  internship: true,
+  acknowledge: true,
+};
 
 const PreferenceSettings = () => {
+  const dispatch = useDispatch();
   const [form] = Form.useForm();
 
-  const handleFinish = (values) => {
-    // Process the form data here
-    // eslint-disable-next-line no-console, no-undef
-    console.log('Submitted values:', values);
+  const resumeData = useSelector(
+    (state) => state.scalantResumeBuilder.resumeBuilder.resumeData
+  );
+  const formData = useSelector(
+    (state) => state.scalantResumeBuilder.formStore.forms[FORM_ID]
+  );
+  const isFormInitialized = useSelector(
+    (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
+  );
+  const preferenceData = resumeData?.user_company_profile;
+  const preferredJobLocationValues = useSelector(
+    (state) => state.scalantResumeBuilder.metaData.meta.job_locations
+  );
+  const [updateResumeDetails] = useUpdateResumeDetailsMutation();
+
+  const { role_types } = useSelector(
+    (state) => state.scalantResumeBuilder.metaData.meta
+  );
+
+  const initialValues = useMemo(
+    () =>
+      preferenceData
+        ? {
+            preferredLocations: preferenceData?.preferred_location.split('/'),
+            preferredRoles: preferenceData?.preferred_role.split('/'),
+            ctc: preferenceData?.expected_ctc,
+            notice: preferenceData?.notice_period,
+            negotiable: preferenceData?.buyout_notice ? 'yes' : 'no',
+            internship: true,
+            acknowledge: true,
+          }
+        : initialFormData,
+    [preferenceData]
+  );
+
+  useEffect(() => {
+    if (!isFormInitialized) {
+      dispatch(
+        initializeForm({
+          formId: FORM_ID,
+          initialData: initialValues,
+        })
+      );
+    }
+  }, [dispatch, isFormInitialized, initialValues]);
+
+  useEffect(() => {
+    // Initialize form with Redux state
+    form.setFieldsValue(formData);
+  }, [form, formData]);
+
+  const createPreferencePayload = () => {
+    let preferredRolesTypes = role_types;
+    if (!form.getFieldsValue().internship) {
+      preferredRolesTypes = role_types.filter(
+        (role) => role.label !== 'internship'
+      );
+    }
+    // If preferred locations is an array, convert it to a string separated by /
+    // If preferred roles is an array, convert it to a string separated by /
+    let preferredLocations = form.getFieldsValue().preferredLocations;
+    let preferredRoles = form.getFieldsValue().preferredRoles;
+    if (Array.isArray(preferredLocations)) {
+      preferredLocations = preferredLocations.join('/');
+    }
+    if (Array.isArray(preferredRoles)) {
+      preferredRoles = preferredRoles.join('/');
+    }
+
+    return {
+      form_stage: 'preferences_details_v1_form',
+      preferred_location: preferredLocations,
+      preferred_role: preferredRoles,
+      expected_ctc: form.getFieldsValue().ctc,
+      ctc_currency: 'INR',
+      notice_period: form.getFieldsValue().notice,
+      buyout_notice: form.getFieldsValue().negotiable === 'yes',
+      rpo_consent: 'true',
+      isPopulated: true,
+      preferred_role_types: preferredRolesTypes,
+      relevancy_alert: form.getFieldsValue().acknowledge,
+    };
+  };
+
+  const handleValuesChange = (changedValues, allValues) => {
+    dispatch(
+      updateFormData({
+        formId: FORM_ID,
+        data: allValues,
+      })
+    );
+  };
+
+  const handleFinish = async () => {
+    const payload = createPreferencePayload();
+
+    try {
+      await updateResumeDetails({
+        resumeId: resumeData?.resume_details?.id,
+        payload,
+      }).unwrap();
+      message.success('Preference details updated successfully');
+    } catch (error) {
+      message.error(`Failed to update preference details: ${error.message}`);
+    }
+    dispatch(nextStep());
   };
 
   return (
@@ -24,12 +152,8 @@ const PreferenceSettings = () => {
         form={form}
         layout="vertical"
         onFinish={handleFinish}
-        initialValues={{
-          preferredLocations: 'All over India',
-          preferredRoles: ['SDE', 'Backend Developer'],
-          ctc: '3',
-          notice: '3',
-        }}
+        onValuesChange={handleValuesChange}
+        initialValues={initialValues}
       >
         <Form.Item
           label="Preferred job locations?"
@@ -38,11 +162,11 @@ const PreferenceSettings = () => {
             { required: true, message: 'Please select preferred location!' },
           ]}
         >
-          <Select>
-            <Select.Option value="All over India">All over India</Select.Option>
-            <Select.Option value="Remote">Remote</Select.Option>
-            <Select.Option value="Bangalore">Bangalore</Select.Option>
-          </Select>
+          <Select
+            mode="multiple"
+            allowClear
+            options={preferredJobLocationValues}
+          />
         </Form.Item>
 
         <Form.Item
@@ -50,15 +174,7 @@ const PreferenceSettings = () => {
           name="preferredRoles"
           rules={[{ required: true, message: 'Please select job roles!' }]}
         >
-          <Select mode="multiple" allowClear>
-            <Select.Option value="SDE">SDE</Select.Option>
-            <Select.Option value="Backend Developer">
-              Backend Developer
-            </Select.Option>
-            <Select.Option value="Frontend Developer">
-              Frontend Developer
-            </Select.Option>
-          </Select>
+          <Select mode="multiple" allowClear options={PREFERRED_JOB_ROLES} />
         </Form.Item>
 
         <Form.Item
@@ -71,24 +187,41 @@ const PreferenceSettings = () => {
           <Input placeholder="e.g., 3" />
         </Form.Item>
 
-        <Form.Item
-          label="Notice Period (in Months)"
-          name="notice"
-          rules={[{ required: true, message: 'Please enter notice period!' }]}
-        >
-          <Input placeholder="e.g., 3" />
-        </Form.Item>
+        <Flex gap={16}>
+          <Form.Item
+            label="Notice Period (in Days)"
+            name="notice"
+            rules={[{ required: true, message: 'Please enter notice period!' }]}
+          >
+            <Input placeholder="e.g., 3" />
+          </Form.Item>
+          <Form.Item
+            label="Negotiable / Buyout available"
+            name="negotiable"
+            rules={[{ required: true, message: 'Please select an option!' }]}
+          >
+            <Radio.Group>
+              <Radio value="yes">Yes</Radio>
+              <Radio value="no">No</Radio>
+            </Radio.Group>
+          </Form.Item>
+        </Flex>
 
         <Form.Item
-          label="Would you also consider internships?"
           name="internship"
+          valuePropName="checked"
           rules={[{ required: true, message: 'Please select an option!' }]}
         >
-          <Radio.Group>
-            <Radio value="yes">Yes</Radio>
-            <Radio value="no">No</Radio>
-          </Radio.Group>
+          <Checkbox>I am also open to Internships</Checkbox>
         </Form.Item>
+
+        <Form.Item name="acknowledge" valuePropName="checked">
+          <Checkbox>
+            Notify me on email and Whatsapp if any relevant job is added to
+            Careers Hub dashboard as per my given preference
+          </Checkbox>
+        </Form.Item>
+
         <div className={styles.buttonContainer}>
           <Button
             className={styles.submitBtn}
@@ -97,10 +230,6 @@ const PreferenceSettings = () => {
             block
           >
             Save and Continue
-          </Button>
-
-          <Button color="primary" variant="outlined" block>
-            I will do this later
           </Button>
         </div>
       </Form>

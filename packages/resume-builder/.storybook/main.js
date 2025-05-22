@@ -1,20 +1,73 @@
-import { join, dirname } from 'path';
+const path = require('path');
+const webpack = require('webpack');
 
-/**
- * This function is used to resolve the absolute path of a package.
- * It is needed in projects that use Yarn PnP or are set up within a monorepo.
- */
-function getAbsolutePath(value) {
-  return dirname(require.resolve(join(value, 'package.json')));
-}
+module.exports = {
+  stories: ['../src/**/*.stories.@(js|jsx)'],
+  addons: ['@storybook/addon-essentials'],
+  framework: '@storybook/react',
+  core: {
+    builder: 'webpack5',
+  },
+  webpackFinal: async (config) => {
+    // Add alias
+    config.plugins.push(
+      new webpack.ProvidePlugin({
+        React: 'react',
+      })
+    );
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@components': path.resolve(__dirname, '../../components/src'),
+    };
 
-/** @type { import('@storybook/react-vite').StorybookConfig } */
-const config = {
-  stories: ['../src/**/*.stories.@(js|jsx|ts|tsx)'],
-  addons: [getAbsolutePath('@storybook/addon-essentials')],
-  framework: {
-    name: getAbsolutePath('@storybook/react-vite'),
-    options: {},
+    // Handle plain CSS files
+    config.module.rules.push({
+      test: /\.css$/,
+      use: ['style-loader', 'css-loader'],
+      include: path.resolve(__dirname, '../'),
+    });
+
+    config.module.rules.push({
+      test: /\.s[ac]ss$/i,
+      exclude: /\.module\.s[ac]ss$/, // Exclude CSS Modules
+      use: [
+        'style-loader',
+        'css-loader',
+        {
+          loader: 'sass-loader',
+          options: {
+            additionalData: `@use "@components/styles/theme.scss" as *;`,
+          },
+        },
+      ],
+      include: path.resolve(__dirname, '../'),
+    });
+
+    // ✅ CSS Modules: *.module.scss
+    config.module.rules.push({
+      test: /\.module\.s[ac]ss$/,
+      use: [
+        'style-loader',
+        {
+          loader: 'css-loader',
+          options: {
+            modules: {
+              localIdentName: '[name]__[local]___[hash:base64:5]',
+              namedExport: false,
+            },
+            sourceMap: true,
+          },
+        },
+        {
+          loader: 'sass-loader',
+          options: {
+            additionalData: `@use "@components/styles/theme.scss" as *;`,
+          },
+        },
+      ],
+      include: path.resolve(__dirname, '../'),
+    });
+
+    return config;
   },
 };
-export default config;

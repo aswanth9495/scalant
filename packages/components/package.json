@@ -1,17 +1,24 @@
 {
-  "name": "components",
-  "version": "1.0.0",
+  "name": "@scalant/components",
+  "version": "2.0.5",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "dist/components.umd.js",
-  "module": "dist/components.mjs",
+  "module": "dist/components.es.js",
+  "files": [
+    "dist"
+  ],
   "exports": {
-    "import": "./dist/components.mjs",
+    "import": "./dist/components.es.js",
     "require": "./dist/components.umd.js"
   },
   "style": "./dist/components.css",
   "scripts": {
-    "storybook": "storybook dev -p 6006",
     "lint": "eslint packages/**/src",
-    "lint:styles": "stylelint \"**/*.scss\""
+    "lint:styles": "stylelint \"**/*.scss\"",
+    "build": "vite build",
+    "storybook": "start-storybook -p 6006"
   }
 }

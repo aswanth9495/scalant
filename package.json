@@ -7,10 +7,13 @@
   "type": "module",
   "devDependencies": {
     "@babel/eslint-parser": "^7.27.0",
-    "@storybook/addon-essentials": "^8.6.12",
-    "@storybook/react": "^8.6.12",
-    "@storybook/react-vite": "^8.6.12",
+    "@reduxjs/toolkit": "1.9.3",
+    "@storybook/addon-essentials": "6.5.16",
+    "@storybook/builder-webpack5": "6.5.16",
+    "@storybook/manager-webpack5": "6.5.16",
+    "@storybook/react": "6.5.16",
     "@vitejs/plugin-react": "^4.4.0",
+    "css-loader": "^7.1.2",
     "eslint": "^9.24.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^10.1.2",
@@ -24,19 +27,29 @@
     "lerna": "^8.2.2",
     "prettier": "^3.5.3",
     "prop-types": "^15.8.1",
-    "sass": "^1.86.3",
-    "storybook": "^8.6.12",
+    "react": "16.12.0",
+    "react-dom": "16.12.0",
+    "react-redux": "7.2.0",
+    "sass": "^1.87.0",
+    "sass-loader": "^16.0.5",
+    "style-loader": "^4.0.0",
     "stylelint": "^16.18.0",
     "stylelint-config-prettier": "^9.0.5",
     "stylelint-config-standard-scss": "^14.0.0",
     "stylelint-prettier": "^5.0.3",
     "stylelint-scss": "^6.11.1",
-    "vite": "^6.3.1"
+    "vite": "^6.3.1",
+    "webpack": "5",
+    "webpack-cli": "4"
   },
   "dependencies": {
-    "antd": "^5.24.7",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0"
+    "antd": "^5.24.7"
+  },
+  "peerDependencies": {
+    "@reduxjs/toolkit": "1.9.3",
+    "react": "16.12.0",
+    "react-dom": "16.12.0",
+    "react-redux": "7.2.0"
   },
   "scripts": {
     "lint": "eslint packages/**/src",

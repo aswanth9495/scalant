@@ -1,61 +1,150 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { initializeForm, updateFormData } from '../../store/formStoreSlice';
+
 import { Space, Button, Flex, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import ProjectFormItem from './ProjectFormItem';
 
-const ProjectForm = () => {
-  const [projectItems, setProjectItems] = useState([
-    { id: 1, completed: false, saved: false, expanded: true },
-  ]);
+import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
+
+const FORM_ID = 'projectForm';
+
+const initialFormData = {
+  projectItems: [
+    {
+      id: 1,
+      completed: false,
+      expanded: true,
+      formData: {
+        title: '',
+        project_link: '',
+        description: '',
+      },
+    },
+  ],
+};
+
+const ProjectForm = ({ onComplete, required = false }) => {
+  const dispatch = useDispatch();
+  const resumeData = useSelector(
+    (state) => state.scalantResumeBuilder.resumeBuilder.resumeData
+  );
+
+  const formData = useSelector(
+    (state) => state.scalantResumeBuilder.formStore.forms[FORM_ID]
+  );
+  const isFormInitialized = useSelector(
+    (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
+  );
+  const [updateResumeDetails] = useUpdateResumeDetailsMutation();
+
+  const initialValues = useMemo(
+    () =>
+      resumeData?.projects
+        ? {
+            projectItems: resumeData.projects.map((item, index) => ({
+              id: index,
+              completed: true,
+              expanded: false,
+              formData: {
+                title: item.title,
+                project_link: item.project_link,
+                description: item.description,
+              },
+            })),
+          }
+        : initialFormData,
+    [resumeData?.projects]
+  );
+
+  useEffect(() => {
+    if (!isFormInitialized) {
+      dispatch(
+        initializeForm({
+          formId: FORM_ID,
+          initialData: initialValues,
+        })
+      );
+    }
+  }, [dispatch, isFormInitialized, initialValues]);
 
   const handleAddProject = () => {
-    setProjectItems([
-      ...projectItems,
-      {
-        id: projectItems.length + 1,
-        completed: false,
-        saved: false,
-        expanded: true,
-      },
-    ]);
+    const currentItems = formData?.projectItems || [];
+    const newId = currentItems.length + 1;
+
+    dispatch(
+      updateFormData({
+        formId: FORM_ID,
+        data: {
+          projectItems: [
+            ...currentItems.map((item) => ({ ...item, expanded: false })),
+            {
+              id: newId,
+              completed: false,
+              expanded: true,
+              formData: {
+                title: '',
+                project_link: '',
+                description: '',
+              },
+            },
+          ],
+        },
+      })
+    );
   };
 
-  const handleMarkAsCompleted = () => {
-    const hasUnsavedItems = projectItems.some((item) => !item.saved);
+  const createProjectsPayload = (projectItems) => {
+    return projectItems.map((item) => ({
+      id: item.id,
+      title: item.formData.title,
+      description: item.formData.description,
+      project_link: item.formData.project_link,
+      user_id: resumeData?.user_id,
+    }));
+  };
 
-    if (hasUnsavedItems) {
-      message.error('Please save all project items before marking as complete');
+  const handleMarkAsCompleted = async () => {
+    const projectItems = formData?.projectItems || [];
+    const hasUncompletedItems = projectItems.some((item) => !item.completed);
+
+    if (hasUncompletedItems) {
+      message.error('Please fill all project items before marking as complete');
       return;
     }
 
-    const projectData = projectItems
-      .filter((item) => item.saved)
-      .map((item) => {
-        const formData = item.formData || {};
+    const projectsPayload = createProjectsPayload(projectItems);
 
-        return {
-          id: item.id,
-          saved: item.saved,
-          projectName: formData[`project_${item.id}_projectName`],
-          projectDescription: formData[`project_${item.id}_projectDescription`],
-          projectLink: formData[`project_${item.id}_projectLink`],
-        };
-      });
+    try {
+      const payload = {
+        form_stage: 'project_details_form',
+        isPopulated: true,
+        projects: projectsPayload,
+        upgrade: false,
+      };
 
-    // eslint-disable-next-line no-console, no-undef
-    console.log(projectData);
+      await updateResumeDetails({
+        resumeId: resumeData?.resume_details?.id,
+        payload,
+      }).unwrap();
+      message.success('Projects updated successfully');
+      onComplete?.();
+    } catch (error) {
+      message.error(`Failed to update projects: ${error.message}`);
+    }
   };
 
   return (
     <Flex vertical gap={16}>
       <Space direction="vertical" style={{ width: '100%' }}>
         <Flex vertical gap={16}>
-          {projectItems.map((item) => (
+          {(formData?.projectItems || []).map((item) => (
             <ProjectFormItem
               key={item.id}
               item={item}
-              setProjectItems={setProjectItems}
-              projectItems={projectItems}
+              formId={FORM_ID}
+              required={required}
             />
           ))}
         </Flex>
@@ -69,10 +158,10 @@ const ProjectForm = () => {
         </Button>
         <Flex gap={16}>
           <Button type="primary" block onClick={handleMarkAsCompleted}>
-            Mark as completed
+            Save and Compile
           </Button>
-          <Button type="default" block>
-            Cancel
+          <Button type="default" onClick={handleMarkAsCompleted} block>
+            Save and Next
           </Button>
         </Flex>
       </Space>

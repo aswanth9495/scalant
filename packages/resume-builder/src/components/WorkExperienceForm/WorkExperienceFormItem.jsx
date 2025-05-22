@@ -1,115 +1,106 @@
-import React, { useEffect } from 'react';
-
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Form,
   Input,
   Card,
   Flex,
   Divider,
-  Tag,
   Typography,
   Checkbox,
   DatePicker,
-  Select,
-  message,
-  Button,
 } from 'antd';
-import { DownOutlined, DeleteOutlined } from '@ant-design/icons';
+import { DownOutlined, DeleteOutlined, UpOutlined } from '@ant-design/icons';
+import { WORK_EXPERIENCE_FORM_REQUIRED_FIELDS } from '../../utils/constants';
+import { updateFormData } from '../../store/formStoreSlice';
+import RichTextEditor from '../RichTextEditor';
 
 const { Text } = Typography;
 
-const WorkExperienceFormItem = ({
-  item,
-  setWorkExperienceItems,
-  workExperienceItems,
-}) => {
+const WorkExperienceFormItem = ({ item, formId, required = false }) => {
+  const dispatch = useDispatch();
+  const formData = useSelector(
+    (state) => state.scalantResumeBuilder.formStore.forms[formId]
+  );
   const [form] = Form.useForm();
-  const workExperienceInfo = form.getFieldsValue([
-    `work_experience_${item.id}_company`,
-    `work_experience_${item.id}_position`,
-    `work_experience_${item.id}_startDate`,
-    `work_experience_${item.id}_endDate`,
-  ]);
 
-  const company = workExperienceInfo[`work_experience_${item.id}_company`];
-  const position = workExperienceInfo[`work_experience_${item.id}_position`];
-  const startDate =
-    workExperienceInfo[`work_experience_${item.id}_startDate`]?.format('YYYY');
-  const endDate =
-    workExperienceInfo[`work_experience_${item.id}_endDate`]?.format('YYYY');
+  const handleValuesChange = (changedValues, allValues) => {
+    const currentItems = formData?.workExperienceItems || [];
 
-  useEffect(() => {
-    if (item.formData) {
-      form.setFieldsValue(item.formData);
-    }
-  }, [item.id, form, item.formData]);
+    // If all required fields are filled mark completed
+    const updatedItems = currentItems.map((workExperienceItem) =>
+      workExperienceItem.id === item.id
+        ? {
+            ...workExperienceItem,
+            formData: allValues,
+            completed: WORK_EXPERIENCE_FORM_REQUIRED_FIELDS.every(
+              (field) => allValues[field]
+            ),
+          }
+        : workExperienceItem
+    );
 
-  const validateAndSave = async (id) => {
-    try {
-      const fieldNames = [
-        `work_experience_${id}_company`,
-        `work_experience_${id}_position`,
-        `work_experience_${id}_startDate`,
-        `work_experience_${id}_endDate`,
-        `work_experience_${id}_location`,
-        `work_experience_${id}_toolstech`,
-        `work_experience_${id}_keyPoints`,
-        `work_experience_${id}_currentWorking`,
-      ];
-
-      await form.validateFields(fieldNames);
-
-      const formData = form.getFieldsValue(fieldNames);
-
-      setWorkExperienceItems(
-        workExperienceItems.map((item) =>
-          item.id === id
-            ? { ...item, saved: true, expanded: false, formData: formData }
-            : item
-        )
-      );
-
-      message.success('Work Experience saved successfully');
-    } catch (error) {
-      message.error(`Failed to save Work Experience: ${error}`);
-    }
-  };
-
-  const handleCancel = (id) => {
-    setWorkExperienceItems(
-      workExperienceItems.map((item) =>
-        item.id === id ? { ...item, expanded: false } : item
-      )
+    dispatch(
+      updateFormData({
+        formId,
+        data: {
+          workExperienceItems: updatedItems,
+        },
+      })
     );
   };
 
-  const handleExpand = (id) => {
-    setWorkExperienceItems(
-      workExperienceItems.map((item) =>
-        item.id === id ? { ...item, expanded: true } : item
-      )
+  const handleExpand = () => {
+    const currentItems = formData?.workExperienceItems || [];
+    const updatedItems = currentItems.map((workExperienceItem) =>
+      workExperienceItem.id === item.id
+        ? { ...workExperienceItem, expanded: !workExperienceItem.expanded }
+        : workExperienceItem
+    );
+
+    dispatch(
+      updateFormData({
+        formId,
+        data: { workExperienceItems: updatedItems },
+      })
     );
   };
 
-  const handleDelete = (id) => {
-    setWorkExperienceItems(
-      workExperienceItems.filter((item) => item.id !== id)
+  const handleDelete = () => {
+    const currentItems = formData?.workExperienceItems || [];
+    const updatedItems = currentItems.filter(
+      (workExperienceItem) => workExperienceItem.id !== item.id
+    );
+
+    dispatch(
+      updateFormData({
+        formId,
+        data: { workExperienceItems: updatedItems },
+      })
     );
   };
 
-  if (item.saved && !item.expanded) {
+  if (!item.expanded) {
     return (
       <Card key={item.id}>
         <Flex justify="space-between" align="center">
           <Flex vertical gap={4}>
-            <Text strong>{company}</Text>
+            <Text strong>{item.formData?.company}</Text>
             <Text>
-              {position && `${position}, `}
-              <Divider />
-              {startDate && `${startDate} - ${endDate}`}
+              {item.formData?.position ? `${item.formData?.position}, ` : '---'}
+              <Divider type="vertical" />
+              {item.formData?.from
+                ? `${item.formData?.from.format('YYYY')}`
+                : '---'}
+              -
+              {item.formData?.to
+                ? `${item.formData?.to.format('YYYY')}`
+                : item.formData?.is_current
+                  ? `Present`
+                  : '---'}
             </Text>
           </Flex>
-          <DownOutlined onClick={() => handleExpand(item.id)} />
+          <DownOutlined onClick={handleExpand} />
         </Flex>
       </Card>
     );
@@ -120,99 +111,65 @@ const WorkExperienceFormItem = ({
       <Flex gap={16} justify="space-between">
         <Flex gap={4}>
           <Text>Work Experience {item.id}</Text>
-          {item.saved && <Tag color="success">Saved</Tag>}
+          {(formData?.workExperienceItems || []).length > 1 && (
+            <DeleteOutlined onClick={handleDelete} style={{ color: 'red' }} />
+          )}
         </Flex>
-        {workExperienceItems.length > 1 && (
-          <DeleteOutlined onClick={() => handleDelete(item.id)} />
-        )}
+        <UpOutlined onClick={handleExpand} />
       </Flex>
-      <Form form={form} layout="vertical">
+      <Form
+        form={form}
+        layout="vertical"
+        initialValues={item.formData}
+        onValuesChange={handleValuesChange}
+      >
         <Form.Item
-          name={`work_experience_${item.id}_company`}
+          name={`company`}
           label="Company"
-          rules={[{ required: true, message: 'Company is required' }]}
+          rules={[{ required: required }]}
         >
           <Input placeholder="Enter Company" />
         </Form.Item>
         <Form.Item
-          name={`work_experience_${item.id}_position`}
+          name={`position`}
           label="Position"
-          rules={[{ required: true, message: 'Position is required' }]}
+          rules={[{ required: required }]}
         >
           <Input placeholder="Enter Position" />
         </Form.Item>
-        <Form.Item
-          name={`work_experience_${item.id}_currentWorking`}
-          valuePropName="checked"
-        >
+        <Form.Item name={`is_current`} valuePropName="checked">
           <Checkbox>I am currently working here</Checkbox>
         </Form.Item>
         <Flex gap={16}>
           <Form.Item
-            name={`work_experience_${item.id}_startDate`}
+            name={`from`}
             label="Start Date"
-            rules={[{ required: true, message: 'Start Date is required' }]}
+            rules={[{ required: required }]}
           >
             <DatePicker format="YYYY-MM-DD" />
           </Form.Item>
           <Form.Item
-            name={`work_experience_${item.id}_endDate`}
+            name={`to`}
             label="End Date"
-            rules={[{ required: true, message: 'End Date is required' }]}
+            rules={[{ required: required && !item.formData?.is_current }]}
           >
-            <DatePicker format="YYYY-MM-DD" />
+            <DatePicker
+              format="YYYY-MM-DD"
+              disabled={item.formData?.is_current}
+            />
           </Form.Item>
         </Flex>
-        <Form.Item
-          name={`work_experience_${item.id}_location`}
-          label="Location"
-        >
-          <Select
-            placeholder="Select Location"
-            options={[
-              { label: 'Bangalore', value: 'Bangalore' },
-              { label: 'Mumbai', value: 'Mumbai' },
-              { label: 'New Delhi', value: 'New Delhi' },
-              { label: 'Hyderabad', value: 'Hyderabad' },
-              { label: 'Chennai', value: 'Chennai' },
-              { label: 'Kolkata', value: 'Kolkata' },
-            ]}
+        <Form.Item name={`location`} label="Location">
+          <Input />
+        </Form.Item>
+        <Form.Item name={`short_description`} label="Key Points">
+          <RichTextEditor
+            form={form}
+            fieldName="short_description"
+            placeholder="Enter Key Points"
+            onValuesChange={handleValuesChange}
           />
         </Form.Item>
-        <Form.Item
-          name={`work_experience_${item.id}_toolstech`}
-          label="Tools & Technologies Used"
-          rules={[
-            {
-              required: true,
-              message: 'Tools & Technologies Used is required',
-            },
-          ]}
-        >
-          <Select
-            mode="multiple"
-            placeholder="Select Tools & Technologies"
-            options={[
-              { label: 'React', value: 'React' },
-              { label: 'Node.js', value: 'Node.js' },
-              { label: 'MongoDB', value: 'MongoDB' },
-            ]}
-          />
-        </Form.Item>
-        <Form.Item
-          name={`work_experience_${item.id}_keyPoints`}
-          label="Key Points"
-        >
-          <Input.TextArea placeholder="Enter Key Points" />
-        </Form.Item>
-        <Flex gap={16}>
-          <Button type="primary" block onClick={() => validateAndSave(item.id)}>
-            Save
-          </Button>
-          <Button type="default" block onClick={() => handleCancel(item.id)}>
-            Cancel
-          </Button>
-        </Flex>
       </Form>
     </Card>
   );
