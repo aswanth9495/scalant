@@ -48,6 +48,10 @@ const PreferenceSettings = () => {
   );
   const [updateResumeDetails] = useUpdateResumeDetailsMutation();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [
+    uniquePreferredJobLocationValues,
+    setUniquePreferredJobLocationValues,
+  ] = useState(preferredJobLocationValues);
 
   const { role_types } = useSelector(
     (state) => state.scalantResumeBuilder.metaData.meta
@@ -84,6 +88,15 @@ const PreferenceSettings = () => {
     // Initialize form with Redux state
     form.setFieldsValue(formData);
   }, [form, formData]);
+
+  useEffect(() => {
+    setUniquePreferredJobLocationValues(
+      preferredJobLocationValues.filter(
+        (value, index, self) =>
+          self.findIndex((t) => t.value === value.value) === index
+      )
+    );
+  }, [preferredJobLocationValues]);
 
   const createPreferencePayload = () => {
     let preferredRolesTypes = role_types;
@@ -169,7 +182,7 @@ const PreferenceSettings = () => {
           <Select
             mode="multiple"
             allowClear
-            options={preferredJobLocationValues}
+            options={uniquePreferredJobLocationValues}
           />
         </Form.Item>
 
@@ -200,7 +213,7 @@ const PreferenceSettings = () => {
             <Input placeholder="e.g., 3" />
           </Form.Item>
           <Form.Item
-            label="Negotiable / Buyout available"
+            label="Negotiable / Can Buyout ?"
             name="negotiable"
             rules={[{ required: true, message: 'Please select an option!' }]}
           >
