@@ -1,5 +1,5 @@
 import { Button, Flex, message, Space } from 'antd';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
@@ -33,6 +33,7 @@ const CustomForm = ({ onComplete }) => {
     (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
   );
   const [updateResumeDetails] = useUpdateResumeDetailsMutation();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const initialValues = useMemo(
     () =>
@@ -57,7 +58,8 @@ const CustomForm = ({ onComplete }) => {
     }
   }, [dispatch, isFormInitialized, initialValues]);
 
-  const handleMarkAsCompleted = async () => {
+  const handleFinish = async () => {
+    setIsSubmitting(true);
     const achievementsItems = formData?.achievementsItems || [];
     const hasUnsavedItems = achievementsItems.some((item) => !item.saved);
 
@@ -89,7 +91,14 @@ const CustomForm = ({ onComplete }) => {
       message.success('Achievements updated successfully');
     } catch (error) {
       message.error(`Failed to update achievements: ${error.message}`);
+    } finally {
+      setIsSubmitting(false);
     }
+  };
+
+  const handleSaveAndNext = () => {
+    handleFinish();
+    onComplete?.();
   };
 
   return (
@@ -113,10 +122,20 @@ const CustomForm = ({ onComplete }) => {
           ))}
         </Flex>
         <Flex gap={16}>
-          <Button type="primary" block onClick={handleMarkAsCompleted}>
+          <Button
+            type="primary"
+            block
+            onClick={handleFinish}
+            disabled={isSubmitting}
+          >
             Save and Compile
           </Button>
-          <Button type="default" onClick={handleMarkAsCompleted} block>
+          <Button
+            type="default"
+            onClick={handleSaveAndNext}
+            block
+            disabled={isSubmitting}
+          >
             Save and Next
           </Button>
         </Flex>

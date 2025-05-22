@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Form, Card, Flex, Typography, Input, Button } from 'antd';
+import { Form, Card, Flex, Typography, Input } from 'antd';
 import { DownOutlined, DeleteOutlined, UpOutlined } from '@ant-design/icons';
 import { PROJECT_FORM_REQUIRED_FIELDS } from '../../utils/constants';
 import { updateFormData } from '../../store/formStoreSlice';
@@ -119,14 +119,6 @@ const ProjectFormItem = ({ item, formId, required = false }) => {
             onValuesChange={handleValuesChange}
           />
         </Form.Item>
-        <Flex gap={16}>
-          <Button type="primary" onClick={handleExpand}>
-            Save
-          </Button>
-          <Button type="default" onClick={handleExpand}>
-            Cancel
-          </Button>
-        </Flex>
       </Form>
     </Card>
   );

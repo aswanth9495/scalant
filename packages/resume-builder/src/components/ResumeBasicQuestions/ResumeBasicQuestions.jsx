@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector, batch } from 'react-redux';
 import { nextStep } from '../../store/resumeBuilderSlice';
 import {
@@ -42,6 +42,7 @@ const ResumeBasicQuestions = () => {
   );
 
   const [updateResumeDetails] = useUpdateResumeDetailsMutation();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     // Initialize form with Redux state
@@ -58,6 +59,7 @@ const ResumeBasicQuestions = () => {
   };
 
   const handleFinish = async (values) => {
+    setIsSubmitting(true);
     const totalExperience =
       values?.totalWorkExperience?.yearsExperience * 12 +
       values?.totalWorkExperience?.monthsExperience;
@@ -81,6 +83,8 @@ const ResumeBasicQuestions = () => {
       message.success('Preference details updated successfully');
     } catch (error) {
       message.error(`Failed to update preference details: ${error.message}`);
+    } finally {
+      setIsSubmitting(false);
     }
 
     batch(() => {
@@ -228,6 +232,7 @@ const ResumeBasicQuestions = () => {
             block
             htmlType="submit"
             className={styles.button}
+            disabled={isSubmitting}
           >
             Save & Continue
           </Button>

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PageHeader from '../PageHeader';
 import { useDispatch, useSelector } from 'react-redux';
 import { nextStep } from '../../store/resumeBuilderSlice';
@@ -47,6 +47,7 @@ const PreferenceSettings = () => {
     (state) => state.scalantResumeBuilder.metaData.meta.job_locations
   );
   const [updateResumeDetails] = useUpdateResumeDetailsMutation();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { role_types } = useSelector(
     (state) => state.scalantResumeBuilder.metaData.meta
@@ -127,6 +128,7 @@ const PreferenceSettings = () => {
   };
 
   const handleFinish = async () => {
+    setIsSubmitting(true);
     const payload = createPreferencePayload();
 
     try {
@@ -137,6 +139,8 @@ const PreferenceSettings = () => {
       message.success('Preference details updated successfully');
     } catch (error) {
       message.error(`Failed to update preference details: ${error.message}`);
+    } finally {
+      setIsSubmitting(false);
     }
     dispatch(nextStep());
   };
@@ -228,6 +232,7 @@ const PreferenceSettings = () => {
             type="primary"
             htmlType="submit"
             block
+            disabled={isSubmitting}
           >
             Save and Continue
           </Button>

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   GithubOutlined,
   LinkedinOutlined,
@@ -60,6 +60,7 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
     (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
   );
   const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [form] = Form.useForm();
 
@@ -114,7 +115,9 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
     }
   }, [dispatch, isFormInitialized, initialValues]);
 
-  const handleFinish = async (values) => {
+  const handleFinish = async () => {
+    const values = formData?.personalInfoAndSocial;
+    setIsSubmitting(true);
     updateFormData({
       formId: FORM_ID,
       data: {
@@ -141,8 +144,6 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
       // Add additional profiles to payload
       const payload = createProfilePayload(values, basePayload);
 
-      onComplete?.();
-
       await updateResumeDetails({
         resumeId: resumeData?.resume_details?.id,
         payload,
@@ -152,7 +153,14 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
       message.error('Failed to update personal details');
       // eslint-disable-next-line no-console, no-undef
       console.error('Error updating personal details:', error);
+    } finally {
+      setIsSubmitting(false);
     }
+  };
+
+  const handleSaveAndNext = () => {
+    handleFinish();
+    onComplete?.();
   };
 
   const handleValuesChange = (changedValues, allValues) => {
@@ -306,7 +314,6 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
     <Space direction="vertical" size={24}>
       <Form
         form={form}
-        onFinish={handleFinish}
         layout="vertical"
         size="large"
         initialValues={formData?.personalInfoAndSocial}
@@ -401,20 +408,28 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
           </Button>
         </Flex>
 
-        <Space
-          direction="vertical"
-          size={16}
-          className={styles.buttonContainer}
-        >
-          <Flex gap={16}>
-            <Button type="primary" htmlType="submit" block loading={isLoading}>
-              Save and compile
-            </Button>
-            <Button type="default" htmlType="submit" block loading={isLoading}>
-              Save and Next
-            </Button>
-          </Flex>
-        </Space>
+        <Flex gap={16} style={{ marginTop: 24 }}>
+          <Button
+            type="primary"
+            htmlType="submit"
+            block
+            loading={isLoading}
+            disabled={isSubmitting}
+            onClick={handleFinish}
+          >
+            Save and compile
+          </Button>
+          <Button
+            type="default"
+            htmlType="submit"
+            block
+            loading={isLoading}
+            disabled={isSubmitting}
+            onClick={handleSaveAndNext}
+          >
+            Save and Next
+          </Button>
+        </Flex>
       </Form>
     </Space>
   );
