@@ -168,6 +168,7 @@ const SkillsAndToolkit = ({ onComplete }) => {
         onSkillClick={handleTagClick}
         onExperienceUpdate={handleExperienceUpdate}
         skillExperience={formData?.skillExperience || {}}
+        formId={FORM_ID}
       />
     );
   };

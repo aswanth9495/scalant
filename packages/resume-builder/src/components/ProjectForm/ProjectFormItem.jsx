@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, Card, Flex, Typography, Input } from 'antd';
 import { DownOutlined, DeleteOutlined, UpOutlined } from '@ant-design/icons';
 import { PROJECT_FORM_REQUIRED_FIELDS } from '../../utils/constants';
 import { updateFormData } from '../../store/formStoreSlice';
 import RichTextEditor from '../RichTextEditor';
+import DeleteConfirmationModal from '../DeleteConfirmationModal';
 
 const { Text } = Typography;
 
@@ -14,6 +15,8 @@ const ProjectFormItem = ({ item, formId, required = false }) => {
     (state) => state.scalantResumeBuilder.formStore.forms[formId]
   );
   const [form] = Form.useForm();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
   const handleValuesChange = (changedValues, allValues) => {
     const currentItems = formData?.projectItems || [];
     const updatedItems = currentItems.map((projectItem) =>
@@ -55,12 +58,21 @@ const ProjectFormItem = ({ item, formId, required = false }) => {
   };
 
   const handleDelete = () => {
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDeleteModalOk = () => {
     const currentItems = formData?.projectItems || [];
     const updatedItems = currentItems.filter(
       (projectItem) => projectItem.id !== item.id
     );
 
     dispatch(updateFormData({ formId, data: { projectItems: updatedItems } }));
+    setIsDeleteModalOpen(false);
+  };
+
+  const handleDeleteModalCancel = () => {
+    setIsDeleteModalOpen(false);
   };
 
   if (!item.expanded) {
@@ -120,6 +132,14 @@ const ProjectFormItem = ({ item, formId, required = false }) => {
           />
         </Form.Item>
       </Form>
+      <DeleteConfirmationModal
+        open={isDeleteModalOpen}
+        onOk={handleDeleteModalOk}
+        onCancel={handleDeleteModalCancel}
+        title="Delete Project"
+        description="Are you sure you want to delete this project?"
+        style={{ top: 20 }}
+      />
     </Card>
   );
 };

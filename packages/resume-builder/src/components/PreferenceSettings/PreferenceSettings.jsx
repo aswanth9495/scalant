@@ -158,6 +158,8 @@ const PreferenceSettings = () => {
     dispatch(nextStep());
   };
 
+  console.log('formData', formData);
+
   return (
     <div>
       <PageHeader
@@ -212,15 +214,19 @@ const PreferenceSettings = () => {
           >
             <Input placeholder="e.g., 3" />
           </Form.Item>
+          {/* // If notice period is 0 then disable negotiable field */}
           <Form.Item
             label="Negotiable / Can Buyout ?"
             name="negotiable"
             rules={[{ required: true, message: 'Please select an option!' }]}
           >
-            <Radio.Group>
-              <Radio value="yes">Yes</Radio>
-              <Radio value="no">No</Radio>
-            </Radio.Group>
+            <Radio.Group
+              options={[
+                { label: 'Yes', value: 'yes' },
+                { label: 'No', value: 'no' },
+              ]}
+              disabled={formData?.notice === '0'}
+            />
           </Form.Item>
         </Flex>
 
