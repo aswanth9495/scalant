@@ -31,7 +31,7 @@ export const WithDummyData = () => {
         isOnboarding={true}
         resumeData={useResumeData1 ? resumeData1 : resumeData}
         resumeList={dummyResumeList}
-        courseProduct={'academy'}
+        courseProduct={'data_science'}
         onResumeClick={(id) => {
           console.log('Resume with id', id, 'clicked');
         }}
@@ -58,7 +58,7 @@ export const WithDummyData1 = () => (
     isOnboarding={true}
     resumeData={resumeData1}
     resumeList={dummyResumeList}
-    courseProduct={'academy'}
+    courseProduct={'data_science'}
     onResumeClick={(id) => {
       console.log('Resume with id', id, 'clicked');
     }}

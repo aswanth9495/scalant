@@ -51,7 +51,8 @@ const SkillTag = ({
     onClick();
   };
 
-  const handleClose = () => {
+  const handleClose = (e) => {
+    e.stopPropagation();
     // Remove the skill from the form data
     const updatedFormData = selectedSkills.filter(
       (item) => item.skill_id !== skill.subtopic_id
@@ -103,9 +104,7 @@ const SkillTag = ({
       <Tag
         className={`${styles.skillTag} ${isSelected ? styles.selected : ''}`}
         onClick={() => {
-          if (!isSelected) {
-            setOpen(true);
-          }
+          setOpen(true);
         }}
       >
         <span>

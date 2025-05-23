@@ -51,7 +51,6 @@ const ResumeBuilderContent = ({
   useEffect(() => {
     if (resumeData) {
       const resumeId = resumeData?.resume_details?.id;
-
       dispatch(setResumeData(resumeData));
       dispatch(setProgram(getResumeProgram(courseProduct)));
       dispatch(resetSteps());
@@ -161,6 +160,7 @@ const ResumeBuilderContent = ({
 const ResumeBuilder = ({
   isOnboarding = true,
   resumeData,
+  courseProduct,
   onBackButtonClick,
   resumeManager,
   resumeList,
@@ -178,6 +178,7 @@ const ResumeBuilder = ({
       onBackButtonClick={onBackButtonClick}
       resumeManager={resumeManager}
       resumeList={resumeList}
+      courseProduct={courseProduct}
       onResumeClick={onResumeClick}
       onAddResumeClick={onAddResumeClick}
       onManageResumesClick={onManageResumesClick}
