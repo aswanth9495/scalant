@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   GithubOutlined,
   LinkedinOutlined,
@@ -20,6 +20,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 import { initializeForm, updateFormData } from '../../store/formStoreSlice';
 
+import { ADDITIONAL_PROFILES } from '../../utils/constants';
+import {
+  getAdditionalProfileUrl,
+  getExistingProfileTypes,
+  getAvailableProfileTypes,
+  createProfilePayload,
+} from '../../utils/resumeUtils';
+
 import styles from './PersonalInfoAndSocial.module.scss';
 
 const { Text } = Typography;
@@ -36,6 +44,7 @@ const initialFormData = {
     linkedIn: '',
     github: '',
     personalWebsite: '',
+    additionalProfiles: [],
   },
 };
 
@@ -51,30 +60,49 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
     (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
   );
   const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [form] = Form.useForm();
 
-  const initialValues = useMemo(
-    () =>
-      resumeData?.personal_details
-        ? {
-            personalInfoAndSocial: {
-              fullName: resumeData.personal_details.name,
-              contactNumber: resumeData.personal_details.phone_number.replace(
-                '+91-',
-                ''
-              ),
-              emailAddress: resumeData.personal_details.email,
-              gender: resumeData.personal_details.gender,
-              currentCity: resumeData.personal_details.city,
-              linkedIn: resumeData.personal_details.linkedin,
-              github: resumeData.personal_details.github,
-              personalWebsite: resumeData.personal_details.portfolio,
-            },
-          }
-        : initialFormData,
-    [resumeData?.personal_details]
-  );
+  const initialValues = useMemo(() => {
+    if (!resumeData?.personal_details) {
+      return initialFormData;
+    }
+
+    // Get additional profiles from user data
+    const additionalProfiles = getAdditionalProfileUrl(
+      resumeData.personal_details
+    );
+
+    // Create a flat object with all form values including profileType0, profileUrl0, etc.
+    const formValues = {
+      fullName: resumeData.personal_details.name,
+      contactNumber: resumeData.personal_details.phone_number.replace(
+        '+91-',
+        ''
+      ),
+      emailAddress: resumeData.personal_details.email,
+      gender: resumeData.personal_details.gender,
+      currentCity: resumeData.personal_details.city,
+      linkedIn: resumeData.personal_details.linkedin,
+      github: resumeData.personal_details.github,
+      personalWebsite: resumeData.personal_details.portfolio,
+    };
+
+    // Add the profileType and profileUrl keys directly to the formValues object
+    additionalProfiles.forEach((profile) => {
+      Object.keys(profile).forEach((key) => {
+        formValues[key] = profile[key];
+      });
+    });
+
+    return {
+      personalInfoAndSocial: {
+        ...formValues,
+        additionalProfiles,
+      },
+    };
+  }, [resumeData?.personal_details]);
 
   useEffect(() => {
     if (!isFormInitialized) {
@@ -87,7 +115,9 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
     }
   }, [dispatch, isFormInitialized, initialValues]);
 
-  const handleFinish = async (values) => {
+  const handleFinish = async () => {
+    const values = formData?.personalInfoAndSocial;
+    setIsSubmitting(true);
     updateFormData({
       formId: FORM_ID,
       data: {
@@ -96,7 +126,8 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
     });
 
     try {
-      const payload = {
+      // Create base payload with main personal details
+      const basePayload = {
         form_stage: 'personal_details_v1_form',
         name: values.fullName,
         email: values.emailAddress,
@@ -110,7 +141,8 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
         isPopulated: true,
       };
 
-      onComplete?.();
+      // Add additional profiles to payload
+      const payload = createProfilePayload(values, basePayload);
 
       await updateResumeDetails({
         resumeId: resumeData?.resume_details?.id,
@@ -121,16 +153,146 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
       message.error('Failed to update personal details');
       // eslint-disable-next-line no-console, no-undef
       console.error('Error updating personal details:', error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
+  const handleSaveAndNext = () => {
+    handleFinish();
+    onComplete?.();
+  };
+
   const handleValuesChange = (changedValues, allValues) => {
+    // Check if a profile type was changed
+    const changedProfileType = Object.keys(changedValues).find((key) =>
+      key.startsWith('profileType')
+    );
+
+    if (changedProfileType) {
+      const newProfileType = changedValues[changedProfileType];
+
+      // Check if this profile type already exists in another profile
+      const isDuplicate = Object.keys(allValues)
+        .filter(
+          (key) => key.startsWith('profileType') && key !== changedProfileType
+        )
+        .some((key) => allValues[key] === newProfileType);
+
+      if (isDuplicate) {
+        // Revert the change by setting back to previous value
+        const previousValue =
+          formData?.personalInfoAndSocial?.[changedProfileType];
+        form.setFieldValue(changedProfileType, previousValue);
+        message.warning(
+          `${ADDITIONAL_PROFILES.find((p) => p.value === newProfileType)?.label} profile is already added`
+        );
+        return;
+      }
+    }
+
+    // Get current additionalProfiles
+    const currentProfiles =
+      formData?.personalInfoAndSocial?.additionalProfiles || [];
+
+    // Update the form state in the store
     dispatch(
       updateFormData({
         formId: FORM_ID,
-        data: { personalInfoAndSocial: allValues },
+        data: {
+          personalInfoAndSocial: {
+            ...allValues,
+            additionalProfiles: currentProfiles,
+          },
+        },
       })
     );
+  };
+
+  const handleAddProfile = () => {
+    // Get current form values
+    const currentFormValues = form.getFieldsValue();
+
+    // Get existing profile types
+    const existingTypes = getExistingProfileTypes(currentFormValues);
+
+    // Check if all profile types are already used
+    if (existingTypes.length >= ADDITIONAL_PROFILES.length) {
+      message.warning('All profile types have already been added');
+      return;
+    }
+
+    // Find an available profile type
+    const availableProfileType = ADDITIONAL_PROFILES.find(
+      (profile) => !existingTypes.includes(profile.value)
+    );
+
+    // Get current additionalProfiles array
+    const currentProfiles =
+      formData?.personalInfoAndSocial?.additionalProfiles || [];
+    const newProfileIndex = currentProfiles.length;
+
+    // Create a new profile with default values
+    const newProfile = {
+      [`profileType${newProfileIndex}`]: availableProfileType.value,
+      [`profileUrl${newProfileIndex}`]: '',
+    };
+
+    // Create updated form data with the new profile
+    const updatedProfiles = [...currentProfiles, newProfile];
+    const updatedFormData = {
+      ...formData?.personalInfoAndSocial,
+      ...currentFormValues,
+      additionalProfiles: updatedProfiles,
+      ...newProfile,
+    };
+
+    // Update the form state and UI
+    dispatch(
+      updateFormData({
+        formId: FORM_ID,
+        data: {
+          personalInfoAndSocial: updatedFormData,
+        },
+      })
+    );
+
+    form.setFieldsValue(updatedFormData);
+  };
+
+  const renderAdditionalProfiles = () => {
+    const profiles = formData?.personalInfoAndSocial?.additionalProfiles || [];
+    const currentFormValues = form.getFieldsValue();
+
+    return profiles.map((_, idx) => {
+      const profileTypeKey = `profileType${idx}`;
+      const profileUrlKey = `profileUrl${idx}`;
+
+      // Get available profile types for this dropdown
+      const availableOptions = getAvailableProfileTypes(currentFormValues, idx);
+
+      return (
+        <Flex gap={16} key={idx}>
+          <Form.Item
+            name={profileTypeKey}
+            style={{ width: '50%' }}
+            className={styles.formItem}
+          >
+            <Select
+              options={availableOptions}
+              placeholder="Select Profile Type"
+            />
+          </Form.Item>
+          <Form.Item
+            name={profileUrlKey}
+            style={{ width: '50%' }}
+            className={styles.formItem}
+          >
+            <Input placeholder="Enter Profile URL" />
+          </Form.Item>
+        </Flex>
+      );
+    });
   };
 
   const selectBefore = (
@@ -152,7 +314,6 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
     <Space direction="vertical" size={24}>
       <Form
         form={form}
-        onFinish={handleFinish}
         layout="vertical"
         size="large"
         initialValues={formData?.personalInfoAndSocial}
@@ -239,20 +400,36 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
           </Form.Item>
         </Space>
 
-        <Space
-          direction="vertical"
-          size={16}
-          className={styles.buttonContainer}
-        >
-          <Flex gap={16}>
-            <Button type="primary" htmlType="submit" block loading={isLoading}>
-              Save and compile
-            </Button>
-            <Button type="default" htmlType="submit" block loading={isLoading}>
-              Save and Next
-            </Button>
-          </Flex>
-        </Space>
+        <Flex gap={16} vertical style={{ width: '100%', marginTop: 24 }}>
+          {renderAdditionalProfiles()}
+
+          <Button type="dashed" onClick={handleAddProfile}>
+            Add Profile
+          </Button>
+        </Flex>
+
+        <Flex gap={16} style={{ marginTop: 24 }}>
+          <Button
+            type="primary"
+            htmlType="submit"
+            block
+            loading={isLoading}
+            disabled={isSubmitting}
+            onClick={handleFinish}
+          >
+            Save and compile
+          </Button>
+          <Button
+            type="default"
+            htmlType="submit"
+            block
+            loading={isLoading}
+            disabled={isSubmitting}
+            onClick={handleSaveAndNext}
+          >
+            Save and Next
+          </Button>
+        </Flex>
       </Form>
     </Space>
   );

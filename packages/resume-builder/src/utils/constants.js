@@ -34,6 +34,15 @@ export const RESUME_BUILDER_STEPS = {
   },
 };
 
+export const ADDITIONAL_PROFILES = [
+  { label: 'LeetCode', value: 'leetcode' },
+  { label: 'Codeforces', value: 'codeforces' },
+  { label: 'Codechef', value: 'codechef' },
+  { label: 'HackerRank', value: 'hackerrank' },
+  { label: 'HackerEarth', value: 'hackerearth' },
+  { label: 'Geeksforgeeks', value: 'geeksforgeeks' },
+];
+
 export const PROJECT_FORM_REQUIRED_FIELDS = [
   'title',
   'project_link',
@@ -275,20 +284,24 @@ const RESUME_TIPS = {
   socialLinks: {
     icon: '🔗',
     title: 'Add Social Links:',
-    description: `Share coding profiles like GitHub, LeetCode, or 
-      Codeforces to show your skills.`,
+    description: `Include links to various Professional social profiles like LinkedIn, 
+      Github, Leetcode, Codeforces, HackerRank, HackerEarth, 
+      CodeChef, GeeksForGeeks, InterviewBit on your profile.`,
   },
   keySkills: {
     icon: '🏆',
     title: 'Highlight Key Skills:',
-    description: `List at least 5 relevant technical skills that align with 
-      the role you're targeting, like languages, tools, or frameworks.`,
+    description: `Include Programming Languages, Frameworks and Tools 
+      in which you have hands-on experience. Include at least 5 skills`,
   },
   projects: {
     icon: '📄',
     title: 'Showcase Projects:',
-    description: `Add 2–3 strong projects with bullet points, 
-    metrics, and links to demos.`,
+    description: `Include 1-2 impactful projects to showcase your technical ability. 
+      Outline each project using 4-6 bullet points. Strengthen your achievements 
+      by incorporating specific metrics like % improvement, cost saved, revenue, 
+      scale handled etc.. Integrate project demo link and / or git repository. 
+      Include details of the Tech Stack.`,
   },
   academicDetails: {
     icon: '🎓',
@@ -299,8 +312,9 @@ const RESUME_TIPS = {
   workExperience: {
     icon: '💼',
     title: 'Add Work Experience:',
-    description: `List previous roles with bullet points, 
-    metrics, and links to demos.`,
+    description: `Include your latest work experience. Outline, using 2-3 bullet points, 
+      your key responsibilities, projects and achievements. 
+      Include Impact metrics like % improvement, cost saved, revenue increased, etc.`,
   },
 };
 

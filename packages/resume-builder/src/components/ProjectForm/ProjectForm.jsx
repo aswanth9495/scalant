@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { initializeForm, updateFormData } from '../../store/formStoreSlice';
 
@@ -38,6 +38,7 @@ const ProjectForm = ({ onComplete, required = false }) => {
     (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
   );
   const [updateResumeDetails] = useUpdateResumeDetailsMutation();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const initialValues = useMemo(
     () =>
@@ -105,7 +106,8 @@ const ProjectForm = ({ onComplete, required = false }) => {
     }));
   };
 
-  const handleMarkAsCompleted = async () => {
+  const handleFinish = async () => {
+    setIsSubmitting(true);
     const projectItems = formData?.projectItems || [];
     const hasUncompletedItems = projectItems.some((item) => !item.completed);
 
@@ -129,10 +131,16 @@ const ProjectForm = ({ onComplete, required = false }) => {
         payload,
       }).unwrap();
       message.success('Projects updated successfully');
-      onComplete?.();
     } catch (error) {
       message.error(`Failed to update projects: ${error.message}`);
+    } finally {
+      setIsSubmitting(false);
     }
+  };
+
+  const handleSaveAndNext = () => {
+    handleFinish();
+    onComplete?.();
   };
 
   return (
@@ -157,10 +165,20 @@ const ProjectForm = ({ onComplete, required = false }) => {
           Add Project
         </Button>
         <Flex gap={16}>
-          <Button type="primary" block onClick={handleMarkAsCompleted}>
+          <Button
+            type="primary"
+            block
+            onClick={handleFinish}
+            disabled={isSubmitting}
+          >
             Save and Compile
           </Button>
-          <Button type="default" onClick={handleMarkAsCompleted} block>
+          <Button
+            type="default"
+            onClick={handleSaveAndNext}
+            block
+            disabled={isSubmitting}
+          >
             Save and Next
           </Button>
         </Flex>

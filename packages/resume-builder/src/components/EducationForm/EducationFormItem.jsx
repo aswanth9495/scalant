@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Card,
@@ -16,6 +16,7 @@ import { updateFormData } from '../../store/formStoreSlice';
 import { EDUCATION_FORM_REQUIRED_FIELDS } from '../../utils/constants';
 import styles from './EducationForm.module.scss';
 import RichTextEditor from '../RichTextEditor/RichTextEditor';
+import DeleteConfirmationModal from '../DeleteConfirmationModal';
 
 const { Text } = Typography;
 
@@ -25,6 +26,7 @@ const EducationFormItem = ({ item, formId, required = false }) => {
     (state) => state.scalantResumeBuilder.formStore.forms[formId]
   );
   const [form] = Form.useForm();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const handleValuesChange = (changedValues, allValues) => {
     const currentItems = formData?.educationItems || [];
@@ -72,6 +74,10 @@ const EducationFormItem = ({ item, formId, required = false }) => {
   };
 
   const handleDelete = () => {
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDeleteModalOk = () => {
     const currentItems = formData?.educationItems || [];
     const updatedItems = currentItems.filter(
       (educationItem) => educationItem.id !== item.id
@@ -85,6 +91,11 @@ const EducationFormItem = ({ item, formId, required = false }) => {
         },
       })
     );
+    setIsDeleteModalOpen(false);
+  };
+
+  const handleDeleteModalCancel = () => {
+    setIsDeleteModalOpen(false);
   };
 
   const selectAfter = (
@@ -243,6 +254,14 @@ const EducationFormItem = ({ item, formId, required = false }) => {
           />
         </Form.Item>
       </Form>
+      <DeleteConfirmationModal
+        open={isDeleteModalOpen}
+        onOk={handleDeleteModalOk}
+        onCancel={handleDeleteModalCancel}
+        title="Delete Education"
+        description="Are you sure you want to delete this education item?"
+        style={{ top: 20 }}
+      />
     </Card>
   );
 };

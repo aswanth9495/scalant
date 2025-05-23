@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PageHeader from '../PageHeader';
 import { useDispatch, useSelector } from 'react-redux';
 import { nextStep } from '../../store/resumeBuilderSlice';
@@ -47,6 +47,11 @@ const PreferenceSettings = () => {
     (state) => state.scalantResumeBuilder.metaData.meta.job_locations
   );
   const [updateResumeDetails] = useUpdateResumeDetailsMutation();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [
+    uniquePreferredJobLocationValues,
+    setUniquePreferredJobLocationValues,
+  ] = useState(preferredJobLocationValues);
 
   const { role_types } = useSelector(
     (state) => state.scalantResumeBuilder.metaData.meta
@@ -83,6 +88,15 @@ const PreferenceSettings = () => {
     // Initialize form with Redux state
     form.setFieldsValue(formData);
   }, [form, formData]);
+
+  useEffect(() => {
+    setUniquePreferredJobLocationValues(
+      preferredJobLocationValues.filter(
+        (value, index, self) =>
+          self.findIndex((t) => t.value === value.value) === index
+      )
+    );
+  }, [preferredJobLocationValues]);
 
   const createPreferencePayload = () => {
     let preferredRolesTypes = role_types;
@@ -127,6 +141,7 @@ const PreferenceSettings = () => {
   };
 
   const handleFinish = async () => {
+    setIsSubmitting(true);
     const payload = createPreferencePayload();
 
     try {
@@ -137,9 +152,13 @@ const PreferenceSettings = () => {
       message.success('Preference details updated successfully');
     } catch (error) {
       message.error(`Failed to update preference details: ${error.message}`);
+    } finally {
+      setIsSubmitting(false);
     }
     dispatch(nextStep());
   };
+
+  console.log('formData', formData);
 
   return (
     <div>
@@ -165,7 +184,7 @@ const PreferenceSettings = () => {
           <Select
             mode="multiple"
             allowClear
-            options={preferredJobLocationValues}
+            options={uniquePreferredJobLocationValues}
           />
         </Form.Item>
 
@@ -195,15 +214,19 @@ const PreferenceSettings = () => {
           >
             <Input placeholder="e.g., 3" />
           </Form.Item>
+          {/* // If notice period is 0 then disable negotiable field */}
           <Form.Item
-            label="Negotiable / Buyout available"
+            label="Negotiable / Can Buyout ?"
             name="negotiable"
             rules={[{ required: true, message: 'Please select an option!' }]}
           >
-            <Radio.Group>
-              <Radio value="yes">Yes</Radio>
-              <Radio value="no">No</Radio>
-            </Radio.Group>
+            <Radio.Group
+              options={[
+                { label: 'Yes', value: 'yes' },
+                { label: 'No', value: 'no' },
+              ]}
+              disabled={formData?.notice === '0'}
+            />
           </Form.Item>
         </Flex>
 
@@ -228,6 +251,7 @@ const PreferenceSettings = () => {
             type="primary"
             htmlType="submit"
             block
+            disabled={isSubmitting}
           >
             Save and Continue
           </Button>
