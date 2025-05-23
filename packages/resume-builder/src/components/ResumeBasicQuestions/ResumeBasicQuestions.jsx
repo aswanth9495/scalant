@@ -33,8 +33,12 @@ const ResumeBasicQuestions = () => {
   const resumeData = useSelector(
     (state) => state.scalantResumeBuilder.resumeBuilder.resumeData
   );
+  const program = useSelector(
+    (state) => state.scalantResumeBuilder.resumeBuilder.program
+  );
+
   const basicQuestionsData = resumeData?.personal_details;
-  const jobRoles = getJobRoles('academy');
+  const jobRoles = getJobRoles(program);
 
   const { initialValues, FORM_ID } = useBasicQuestionsForm(basicQuestionsData);
   const formData = useSelector(
