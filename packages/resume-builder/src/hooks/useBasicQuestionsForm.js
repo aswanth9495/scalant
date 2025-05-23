@@ -38,7 +38,7 @@ export const useBasicQuestionsForm = (basicQuestionsData) => {
               ),
               monthsExperienceInTech: basicQuestionsData?.experience % 12,
             },
-            currentJobRole: basicQuestionsData?.job_title,
+            currentJobRole: '',
           }
         : initialFormData,
     [basicQuestionsData]

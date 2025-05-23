@@ -133,6 +133,7 @@ const ResumeBasicQuestions = () => {
             <Form.Item
               label="Total Work Experience"
               className={styles.formItem}
+              required
             >
               <Flex gap={16} align="center">
                 <Flex gap={4} vertical>
@@ -173,6 +174,7 @@ const ResumeBasicQuestions = () => {
             <Form.Item
               label="Total Work Experience in Tech"
               className={styles.formItem}
+              required
             >
               <Flex gap={16} align="center">
                 <Flex gap={4} vertical>

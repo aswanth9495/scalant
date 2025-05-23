@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Form,
@@ -14,6 +14,7 @@ import { DownOutlined, DeleteOutlined, UpOutlined } from '@ant-design/icons';
 import { WORK_EXPERIENCE_FORM_REQUIRED_FIELDS } from '../../utils/constants';
 import { updateFormData } from '../../store/formStoreSlice';
 import RichTextEditor from '../RichTextEditor';
+import DeleteConfirmationModal from '../DeleteConfirmationModal';
 
 const { Text } = Typography;
 
@@ -22,6 +23,7 @@ const WorkExperienceFormItem = ({ item, formId, required = false }) => {
   const formData = useSelector(
     (state) => state.scalantResumeBuilder.formStore.forms[formId]
   );
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [form] = Form.useForm();
 
   const handleValuesChange = (changedValues, allValues) => {
@@ -67,6 +69,10 @@ const WorkExperienceFormItem = ({ item, formId, required = false }) => {
   };
 
   const handleDelete = () => {
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDeleteModalOk = () => {
     const currentItems = formData?.workExperienceItems || [];
     const updatedItems = currentItems.filter(
       (workExperienceItem) => workExperienceItem.id !== item.id
@@ -78,6 +84,11 @@ const WorkExperienceFormItem = ({ item, formId, required = false }) => {
         data: { workExperienceItems: updatedItems },
       })
     );
+    setIsDeleteModalOpen(false);
+  };
+
+  const handleDeleteModalCancel = () => {
+    setIsDeleteModalOpen(false);
   };
 
   if (!item.expanded) {
@@ -171,6 +182,14 @@ const WorkExperienceFormItem = ({ item, formId, required = false }) => {
           />
         </Form.Item>
       </Form>
+      <DeleteConfirmationModal
+        open={isDeleteModalOpen}
+        onOk={handleDeleteModalOk}
+        onCancel={handleDeleteModalCancel}
+        title="Delete Work Experience"
+        description="Are you sure you want to delete this work experience?"
+        style={{ top: 20 }}
+      />
     </Card>
   );
 };
