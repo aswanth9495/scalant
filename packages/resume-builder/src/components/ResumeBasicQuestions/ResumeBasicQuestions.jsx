@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector, batch } from 'react-redux';
 import { nextStep } from '../../store/resumeBuilderSlice';
 import {
@@ -45,8 +45,7 @@ const ResumeBasicQuestions = () => {
     (state) => state.scalantResumeBuilder.formStore.forms[FORM_ID]
   );
 
-  const [updateResumeDetails] = useUpdateResumeDetailsMutation();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
   useEffect(() => {
     // Initialize form with Redux state
@@ -63,7 +62,6 @@ const ResumeBasicQuestions = () => {
   };
 
   const handleFinish = async (values) => {
-    setIsSubmitting(true);
     const totalExperience =
       values?.totalWorkExperience?.yearsExperience * 12 +
       values?.totalWorkExperience?.monthsExperience;
@@ -87,20 +85,9 @@ const ResumeBasicQuestions = () => {
       message.success('Preference details updated successfully');
     } catch (error) {
       message.error(`Failed to update preference details: ${error.message}`);
-    } finally {
-      setIsSubmitting(false);
     }
 
     batch(() => {
-      // dispatch(
-      //   setResumePersonaData({
-      //     totalExperience,
-      //     techExperience,
-      //     currentJobRole: values?.currentJobRole,
-      //     program: 'academy',
-      //   })
-      // );
-
       const formData = {
         totalExperience,
         techExperience,
@@ -238,7 +225,7 @@ const ResumeBasicQuestions = () => {
             block
             htmlType="submit"
             className={styles.button}
-            disabled={isSubmitting}
+            loading={isLoading}
           >
             Save & Continue
           </Button>

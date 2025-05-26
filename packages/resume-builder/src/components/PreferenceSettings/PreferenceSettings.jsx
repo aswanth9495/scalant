@@ -46,8 +46,7 @@ const PreferenceSettings = () => {
   const preferredJobLocationValues = useSelector(
     (state) => state.scalantResumeBuilder.metaData.meta.job_locations
   );
-  const [updateResumeDetails] = useUpdateResumeDetailsMutation();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
   const [
     uniquePreferredJobLocationValues,
     setUniquePreferredJobLocationValues,
@@ -141,7 +140,6 @@ const PreferenceSettings = () => {
   };
 
   const handleFinish = async () => {
-    setIsSubmitting(true);
     const payload = createPreferencePayload();
 
     try {
@@ -152,13 +150,9 @@ const PreferenceSettings = () => {
       message.success('Preference details updated successfully');
     } catch (error) {
       message.error(`Failed to update preference details: ${error.message}`);
-    } finally {
-      setIsSubmitting(false);
     }
     dispatch(nextStep());
   };
-
-  console.log('formData', formData);
 
   return (
     <div>
@@ -251,7 +245,7 @@ const PreferenceSettings = () => {
             type="primary"
             htmlType="submit"
             block
-            disabled={isSubmitting}
+            loading={isLoading}
           >
             Save and Continue
           </Button>

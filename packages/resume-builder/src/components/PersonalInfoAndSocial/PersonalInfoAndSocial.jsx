@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import {
   GithubOutlined,
   LinkedinOutlined,
@@ -48,6 +48,10 @@ const initialFormData = {
   },
 };
 
+// URL validation regex pattern
+const urlPattern =
+  /^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)$/;
+
 const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
   const dispatch = useDispatch();
   const resumeData = useSelector(
@@ -60,7 +64,6 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
     (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
   );
   const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [form] = Form.useForm();
 
@@ -117,7 +120,6 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
 
   const handleFinish = async () => {
     const values = formData?.personalInfoAndSocial;
-    setIsSubmitting(true);
     updateFormData({
       formId: FORM_ID,
       data: {
@@ -153,8 +155,6 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
       message.error('Failed to update personal details');
       // eslint-disable-next-line no-console, no-undef
       console.error('Error updating personal details:', error);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -287,6 +287,13 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
             name={profileUrlKey}
             style={{ width: '50%' }}
             className={styles.formItem}
+            rules={[
+              {
+                required: required,
+                pattern: urlPattern,
+                message: 'Please enter a valid URL',
+              },
+            ]}
           >
             <Input placeholder="Enter Profile URL" />
           </Form.Item>
@@ -383,18 +390,40 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
           <Form.Item
             label="LinkedIn"
             name="linkedIn"
-            rules={[{ required: required }]}
+            rules={[
+              { required: required },
+              {
+                pattern: urlPattern,
+                message: 'Please enter a valid URL',
+              },
+            ]}
             className={styles.formItem}
           >
             <Input prefix={<LinkedinOutlined />} />
           </Form.Item>
-          <Form.Item label="GitHub" name="github" className={styles.formItem}>
+          <Form.Item
+            label="GitHub"
+            name="github"
+            className={styles.formItem}
+            rules={[
+              {
+                pattern: urlPattern,
+                message: 'Please enter a valid URL',
+              },
+            ]}
+          >
             <Input prefix={<GithubOutlined />} />
           </Form.Item>
           <Form.Item
             label="Personal Website"
             name="personalWebsite"
             className={styles.formItem}
+            rules={[
+              {
+                pattern: urlPattern,
+                message: 'Please enter a valid URL',
+              },
+            ]}
           >
             <Input prefix={<CodeOutlined />} />
           </Form.Item>
@@ -414,7 +443,7 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
             htmlType="submit"
             block
             loading={isLoading}
-            disabled={isSubmitting}
+            disabled={isLoading}
             onClick={handleFinish}
           >
             Save and compile
@@ -424,7 +453,7 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
             htmlType="submit"
             block
             loading={isLoading}
-            disabled={isSubmitting}
+            disabled={isLoading}
             onClick={handleSaveAndNext}
           >
             Save and Next

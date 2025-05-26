@@ -1,10 +1,11 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Space, Button, Flex, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import WorkExperienceFormItem from './WorkExperienceFormItem';
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 import { initializeForm, updateFormData } from '../../store/formStoreSlice';
+import AiSuggestionBanner from '../AiSuggestionBanner';
 import dayjs from 'dayjs';
 
 const FORM_ID = 'workExperienceForm';
@@ -39,8 +40,7 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
   const isFormInitialized = useSelector(
     (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
   );
-  const [updateResumeDetails] = useUpdateResumeDetailsMutation();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
   const initialValues = useMemo(
     () =>
@@ -136,7 +136,6 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
   };
 
   const handleFinish = async () => {
-    setIsSubmitting(true);
     const workExperienceItems = formData?.workExperienceItems || [];
     const hasUncompletedItems = workExperienceItems.some(
       (item) => !item.completed
@@ -166,8 +165,6 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
       message.success('Work experience details updated successfully');
     } catch (error) {
       message.error(`Failed to update work experience details: ${error}`);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -178,6 +175,7 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
 
   return (
     <Flex vertical gap={16}>
+      <AiSuggestionBanner />
       <Space direction="vertical" style={{ width: '100%' }}>
         <Flex vertical gap={16}>
           {(formData?.workExperienceItems || []).map((item) => (
@@ -202,7 +200,7 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
             type="primary"
             block
             onClick={handleFinish}
-            disabled={isSubmitting}
+            disabled={isLoading}
           >
             Save and Compile
           </Button>
@@ -210,7 +208,7 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
             type="default"
             onClick={handleSaveAndNext}
             block
-            disabled={isSubmitting}
+            disabled={isLoading}
           >
             Save and Next
           </Button>

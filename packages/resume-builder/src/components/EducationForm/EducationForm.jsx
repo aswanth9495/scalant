@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Space, Button, Flex, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
@@ -43,8 +43,7 @@ const EducationForm = ({ onComplete, required = false }) => {
   const isFormInitialized = useSelector(
     (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
   );
-  const [updateResumeDetails] = useUpdateResumeDetailsMutation();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
   const initialValues = useMemo(
     () =>
@@ -142,7 +141,6 @@ const EducationForm = ({ onComplete, required = false }) => {
   };
 
   const handleFinish = async () => {
-    setIsSubmitting(true);
     const educationItems = formData?.educationItems || [];
     const customEducation = formData?.customEducation;
     const hasUncompletedItems = educationItems.some((item) => !item.completed);
@@ -171,8 +169,6 @@ const EducationForm = ({ onComplete, required = false }) => {
       message.success('Education details updated successfully');
     } catch (error) {
       message.error(`Failed to update education details: ${error.message}`);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -213,7 +209,7 @@ const EducationForm = ({ onComplete, required = false }) => {
             type="primary"
             block
             onClick={handleFinish}
-            disabled={isSubmitting}
+            disabled={isLoading}
           >
             Save and Compile
           </Button>
@@ -221,7 +217,7 @@ const EducationForm = ({ onComplete, required = false }) => {
             type="default"
             onClick={handleSaveAndNext}
             block
-            disabled={isSubmitting}
+            disabled={isLoading}
           >
             Save and Next
           </Button>

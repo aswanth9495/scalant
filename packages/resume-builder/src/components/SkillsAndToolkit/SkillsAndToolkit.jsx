@@ -1,5 +1,5 @@
 import { Button, Flex, Space, message } from 'antd';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
@@ -45,8 +45,7 @@ const SkillsAndToolkit = ({ onComplete }) => {
   const { resume_builder_skills: resumeBuilderSkills, skill_data: skillsData } =
     useSelector((state) => state.scalantResumeBuilder.metaData.meta);
 
-  const [updateResumeDetails] = useUpdateResumeDetailsMutation();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
   const initialValues = useMemo(
     () =>
@@ -59,6 +58,27 @@ const SkillsAndToolkit = ({ onComplete }) => {
         : initialFormData,
     [resumeData?.skills, skillsData]
   );
+
+  const handleFinish = async () => {
+    const selectedSkills = formData?.selectedSkills || [];
+
+    try {
+      const payload = {
+        form_stage: 'skills_details_form',
+        skills: selectedSkills,
+      };
+
+      await updateResumeDetails({
+        resumeId: resumeData?.resume_details?.id,
+        payload,
+      }).unwrap();
+      message.success('Skills and toolkit updated successfully');
+      dispatch(setIsSkillsSaved(true));
+      // eslint-disable-next-line no-unused-vars
+    } catch (error) {
+      message.error('Failed to update skills and toolkit');
+    }
+  };
 
   useEffect(() => {
     if (!isFormInitialized) {
@@ -125,29 +145,6 @@ const SkillsAndToolkit = ({ onComplete }) => {
     }
   };
 
-  const handleFinish = async () => {
-    setIsSubmitting(true);
-    const selectedSkills = formData?.selectedSkills || [];
-
-    try {
-      const payload = {
-        form_stage: 'skills_details_form',
-        skills: selectedSkills,
-      };
-
-      await updateResumeDetails({
-        resumeId: resumeData?.resume_details?.id,
-        payload,
-      }).unwrap();
-      message.success('Skills and toolkit updated successfully');
-      // eslint-disable-next-line no-unused-vars
-    } catch (error) {
-      message.error('Failed to update skills and toolkit');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   const handleSaveAndNext = () => {
     handleFinish();
     onComplete?.();
@@ -181,7 +178,7 @@ const SkillsAndToolkit = ({ onComplete }) => {
           type="primary"
           block
           onClick={handleFinish}
-          disabled={isSubmitting}
+          disabled={isLoading}
         >
           Save and Compile
         </Button>
@@ -189,7 +186,7 @@ const SkillsAndToolkit = ({ onComplete }) => {
           type="default"
           block
           onClick={handleSaveAndNext}
-          disabled={isSubmitting}
+          disabled={isLoading}
         >
           Save and Next
         </Button>

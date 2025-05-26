@@ -8,6 +8,8 @@ import RichTextEditor from '../RichTextEditor';
 import DeleteConfirmationModal from '../DeleteConfirmationModal';
 
 const { Text } = Typography;
+const urlPattern =
+  /^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)$/;
 
 const ProjectFormItem = ({ item, formId, required = false }) => {
   const dispatch = useDispatch();
@@ -115,7 +117,13 @@ const ProjectFormItem = ({ item, formId, required = false }) => {
         <Form.Item
           name={`project_link`}
           label="Project Link"
-          rules={[{ required: required }]}
+          rules={[
+            { required: required },
+            {
+              pattern: urlPattern,
+              message: 'Please enter a valid URL',
+            },
+          ]}
         >
           <Input placeholder="Enter Project Link" />
         </Form.Item>

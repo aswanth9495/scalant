@@ -1,10 +1,9 @@
 import { Button, Flex, message, Space } from 'antd';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 import { initializeForm } from '../../store/formStoreSlice';
-import AiSuggestionBanner from '../AiSuggestionBanner';
 import CustomFormItem from './CustomFormItem';
 
 const FORM_ID = 'achievementsForm';
@@ -32,8 +31,7 @@ const CustomForm = ({ onComplete }) => {
   const isFormInitialized = useSelector(
     (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
   );
-  const [updateResumeDetails] = useUpdateResumeDetailsMutation();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
   const initialValues = useMemo(
     () =>
@@ -59,7 +57,6 @@ const CustomForm = ({ onComplete }) => {
   }, [dispatch, isFormInitialized, initialValues]);
 
   const handleFinish = async () => {
-    setIsSubmitting(true);
     const achievementsItems = formData?.achievementsItems || [];
     const hasUnsavedItems = achievementsItems.some((item) => !item.saved);
 
@@ -91,8 +88,6 @@ const CustomForm = ({ onComplete }) => {
       message.success('Achievements updated successfully');
     } catch (error) {
       message.error(`Failed to update achievements: ${error.message}`);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -126,7 +121,7 @@ const CustomForm = ({ onComplete }) => {
             type="primary"
             block
             onClick={handleFinish}
-            disabled={isSubmitting}
+            disabled={isLoading}
           >
             Save and Compile
           </Button>
@@ -134,13 +129,12 @@ const CustomForm = ({ onComplete }) => {
             type="default"
             onClick={handleSaveAndNext}
             block
-            disabled={isSubmitting}
+            disabled={isLoading}
           >
             Save and Next
           </Button>
         </Flex>
       </Space>
-      <AiSuggestionBanner />
     </Flex>
   );
 };

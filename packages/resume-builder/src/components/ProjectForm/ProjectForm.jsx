@@ -1,10 +1,11 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { initializeForm, updateFormData } from '../../store/formStoreSlice';
 
 import { Space, Button, Flex, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import ProjectFormItem from './ProjectFormItem';
+import AiSuggestionBanner from '../AiSuggestionBanner';
 
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 
@@ -37,8 +38,7 @@ const ProjectForm = ({ onComplete, required = false }) => {
   const isFormInitialized = useSelector(
     (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
   );
-  const [updateResumeDetails] = useUpdateResumeDetailsMutation();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
   const initialValues = useMemo(
     () =>
@@ -107,7 +107,6 @@ const ProjectForm = ({ onComplete, required = false }) => {
   };
 
   const handleFinish = async () => {
-    setIsSubmitting(true);
     const projectItems = formData?.projectItems || [];
     const hasUncompletedItems = projectItems.some((item) => !item.completed);
 
@@ -133,8 +132,6 @@ const ProjectForm = ({ onComplete, required = false }) => {
       message.success('Projects updated successfully');
     } catch (error) {
       message.error(`Failed to update projects: ${error.message}`);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -145,6 +142,7 @@ const ProjectForm = ({ onComplete, required = false }) => {
 
   return (
     <Flex vertical gap={16}>
+      <AiSuggestionBanner />
       <Space direction="vertical" style={{ width: '100%' }}>
         <Flex vertical gap={16}>
           {(formData?.projectItems || []).map((item) => (
@@ -169,7 +167,7 @@ const ProjectForm = ({ onComplete, required = false }) => {
             type="primary"
             block
             onClick={handleFinish}
-            disabled={isSubmitting}
+            disabled={isLoading}
           >
             Save and Compile
           </Button>
@@ -177,7 +175,7 @@ const ProjectForm = ({ onComplete, required = false }) => {
             type="default"
             onClick={handleSaveAndNext}
             block
-            disabled={isSubmitting}
+            disabled={isLoading}
           >
             Save and Next
           </Button>
