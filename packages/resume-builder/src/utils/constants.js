@@ -142,52 +142,52 @@ export const RESUME_PDF_LINKS = {
   [RESUME_PDF_LINK_KEYS.DSML_FRESHER]: {
     preview: `${RESUME_PREVIEW_BASE_URL}/DSML/fresher/preview/preview-after.png`,
     pdfLink:
-      'https://drive.google.com/file/d/1lfjG9TkvhP6tja9reMmsiYYRndlkCJD7/view',
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/678/original/Fresher_good_resume_%281%29.pdf?1748329562',
   },
   [RESUME_PDF_LINK_KEYS.FRESHER]: {
     preview: `${RESUME_PREVIEW_BASE_URL}/fresher/preview/preview-after.png`,
     pdfLink:
-      'https://drive.google.com/file/d/1lfjG9TkvhP6tja9reMmsiYYRndlkCJD7/view',
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/678/original/Fresher_good_resume_%281%29.pdf?1748329562',
   },
   [RESUME_PDF_LINK_KEYS.JUNIOR_BACKEND]: {
     preview: `${RESUME_PREVIEW_BASE_URL}/junior-back-end-engineer/preview/preview-after.png`,
     pdfLink:
-      'https://drive.google.com/file/d/1gLFB1Q39J8lta99vE6E8DxE4rR8m4e3U/view',
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/679/original/Junior_backend_developer_good_resume.pdf?1748329607',
   },
   [RESUME_PDF_LINK_KEYS.JUNIOR_FRONTEND]: {
     preview: `${RESUME_PREVIEW_BASE_URL}/junior-front-end-engineer/preview/preview-after.png`,
     pdfLink:
-      'https://drive.google.com/file/d/1_1CoX4N76Urh6ykipNeR07wC1SL31MPP/view',
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/680/original/Junior_frontend_developer_good_resume.pdf?1748329639',
   },
   [RESUME_PDF_LINK_KEYS.SENIOR_BACKEND]: {
     preview: `${RESUME_PREVIEW_BASE_URL}/senior-back-end-engineer/preview/preview-after.png`,
     pdfLink:
-      'https://drive.google.com/file/d/14uGj3odWbuvO7W7SOWj-3C-x2JOTizF3/view',
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/683/original/Senior_backend_developer_good_resume.pdf?1748329744',
   },
   [RESUME_PDF_LINK_KEYS.NON_TECH]: {
     preview: `${RESUME_PREVIEW_BASE_URL}/non-tech/preview/preview-after.png`,
     pdfLink:
-      'https://drive.google.com/file/d/10_-rEzjEh3u4sogUZZfuduL5yYsBWby6/view',
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/681/original/Non_Tech_good_resume.pdf?1748329693',
   },
   [RESUME_PDF_LINK_KEYS.ENGG_MANAGER]: {
     preview: `${RESUME_PREVIEW_BASE_URL}/engg-manager/preview/preview-after.png`,
     pdfLink:
-      'https://drive.google.com/file/d/1arcCU7GOqqjXaFS6JHsTT7_Ss2Gklfez/view',
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/677/original/Engineering_Manager_Good_Resume_1.pdf?1748329511',
   },
   [RESUME_PDF_LINK_KEYS.NON_TECH_BACKGROUND]: {
     preview: `${RESUME_PREVIEW_BASE_URL}/DSML/non-tech-background/preview/preview-after.png`,
     pdfLink:
-      'https://drive.google.com/file/d/1K-HyDftO9sXsIfOZVzJ2LTPTrpL1vu0R/view',
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/684/original/Non_Tech_good_resume_%281%29.pdf?1748329780',
   },
   [RESUME_PDF_LINK_KEYS.DATA_ANALYST]: {
     preview: `${RESUME_PREVIEW_BASE_URL}/DSML/data-analyst/preview/preview-after.png`,
     pdfLink:
-      'https://drive.google.com/file/d/1lQXurdy_S5hBAWhygUg7-sL_TsB7PRHy/view',
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/675/original/Data_analyst_good_resume.pdf?1748329370',
   },
   [RESUME_PDF_LINK_KEYS.DATA_SCIENTIST]: {
     preview: `${RESUME_PREVIEW_BASE_URL}/DSML/data-scientist/preview/preview-after.png`,
     pdfLink:
-      'https://drive.google.com/file/d/1cSPlK-xgYhx358mfoKiMzCsPjelObgLN/view',
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/676/original/Data_scientist_good_resume.pdf?1748329448',
   },
 };
 
@@ -412,7 +412,7 @@ Include complex / elaborate Projects done outside work if your tech work experie
   },
   engineeringLeadership: {
     imageLink:
-      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/126/276/original/Engineering_Leadership_Resume.png?1747392633',
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/685/original/Engineering_Leadership.png?1748329958',
     recommendation: `Work Experience needs to be the major focus of your resume. 
 
 Include work experiences and promotions from most recent to oldest. 

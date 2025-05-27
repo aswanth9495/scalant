@@ -56,7 +56,7 @@ const ResumeProfileCard = ({ resumePersonaData }) => {
             </Text>
           </Flex>
         </Flex>
-        <Button onClick={handleEditProfile}>Edit Profile</Button>
+        <Button onClick={handleEditProfile}>Edit Preferences</Button>
       </Flex>
     </Card>
   );

@@ -174,6 +174,7 @@ const PreferenceSettings = () => {
           rules={[
             { required: true, message: 'Please select preferred location!' },
           ]}
+          tooltip="Flexibility in your job locations will enable you to be eligible for more opportunities."
         >
           <Select
             mode="multiple"
