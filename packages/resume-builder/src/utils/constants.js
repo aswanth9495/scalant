@@ -78,9 +78,6 @@ export const STEPS_ORDER = [
   RESUME_BUILDER_STEPS.RESUME_STEPS,
 ];
 
-const RESUME_PREVIEW_BASE_URL =
-  'https://content.interviewbit.com/Resume+Repo+resumes';
-
 export const JOB_ROLES = {
   fresher: 'Fresher',
   nonTech: 'Non-Tech',
@@ -140,52 +137,52 @@ export const RESUME_PDF_LINK_KEYS = {
 
 export const RESUME_PDF_LINKS = {
   [RESUME_PDF_LINK_KEYS.DSML_FRESHER]: {
-    preview: `${RESUME_PREVIEW_BASE_URL}/DSML/fresher/preview/preview-after.png`,
+    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/793/original/Fresher_good_resume_%281%29_page-0001.jpg?1748353701`,
     pdfLink:
       'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/678/original/Fresher_good_resume_%281%29.pdf?1748329562',
   },
   [RESUME_PDF_LINK_KEYS.FRESHER]: {
-    preview: `${RESUME_PREVIEW_BASE_URL}/fresher/preview/preview-after.png`,
+    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/793/original/Fresher_good_resume_%281%29_page-0001.jpg?1748353701`,
     pdfLink:
       'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/678/original/Fresher_good_resume_%281%29.pdf?1748329562',
   },
   [RESUME_PDF_LINK_KEYS.JUNIOR_BACKEND]: {
-    preview: `${RESUME_PREVIEW_BASE_URL}/junior-back-end-engineer/preview/preview-after.png`,
+    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/794/original/Junior_backend_developer_good_resume_page-0001.jpg?1748353769`,
     pdfLink:
       'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/679/original/Junior_backend_developer_good_resume.pdf?1748329607',
   },
   [RESUME_PDF_LINK_KEYS.JUNIOR_FRONTEND]: {
-    preview: `${RESUME_PREVIEW_BASE_URL}/junior-front-end-engineer/preview/preview-after.png`,
+    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/795/original/Junior_frontend_developer_good_resume_page-0001.jpg?1748353816`,
     pdfLink:
       'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/680/original/Junior_frontend_developer_good_resume.pdf?1748329639',
   },
   [RESUME_PDF_LINK_KEYS.SENIOR_BACKEND]: {
-    preview: `${RESUME_PREVIEW_BASE_URL}/senior-back-end-engineer/preview/preview-after.png`,
+    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/796/original/Senior_Backend_Developer.jpg?1748353857`,
     pdfLink:
       'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/683/original/Senior_backend_developer_good_resume.pdf?1748329744',
   },
   [RESUME_PDF_LINK_KEYS.NON_TECH]: {
-    preview: `${RESUME_PREVIEW_BASE_URL}/non-tech/preview/preview-after.png`,
+    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/797/original/Non_Tech_good_resume_page-0001.jpg?1748353908`,
     pdfLink:
       'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/681/original/Non_Tech_good_resume.pdf?1748329693',
   },
   [RESUME_PDF_LINK_KEYS.ENGG_MANAGER]: {
-    preview: `${RESUME_PREVIEW_BASE_URL}/engg-manager/preview/preview-after.png`,
+    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/798/original/Engineering_Manager_Good_Resume_1_page-0001.jpg?1748353948`,
     pdfLink:
       'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/677/original/Engineering_Manager_Good_Resume_1.pdf?1748329511',
   },
   [RESUME_PDF_LINK_KEYS.NON_TECH_BACKGROUND]: {
-    preview: `${RESUME_PREVIEW_BASE_URL}/DSML/non-tech-background/preview/preview-after.png`,
+    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/799/original/Non_Tech_good_resume_%281%29.jpg?1748353990`,
     pdfLink:
       'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/684/original/Non_Tech_good_resume_%281%29.pdf?1748329780',
   },
   [RESUME_PDF_LINK_KEYS.DATA_ANALYST]: {
-    preview: `${RESUME_PREVIEW_BASE_URL}/DSML/data-analyst/preview/preview-after.png`,
+    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/803/original/Data_Analyst_good_resume.jpg?1748354029`,
     pdfLink:
       'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/675/original/Data_analyst_good_resume.pdf?1748329370',
   },
   [RESUME_PDF_LINK_KEYS.DATA_SCIENTIST]: {
-    preview: `${RESUME_PREVIEW_BASE_URL}/DSML/data-scientist/preview/preview-after.png`,
+    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/804/original/Data_scientist_good_resume_page-0001.jpg?1748354071`,
     pdfLink:
       'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/676/original/Data_scientist_good_resume.pdf?1748329448',
   },
