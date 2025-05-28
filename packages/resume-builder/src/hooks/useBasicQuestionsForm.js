@@ -21,7 +21,6 @@ export const useBasicQuestionsForm = (basicQuestionsData) => {
   const isFormInitialized = useSelector(
     (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
   );
-  // console.log('basicQuestionsData', basicQuestionsData);
   const initialValues = useMemo(
     () =>
       basicQuestionsData
@@ -38,7 +37,7 @@ export const useBasicQuestionsForm = (basicQuestionsData) => {
               ),
               monthsExperienceInTech: basicQuestionsData?.experience % 12,
             },
-            currentJobRole: '',
+            currentJobRole: basicQuestionsData?.job_title,
           }
         : initialFormData,
     [basicQuestionsData]
