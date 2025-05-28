@@ -175,7 +175,7 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
 
   return (
     <Flex vertical gap={16}>
-      <AiSuggestionBanner />
+      {/* <AiSuggestionBanner /> */}
       <Space direction="vertical" style={{ width: '100%' }}>
         <Flex vertical gap={16}>
           {(formData?.workExperienceItems || []).map((item) => (
