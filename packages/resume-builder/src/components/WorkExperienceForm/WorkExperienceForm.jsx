@@ -109,7 +109,6 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
 
   const createWorkExperiencePayload = (workExperienceItems) => {
     return workExperienceItems.map((item) => ({
-      id: item.id,
       user_id: resumeData?.user_id,
       company: item.formData.company,
       position: item.formData.position,

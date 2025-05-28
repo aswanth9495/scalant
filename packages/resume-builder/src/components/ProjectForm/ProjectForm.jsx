@@ -98,7 +98,6 @@ const ProjectForm = ({ onComplete, required = false }) => {
 
   const createProjectsPayload = (projectItems) => {
     return projectItems.map((item) => ({
-      id: item.id,
       title: item.formData.title,
       description: item.formData.description,
       project_link: item.formData.project_link,

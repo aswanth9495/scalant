@@ -127,7 +127,6 @@ const EducationForm = ({ onComplete, required = false }) => {
 
   const createEducationPayload = (educationItems) => {
     return educationItems.map((item) => ({
-      id: item.id,
       university: item.formData.university,
       degree: item.formData.degree,
       field: item.formData.field,
