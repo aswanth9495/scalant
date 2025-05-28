@@ -18,7 +18,7 @@ import DeleteConfirmationModal from '../DeleteConfirmationModal';
 
 const { Text } = Typography;
 
-const WorkExperienceFormItem = ({ item, formId, required = false }) => {
+const WorkExperienceFormItem = ({ item, formId, required = false, index }) => {
   const dispatch = useDispatch();
   const formData = useSelector(
     (state) => state.scalantResumeBuilder.formStore.forms[formId]
@@ -121,7 +121,7 @@ const WorkExperienceFormItem = ({ item, formId, required = false }) => {
     <Card key={item.id}>
       <Flex gap={16} justify="space-between">
         <Flex gap={4}>
-          <Text>Work Experience {item.id}</Text>
+          <Text>Work Experience {index + 1}</Text>
           {(formData?.workExperienceItems || []).length > 1 && (
             <DeleteOutlined onClick={handleDelete} style={{ color: 'red' }} />
           )}

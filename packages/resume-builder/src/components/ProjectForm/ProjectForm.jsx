@@ -145,8 +145,9 @@ const ProjectForm = ({ onComplete, required = false }) => {
       {/* <AiSuggestionBanner /> */}
       <Space direction="vertical" style={{ width: '100%' }}>
         <Flex vertical gap={16}>
-          {(formData?.projectItems || []).map((item) => (
+          {(formData?.projectItems || []).map((item, index) => (
             <ProjectFormItem
+              index={index}
               key={item.id}
               item={item}
               formId={FORM_ID}

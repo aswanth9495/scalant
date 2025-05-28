@@ -181,8 +181,9 @@ const EducationForm = ({ onComplete, required = false }) => {
     <Flex vertical gap={16}>
       <Space direction="vertical" style={{ width: '100%' }}>
         <Flex vertical gap={16}>
-          {(formData?.educationItems || []).map((item) => (
+          {(formData?.educationItems || []).map((item, index) => (
             <EducationFormItem
+              index={index}
               key={item.id}
               item={item}
               formId={FORM_ID}

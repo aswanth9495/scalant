@@ -178,8 +178,9 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
       {/* <AiSuggestionBanner /> */}
       <Space direction="vertical" style={{ width: '100%' }}>
         <Flex vertical gap={16}>
-          {(formData?.workExperienceItems || []).map((item) => (
+          {(formData?.workExperienceItems || []).map((item, index) => (
             <WorkExperienceFormItem
+              index={index}
               key={item.id}
               item={item}
               formId={FORM_ID}

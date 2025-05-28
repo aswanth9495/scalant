@@ -11,7 +11,7 @@ const { Text } = Typography;
 const urlPattern =
   /^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)$/;
 
-const ProjectFormItem = ({ item, formId, required = false }) => {
+const ProjectFormItem = ({ item, formId, required = false, index }) => {
   const dispatch = useDispatch();
   const formData = useSelector(
     (state) => state.scalantResumeBuilder.formStore.forms[formId]
@@ -94,7 +94,7 @@ const ProjectFormItem = ({ item, formId, required = false }) => {
     <Card key={item.id}>
       <Flex gap={16} justify="space-between">
         <Flex gap={4}>
-          <Text>Project {item.id}</Text>
+          <Text>Project {index + 1}</Text>
           {(formData?.projectItems || []).length > 1 && (
             <DeleteOutlined onClick={handleDelete} />
           )}

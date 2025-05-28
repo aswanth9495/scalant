@@ -20,7 +20,7 @@ import DeleteConfirmationModal from '../DeleteConfirmationModal';
 
 const { Text } = Typography;
 
-const EducationFormItem = ({ item, formId, required = false }) => {
+const EducationFormItem = ({ item, formId, required = false, index }) => {
   const dispatch = useDispatch();
   const formData = useSelector(
     (state) => state.scalantResumeBuilder.formStore.forms[formId]
@@ -135,7 +135,7 @@ const EducationFormItem = ({ item, formId, required = false }) => {
     <Card key={item.id}>
       <Flex gap={16} justify="space-between">
         <Flex gap={4}>
-          <Text strong>Education {item.id}</Text>
+          <Text strong>Education {index + 1}</Text>
           {(formData?.educationItems || []).length > 1 && (
             <DeleteOutlined onClick={handleDelete} />
           )}
