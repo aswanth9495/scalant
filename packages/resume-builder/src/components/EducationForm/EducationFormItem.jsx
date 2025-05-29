@@ -31,7 +31,7 @@ const EducationFormItem = ({ item, formId, required = false, index }) => {
   const handleValuesChange = (changedValues, allValues) => {
     const currentItems = formData?.educationItems || [];
     const updatedItems = currentItems.map((educationItem) =>
-      educationItem.id === item.id
+      educationItem.index === index
         ? {
             ...educationItem,
             formData: allValues,
@@ -55,7 +55,7 @@ const EducationFormItem = ({ item, formId, required = false, index }) => {
   const handleExpand = () => {
     const currentItems = formData?.educationItems || [];
     const updatedItems = currentItems.map((educationItem) =>
-      educationItem.id === item.id
+      educationItem.index === index
         ? {
             ...educationItem,
             expanded: !educationItem.expanded,
@@ -80,7 +80,7 @@ const EducationFormItem = ({ item, formId, required = false, index }) => {
   const handleDeleteModalOk = () => {
     const currentItems = formData?.educationItems || [];
     const updatedItems = currentItems.filter(
-      (educationItem) => educationItem.id !== item.id
+      (educationItem) => educationItem.index !== index
     );
 
     dispatch(
@@ -111,7 +111,7 @@ const EducationFormItem = ({ item, formId, required = false, index }) => {
 
   if (!item.expanded) {
     return (
-      <Card key={item.id}>
+      <Card key={index}>
         <Flex justify="space-between" align="center">
           <Flex vertical gap={4}>
             <Text strong>
@@ -132,7 +132,7 @@ const EducationFormItem = ({ item, formId, required = false, index }) => {
   }
 
   return (
-    <Card key={item.id}>
+    <Card key={index}>
       <Flex gap={16} justify="space-between">
         <Flex gap={4}>
           <Text strong>Education {index + 1}</Text>

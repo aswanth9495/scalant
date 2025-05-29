@@ -13,8 +13,8 @@ const FORM_ID = 'educationForm';
 const initialFormData = {
   educationItems: [
     {
-      id: 1,
       completed: false,
+      index: 0,
       expanded: true,
       formData: {
         university: '',
@@ -45,12 +45,13 @@ const EducationForm = ({ onComplete, required = false }) => {
   );
   const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
-  const initialValues = useMemo(
-    () =>
-      resumeData?.education
+  const initialValues = useMemo(() => {
+    let value =
+      resumeData?.education && resumeData?.education.length > 0
         ? {
             educationItems: resumeData.education.map((item, index) => ({
-              id: index,
+              id: item.id,
+              index: index,
               completed: true,
               expanded: false,
               formData: {
@@ -65,24 +66,25 @@ const EducationForm = ({ onComplete, required = false }) => {
                 short_description: item.short_description,
               },
             })),
-            customEducation:
-              resumeData?.resume_custom_section &&
-              Object.keys(resumeData?.resume_custom_section).length
-                ? {
-                    id: resumeData?.resume_custom_section?.id,
-                    completed: true,
-                    expanded: false,
-                    formData: {
-                      name: resumeData?.resume_custom_section?.name,
-                      description:
-                        resumeData?.resume_custom_section?.description,
-                    },
-                  }
-                : null,
           }
-        : initialFormData,
-    [resumeData?.education, resumeData?.resume_custom_section]
-  );
+        : initialFormData;
+
+    value.customEducation =
+      resumeData?.resume_custom_section &&
+      Object.keys(resumeData?.resume_custom_section).length
+        ? {
+            id: resumeData?.resume_custom_section?.id,
+            completed: true,
+            expanded: true,
+            formData: {
+              name: resumeData?.resume_custom_section?.name,
+              description: resumeData?.resume_custom_section?.description,
+            },
+          }
+        : null;
+
+    return value;
+  }, [resumeData?.education, resumeData?.resume_custom_section]);
 
   useEffect(() => {
     if (!isFormInitialized) {
@@ -97,16 +99,16 @@ const EducationForm = ({ onComplete, required = false }) => {
 
   const handleAddEducation = () => {
     const currentItems = formData?.educationItems || [];
-    const newId = currentItems.length + 1;
+    const newIndex = currentItems.length;
 
     dispatch(
       updateFormData({
         formId: FORM_ID,
         data: {
           educationItems: [
-            ...currentItems,
+            ...currentItems.map((item) => ({ ...item, expanded: false })),
             {
-              id: newId,
+              index: newIndex,
               completed: false,
               expanded: true,
               formData: {
@@ -127,6 +129,7 @@ const EducationForm = ({ onComplete, required = false }) => {
 
   const createEducationPayload = (educationItems) => {
     return educationItems.map((item) => ({
+      ...(item.id && { id: item.id }),
       university: item.formData.university,
       degree: item.formData.degree,
       field: item.formData.field,
@@ -183,7 +186,7 @@ const EducationForm = ({ onComplete, required = false }) => {
           {(formData?.educationItems || []).map((item, index) => (
             <EducationFormItem
               index={index}
-              key={item.id}
+              key={index}
               item={item}
               formId={FORM_ID}
               required={required}

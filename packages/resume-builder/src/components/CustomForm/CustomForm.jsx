@@ -68,7 +68,7 @@ const CustomForm = ({ onComplete }) => {
     }
 
     const achievements = achievementsItems.map((item) => ({
-      id: item.id,
+      ...(item.id && { id: item.id }),
       description: item.formData.description,
     }));
 

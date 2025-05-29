@@ -5,7 +5,6 @@ import { PlusOutlined } from '@ant-design/icons';
 import WorkExperienceFormItem from './WorkExperienceFormItem';
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 import { initializeForm, updateFormData } from '../../store/formStoreSlice';
-import AiSuggestionBanner from '../AiSuggestionBanner';
 import dayjs from 'dayjs';
 
 const FORM_ID = 'workExperienceForm';
@@ -13,7 +12,7 @@ const FORM_ID = 'workExperienceForm';
 const initialFormData = {
   workExperienceItems: [
     {
-      id: 1,
+      index: 0,
       completed: false,
       expanded: true,
       formData: {
@@ -44,10 +43,11 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
 
   const initialValues = useMemo(
     () =>
-      resumeData?.experience
+      resumeData?.experience && resumeData?.experience.length > 0
         ? {
             workExperienceItems: resumeData.experience.map((item, index) => ({
-              id: index,
+              id: item.id,
+              index: index,
               completed: true,
               expanded: false,
               formData: {
@@ -78,7 +78,7 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
 
   const handleAddWorkExperience = () => {
     const currentItems = formData?.workExperienceItems || [];
-    const newId = currentItems.length + 1;
+    const newIndex = currentItems.length;
 
     // Close all already expanded items
     dispatch(
@@ -88,7 +88,7 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
           workExperienceItems: [
             ...currentItems.map((item) => ({ ...item, expanded: false })),
             {
-              id: newId,
+              index: newIndex,
               completed: false,
               expanded: true,
               formData: {
@@ -109,6 +109,7 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
 
   const createWorkExperiencePayload = (workExperienceItems) => {
     return workExperienceItems.map((item) => ({
+      ...(item.id && { id: item.id }),
       user_id: resumeData?.user_id,
       company: item.formData.company,
       position: item.formData.position,
@@ -180,7 +181,7 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
           {(formData?.workExperienceItems || []).map((item, index) => (
             <WorkExperienceFormItem
               index={index}
-              key={item.id}
+              key={index}
               item={item}
               formId={FORM_ID}
               required={required}

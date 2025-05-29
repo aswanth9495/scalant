@@ -5,7 +5,6 @@ import { initializeForm, updateFormData } from '../../store/formStoreSlice';
 import { Space, Button, Flex, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import ProjectFormItem from './ProjectFormItem';
-import AiSuggestionBanner from '../AiSuggestionBanner';
 
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 
@@ -14,7 +13,7 @@ const FORM_ID = 'projectForm';
 const initialFormData = {
   projectItems: [
     {
-      id: 1,
+      index: 0,
       completed: false,
       expanded: true,
       formData: {
@@ -42,10 +41,11 @@ const ProjectForm = ({ onComplete, required = false }) => {
 
   const initialValues = useMemo(
     () =>
-      resumeData?.projects
+      resumeData?.projects && resumeData?.projects.length > 0
         ? {
             projectItems: resumeData.projects.map((item, index) => ({
-              id: index,
+              id: item.id,
+              index: index,
               completed: true,
               expanded: false,
               formData: {
@@ -72,8 +72,7 @@ const ProjectForm = ({ onComplete, required = false }) => {
 
   const handleAddProject = () => {
     const currentItems = formData?.projectItems || [];
-    const newId = currentItems.length + 1;
-
+    const newIndex = currentItems.length;
     dispatch(
       updateFormData({
         formId: FORM_ID,
@@ -81,7 +80,7 @@ const ProjectForm = ({ onComplete, required = false }) => {
           projectItems: [
             ...currentItems.map((item) => ({ ...item, expanded: false })),
             {
-              id: newId,
+              index: newIndex,
               completed: false,
               expanded: true,
               formData: {
@@ -98,6 +97,7 @@ const ProjectForm = ({ onComplete, required = false }) => {
 
   const createProjectsPayload = (projectItems) => {
     return projectItems.map((item) => ({
+      ...(item.id && { id: item.id }),
       title: item.formData.title,
       description: item.formData.description,
       project_link: item.formData.project_link,
@@ -147,7 +147,7 @@ const ProjectForm = ({ onComplete, required = false }) => {
           {(formData?.projectItems || []).map((item, index) => (
             <ProjectFormItem
               index={index}
-              key={item.id}
+              key={index}
               item={item}
               formId={FORM_ID}
               required={required}

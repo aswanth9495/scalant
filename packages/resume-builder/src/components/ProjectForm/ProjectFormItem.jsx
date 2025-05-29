@@ -22,7 +22,7 @@ const ProjectFormItem = ({ item, formId, required = false, index }) => {
   const handleValuesChange = (changedValues, allValues) => {
     const currentItems = formData?.projectItems || [];
     const updatedItems = currentItems.map((projectItem) =>
-      projectItem.id === item.id
+      projectItem.index === index
         ? {
             ...projectItem,
             formData: allValues,
@@ -46,7 +46,7 @@ const ProjectFormItem = ({ item, formId, required = false, index }) => {
   const handleExpand = () => {
     const currentItems = formData?.projectItems || [];
     const updatedItems = currentItems.map((projectItem) =>
-      projectItem.id === item.id
+      projectItem.index === index
         ? { ...projectItem, expanded: !projectItem.expanded }
         : projectItem
     );
@@ -66,7 +66,7 @@ const ProjectFormItem = ({ item, formId, required = false, index }) => {
   const handleDeleteModalOk = () => {
     const currentItems = formData?.projectItems || [];
     const updatedItems = currentItems.filter(
-      (projectItem) => projectItem.id !== item.id
+      (projectItem) => projectItem.index !== index
     );
 
     dispatch(updateFormData({ formId, data: { projectItems: updatedItems } }));
@@ -79,7 +79,7 @@ const ProjectFormItem = ({ item, formId, required = false, index }) => {
 
   if (!item.expanded) {
     return (
-      <Card key={item.id}>
+      <Card key={index}>
         <Flex justify="space-between" align="center">
           <Text strong>
             {item.formData?.title ? item.formData?.title : '---'}
@@ -91,7 +91,7 @@ const ProjectFormItem = ({ item, formId, required = false, index }) => {
   }
 
   return (
-    <Card key={item.id}>
+    <Card key={index}>
       <Flex gap={16} justify="space-between">
         <Flex gap={4}>
           <Text>Project {index + 1}</Text>

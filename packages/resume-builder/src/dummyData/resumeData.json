@@ -48,84 +48,7 @@
     "portfolio": "hscvbskhavhjvahjvscjasvhj"
   },
   "education": [
-    {
-      "id": 180,
-      "user_id": 984868,
-      "university": "IIT Kanpur 1123",
-      "degree": "BE/B.Tech/BS",
-      "graduation_date": "2035-01-01",
-      "field": "Computer Science",
-      "created_at": "2025-04-28T11:38:09.000Z",
-      "updated_at": "2025-04-28T11:38:09.000Z",
-      "creator": null,
-      "degree_free_text": null,
-      "field_free_text": null,
-      "short_description": "<p>Hello sample description</p>",
-      "from": null,
-      "to": null,
-      "projects": null,
-      "board": null,
-      "marks": "90",
-      "marks_type": "percentage",
-      "data_source": "careers_hub",
-      "university_city": null,
-      "math_score": null,
-      "math_score_type": null,
-      "show_marks_in_resume": false,
-      "show_branch_in_resume": false
-    },
-    {
-      "id": 177,
-      "user_id": 984868,
-      "university": "Scaler 123",
-      "degree": "Specialized in Software Development & Problem Solving",
-      "graduation_date": "2020-04-11",
-      "field": null,
-      "created_at": "2025-04-21T08:17:59.000Z",
-      "updated_at": "2025-04-28T11:38:09.000Z",
-      "creator": null,
-      "degree_free_text": null,
-      "field_free_text": null,
-      "short_description": "<p></p>",
-      "from": null,
-      "to": null,
-      "projects": null,
-      "board": null,
-      "marks": "9.1",
-      "marks_type": "gpa",
-      "data_source": null,
-      "university_city": null,
-      "math_score": null,
-      "math_score_type": null,
-      "show_marks_in_resume": false,
-      "show_branch_in_resume": false
-    },
-    {
-      "id": 73,
-      "user_id": 984868,
-      "university": "AAST",
-      "degree": "BE/B.Tech/BS",
-      "graduation_date": "2020-01-01",
-      "field": "Computer Science",
-      "created_at": "2022-04-07T13:03:09.000Z",
-      "updated_at": "2025-04-28T11:38:09.000Z",
-      "creator": "candidate",
-      "degree_free_text": null,
-      "field_free_text": null,
-      "short_description": "<p></p>",
-      "from": null,
-      "to": null,
-      "projects": null,
-      "board": null,
-      "marks": "8.3",
-      "marks_type": "cgpa",
-      "data_source": null,
-      "university_city": null,
-      "math_score": null,
-      "math_score_type": null,
-      "show_marks_in_resume": false,
-      "show_branch_in_resume": false
-    }
+    
   ],
   "experience": [
     {
@@ -240,39 +163,9 @@
     }
   },
   "projects": [
-    {
-      "id": 98438,
-      "title": "Demo1",
-      "description": "<p>demo</p>",
-      "workplace_type": null,
-      "workplace_id": null,
-      "user_id": 674153,
-      "created_at": "2025-04-30T07:01:47.000Z",
-      "updated_at": "2025-04-30T07:01:47.000Z",
-      "project_link": "https://www.demo.com",
-      "data_source": "careers_hub"
-    },
-    {
-      "id": 98439,
-      "title": "Demo2",
-      "description": "<p>demo</p>",
-      "workplace_type": null,
-      "workplace_id": null,
-      "user_id": 674153,
-      "created_at": "2025-04-30T07:01:47.000Z",
-      "updated_at": "2025-04-30T07:01:47.000Z",
-      "project_link": "https://www.demo.com",
-      "data_source": "careers_hub"
-    }
   ],
   "achievements": [
-    {
-      "id": 1,
-      "description": "<p></p>",
-      "user_id": 984868,
-      "created_at": "2025-04-21T11:27:09.000Z",
-      "updated_at": "2025-04-21T11:27:09.000Z"
-    }
+    
   ],
   "resume_custom_section": {
     "id": 1,

@@ -31,7 +31,7 @@ const WorkExperienceFormItem = ({ item, formId, required = false, index }) => {
 
     // If all required fields are filled mark completed
     const updatedItems = currentItems.map((workExperienceItem) =>
-      workExperienceItem.id === item.id
+      workExperienceItem.index === index
         ? {
             ...workExperienceItem,
             formData: allValues,
@@ -55,7 +55,7 @@ const WorkExperienceFormItem = ({ item, formId, required = false, index }) => {
   const handleExpand = () => {
     const currentItems = formData?.workExperienceItems || [];
     const updatedItems = currentItems.map((workExperienceItem) =>
-      workExperienceItem.id === item.id
+      workExperienceItem.index === index
         ? { ...workExperienceItem, expanded: !workExperienceItem.expanded }
         : workExperienceItem
     );
@@ -75,7 +75,7 @@ const WorkExperienceFormItem = ({ item, formId, required = false, index }) => {
   const handleDeleteModalOk = () => {
     const currentItems = formData?.workExperienceItems || [];
     const updatedItems = currentItems.filter(
-      (workExperienceItem) => workExperienceItem.id !== item.id
+      (workExperienceItem) => workExperienceItem.index !== index
     );
 
     dispatch(
@@ -93,7 +93,7 @@ const WorkExperienceFormItem = ({ item, formId, required = false, index }) => {
 
   if (!item.expanded) {
     return (
-      <Card key={item.id}>
+      <Card key={index}>
         <Flex justify="space-between" align="center">
           <Flex vertical gap={4}>
             <Text strong>{item.formData?.company}</Text>
@@ -118,7 +118,7 @@ const WorkExperienceFormItem = ({ item, formId, required = false, index }) => {
   }
 
   return (
-    <Card key={item.id}>
+    <Card key={index}>
       <Flex gap={16} justify="space-between">
         <Flex gap={4}>
           <Text>Work Experience {index + 1}</Text>
