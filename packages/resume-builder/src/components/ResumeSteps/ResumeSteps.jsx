@@ -71,6 +71,9 @@ const ResumeTimeline = () => {
 
   const handleStepClick = (key) => {
     setExpandedStep((prev) => (prev === key ? null : key));
+    if (incompleteForms.includes(key)) {
+      dispatch(setCurrentIncompleteForm(key));
+    }
   };
 
   const handleFormCompletion = useCallback(
