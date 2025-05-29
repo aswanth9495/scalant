@@ -79,12 +79,12 @@ const ProjectFormItem = ({ item, formId, required = false, index }) => {
 
   if (!item.expanded) {
     return (
-      <Card key={index}>
+      <Card key={index} onClick={handleExpand}>
         <Flex justify="space-between" align="center">
           <Text strong>
             {item.formData?.title ? item.formData?.title : '---'}
           </Text>
-          <DownOutlined onClick={handleExpand} />
+          <DownOutlined />
         </Flex>
       </Card>
     );

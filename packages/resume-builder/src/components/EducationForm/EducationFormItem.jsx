@@ -111,7 +111,7 @@ const EducationFormItem = ({ item, formId, required = false, index }) => {
 
   if (!item.expanded) {
     return (
-      <Card key={index}>
+      <Card key={index} onClick={handleExpand}>
         <Flex justify="space-between" align="center">
           <Flex vertical gap={4}>
             <Text strong>
@@ -125,7 +125,7 @@ const EducationFormItem = ({ item, formId, required = false, index }) => {
                 : '---'}
             </Text>
           </Flex>
-          <DownOutlined onClick={handleExpand} />
+          <DownOutlined />
         </Flex>
       </Card>
     );
