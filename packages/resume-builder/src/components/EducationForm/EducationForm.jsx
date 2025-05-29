@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Space, Button, Flex, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import EducationFormItem from './EducationFormItem';
-
+import CustomEducationFormItem from './CustomEducationFormItem';
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 import { initializeForm, updateFormData } from '../../store/formStoreSlice';
 import dayjs from 'dayjs';
@@ -24,9 +24,12 @@ const initialFormData = {
         marks_type: '',
         graduation_date: '',
         short_description: '',
+        custom_section_name: null,
+        custom_section_description: null,
       },
     },
   ],
+  customEducation: null,
 };
 
 const EducationForm = ({ onComplete, required = false }) => {
@@ -40,7 +43,7 @@ const EducationForm = ({ onComplete, required = false }) => {
   const isFormInitialized = useSelector(
     (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
   );
-  const [updateResumeDetails] = useUpdateResumeDetailsMutation();
+  const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
   const initialValues = useMemo(
     () =>
@@ -62,9 +65,23 @@ const EducationForm = ({ onComplete, required = false }) => {
                 short_description: item.short_description,
               },
             })),
+            customEducation:
+              resumeData?.resume_custom_section &&
+              Object.keys(resumeData?.resume_custom_section).length
+                ? {
+                    id: resumeData?.resume_custom_section?.id,
+                    completed: true,
+                    expanded: false,
+                    formData: {
+                      name: resumeData?.resume_custom_section?.name,
+                      description:
+                        resumeData?.resume_custom_section?.description,
+                    },
+                  }
+                : null,
           }
         : initialFormData,
-    [resumeData?.education]
+    [resumeData?.education, resumeData?.resume_custom_section]
   );
 
   useEffect(() => {
@@ -123,8 +140,9 @@ const EducationForm = ({ onComplete, required = false }) => {
     }));
   };
 
-  const handleMarkAsCompleted = async () => {
+  const handleFinish = async () => {
     const educationItems = formData?.educationItems || [];
+    const customEducation = formData?.customEducation;
     const hasUncompletedItems = educationItems.some((item) => !item.completed);
 
     if (hasUncompletedItems) {
@@ -141,8 +159,8 @@ const EducationForm = ({ onComplete, required = false }) => {
         form_stage: 'education_details_form',
         isPopulated: true,
         educations: educationPayload,
+        resume_custom_section: customEducation,
       };
-      onComplete?.();
 
       await updateResumeDetails({
         resumeId: resumeData?.resume_details?.id,
@@ -152,6 +170,11 @@ const EducationForm = ({ onComplete, required = false }) => {
     } catch (error) {
       message.error(`Failed to update education details: ${error.message}`);
     }
+  };
+
+  const handleSaveAndNext = () => {
+    handleFinish();
+    onComplete?.();
   };
 
   return (
@@ -166,6 +189,10 @@ const EducationForm = ({ onComplete, required = false }) => {
               required={required}
             />
           ))}
+
+          {formData?.customEducation && (
+            <CustomEducationFormItem formId={FORM_ID} />
+          )}
         </Flex>
         <Button
           type="dashed"
@@ -178,10 +205,20 @@ const EducationForm = ({ onComplete, required = false }) => {
             : 'Add another education'}
         </Button>
         <Flex gap={16}>
-          <Button type="primary" block onClick={handleMarkAsCompleted}>
+          <Button
+            type="primary"
+            block
+            onClick={handleFinish}
+            disabled={isLoading}
+          >
             Save and Compile
           </Button>
-          <Button type="default" onClick={handleMarkAsCompleted} block>
+          <Button
+            type="default"
+            onClick={handleSaveAndNext}
+            block
+            disabled={isLoading}
+          >
             Save and Next
           </Button>
         </Flex>

@@ -5,6 +5,7 @@ import { initializeForm, updateFormData } from '../../store/formStoreSlice';
 import { Space, Button, Flex, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import ProjectFormItem from './ProjectFormItem';
+import AiSuggestionBanner from '../AiSuggestionBanner';
 
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 
@@ -37,7 +38,7 @@ const ProjectForm = ({ onComplete, required = false }) => {
   const isFormInitialized = useSelector(
     (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
   );
-  const [updateResumeDetails] = useUpdateResumeDetailsMutation();
+  const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
   const initialValues = useMemo(
     () =>
@@ -105,7 +106,7 @@ const ProjectForm = ({ onComplete, required = false }) => {
     }));
   };
 
-  const handleMarkAsCompleted = async () => {
+  const handleFinish = async () => {
     const projectItems = formData?.projectItems || [];
     const hasUncompletedItems = projectItems.some((item) => !item.completed);
 
@@ -129,14 +130,19 @@ const ProjectForm = ({ onComplete, required = false }) => {
         payload,
       }).unwrap();
       message.success('Projects updated successfully');
-      onComplete?.();
     } catch (error) {
       message.error(`Failed to update projects: ${error.message}`);
     }
   };
 
+  const handleSaveAndNext = () => {
+    handleFinish();
+    onComplete?.();
+  };
+
   return (
     <Flex vertical gap={16}>
+      <AiSuggestionBanner />
       <Space direction="vertical" style={{ width: '100%' }}>
         <Flex vertical gap={16}>
           {(formData?.projectItems || []).map((item) => (
@@ -157,10 +163,20 @@ const ProjectForm = ({ onComplete, required = false }) => {
           Add Project
         </Button>
         <Flex gap={16}>
-          <Button type="primary" block onClick={handleMarkAsCompleted}>
+          <Button
+            type="primary"
+            block
+            onClick={handleFinish}
+            disabled={isLoading}
+          >
             Save and Compile
           </Button>
-          <Button type="default" onClick={handleMarkAsCompleted} block>
+          <Button
+            type="default"
+            onClick={handleSaveAndNext}
+            block
+            disabled={isLoading}
+          >
             Save and Next
           </Button>
         </Flex>

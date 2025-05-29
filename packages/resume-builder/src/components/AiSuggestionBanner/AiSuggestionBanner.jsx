@@ -9,11 +9,11 @@ const AiSuggestionBanner = () => {
   return (
     <Flex justify="space-between" align="center" className={styles.container}>
       <Text className={styles.title}>
-        <span className={styles.bold}>Let AI do the heavy lifting</span> —
-        easily turn your work into powerful resume points!
+        <span className={styles.bold}>Have a conversation with companion </span>
+        to get pointers on how you write your work experience or projects.
       </Text>
       <Button className={styles.button}>
-        Write with
+        Discuss with
         <span className={styles.bold}>AI</span>
       </Button>
     </Flex>

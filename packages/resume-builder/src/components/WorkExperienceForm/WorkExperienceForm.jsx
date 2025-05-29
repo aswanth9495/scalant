@@ -5,6 +5,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import WorkExperienceFormItem from './WorkExperienceFormItem';
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 import { initializeForm, updateFormData } from '../../store/formStoreSlice';
+import AiSuggestionBanner from '../AiSuggestionBanner';
 import dayjs from 'dayjs';
 
 const FORM_ID = 'workExperienceForm';
@@ -39,7 +40,7 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
   const isFormInitialized = useSelector(
     (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
   );
-  const [updateResumeDetails] = useUpdateResumeDetailsMutation();
+  const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
   const initialValues = useMemo(
     () =>
@@ -134,7 +135,7 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
     }));
   };
 
-  const handleMarkAsCompleted = async () => {
+  const handleFinish = async () => {
     const workExperienceItems = formData?.workExperienceItems || [];
     const hasUncompletedItems = workExperienceItems.some(
       (item) => !item.completed
@@ -156,7 +157,6 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
         isPopulated: true,
         previous_experiences: workExperiencePayload,
       };
-      onComplete?.();
 
       await updateResumeDetails({
         resumeId: resumeData?.resume_details?.id,
@@ -168,8 +168,14 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
     }
   };
 
+  const handleSaveAndNext = () => {
+    handleFinish();
+    onComplete?.();
+  };
+
   return (
     <Flex vertical gap={16}>
+      <AiSuggestionBanner />
       <Space direction="vertical" style={{ width: '100%' }}>
         <Flex vertical gap={16}>
           {(formData?.workExperienceItems || []).map((item) => (
@@ -190,10 +196,20 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
           Add another experience
         </Button>
         <Flex gap={16}>
-          <Button type="primary" block onClick={handleMarkAsCompleted}>
+          <Button
+            type="primary"
+            block
+            onClick={handleFinish}
+            disabled={isLoading}
+          >
             Save and Compile
           </Button>
-          <Button type="default" onClick={handleMarkAsCompleted} block>
+          <Button
+            type="default"
+            onClick={handleSaveAndNext}
+            block
+            disabled={isLoading}
+          >
             Save and Next
           </Button>
         </Flex>
