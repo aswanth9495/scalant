@@ -144,6 +144,11 @@ const SkillsAndToolkit = ({ onComplete }) => {
     }
   };
 
+  const handleSaveAndCompile = () => {
+    handleFinish();
+    onComplete?.(true);
+  };
+
   const handleSaveAndNext = () => {
     handleFinish();
     onComplete?.();
@@ -176,7 +181,7 @@ const SkillsAndToolkit = ({ onComplete }) => {
         <Button
           type="primary"
           block
-          onClick={handleFinish}
+          onClick={handleSaveAndCompile}
           disabled={isLoading}
         >
           Save and Compile

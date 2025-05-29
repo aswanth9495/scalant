@@ -78,7 +78,6 @@ const CustomForm = ({ onComplete }) => {
         isPopulated: true,
         achievements: achievements,
       };
-      onComplete?.();
 
       await updateResumeDetails({
         resumeId: resumeData?.resume_details?.id,
@@ -94,6 +93,11 @@ const CustomForm = ({ onComplete }) => {
   const handleSaveAndNext = () => {
     handleFinish();
     onComplete?.();
+  };
+
+  const handleSaveAndCompile = () => {
+    handleFinish();
+    onComplete?.(true);
   };
 
   return (
@@ -120,7 +124,7 @@ const CustomForm = ({ onComplete }) => {
           <Button
             type="primary"
             block
-            onClick={handleFinish}
+            onClick={handleSaveAndCompile}
             disabled={isLoading}
           >
             Save and Compile

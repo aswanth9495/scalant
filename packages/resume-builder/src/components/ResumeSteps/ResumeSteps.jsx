@@ -73,24 +73,27 @@ const ResumeTimeline = () => {
     setExpandedStep((prev) => (prev === key ? null : key));
   };
 
-  const handleFormCompletion = useCallback(() => {
-    let updatedIncompleteForms = [...incompleteForms];
-    if (expandedStep === currentIncompleteForm) {
-      updatedIncompleteForms = updatedIncompleteForms.filter(
-        (form) => form !== currentIncompleteForm
-      );
+  const handleFormCompletion = useCallback(
+    (skipNextStep = false) => {
+      let updatedIncompleteForms = [...incompleteForms];
+      if (expandedStep === currentIncompleteForm) {
+        updatedIncompleteForms = updatedIncompleteForms.filter(
+          (form) => form !== currentIncompleteForm
+        );
 
-      dispatch(setIncompleteForms(updatedIncompleteForms));
-    }
+        dispatch(setIncompleteForms(updatedIncompleteForms));
+      }
 
-    if (updatedIncompleteForms.length > 0) {
-      const nextForm = updatedIncompleteForms[0];
-      dispatch(setCurrentIncompleteForm(nextForm));
-      setExpandedStep(nextForm);
-    } else {
-      setExpandedStep(null);
-    }
-  }, [incompleteForms, currentIncompleteForm, dispatch, expandedStep]);
+      if (!skipNextStep && updatedIncompleteForms.length > 0) {
+        const nextForm = updatedIncompleteForms[0];
+        dispatch(setCurrentIncompleteForm(nextForm));
+        setExpandedStep(nextForm);
+      } else if (!skipNextStep) {
+        setExpandedStep(null);
+      }
+    },
+    [incompleteForms, currentIncompleteForm, dispatch, expandedStep]
+  );
 
   useEffect(() => {
     if (resumePersonaData) {

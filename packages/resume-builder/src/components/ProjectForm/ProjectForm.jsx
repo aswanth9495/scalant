@@ -134,6 +134,11 @@ const ProjectForm = ({ onComplete, required = false }) => {
     }
   };
 
+  const handleSaveAndCompile = () => {
+    handleFinish();
+    onComplete?.(true);
+  };
+
   const handleSaveAndNext = () => {
     handleFinish();
     onComplete?.();
@@ -166,7 +171,7 @@ const ProjectForm = ({ onComplete, required = false }) => {
           <Button
             type="primary"
             block
-            onClick={handleFinish}
+            onClick={handleSaveAndCompile}
             disabled={isLoading}
           >
             Save and Compile

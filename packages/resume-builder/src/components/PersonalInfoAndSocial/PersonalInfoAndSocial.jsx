@@ -157,6 +157,10 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
       console.error('Error updating personal details:', error);
     }
   };
+  const handleSaveAndCompile = () => {
+    handleFinish();
+    onComplete?.(true);
+  };
 
   const handleSaveAndNext = () => {
     handleFinish();
@@ -444,7 +448,7 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
             block
             loading={isLoading}
             disabled={isLoading}
-            onClick={handleFinish}
+            onClick={handleSaveAndCompile}
           >
             Save and compile
           </Button>

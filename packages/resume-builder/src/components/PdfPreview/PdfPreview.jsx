@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Flex, Button, Empty } from 'antd';
+import { Flex, Button, Empty, message } from 'antd';
 import { Document, Page, pdfjs } from 'react-pdf';
 import {
   LeftOutlined,
@@ -9,6 +9,7 @@ import {
   DownloadOutlined,
 } from '@ant-design/icons';
 import { downloadFile } from '../../utils/downloadUtils';
+import ErrorBoundary from './ErrorBoundary';
 
 import styles from './PdfPreview.module.scss';
 
@@ -61,7 +62,7 @@ const PdfPreview = ({
         setRetryCount(retryCount + 1);
       }, 1000);
     } else {
-      // eslint-disable-next-line no-undef
+      // eslint-disable-next-line no-undef, no-console
       console.error('Error while loading pdf! ', error.message);
     }
   };
@@ -77,7 +78,12 @@ const PdfPreview = ({
   const nextPage = () => changePage(1);
 
   const handleDownload = () => {
-    downloadFile(pdfLink, `resume.pdf`);
+    try {
+      downloadFile(pdfLink, `resume.pdf`);
+      message.success('Resume will be downloaded in a moment');
+    } catch {
+      message.error('Failed to download resume. Please try again.');
+    }
   };
 
   // Show error state if needed
@@ -146,21 +152,24 @@ const PdfPreview = ({
         </Button>
       </Flex>
       <Flex align="center" justify="center">
-        <Document
-          file={pdfLink}
-          className={styles.document}
-          onLoadSuccess={onDocumentLoadSuccess}
-          onLoadError={onDocumentLoadError}
-          loading={<LoadingLayout message="Loading PDF document..." />}
-          key={retryCount} // Force re-render on retry
-        >
-          <Page
-            pageNumber={pageNumber}
-            className={styles.page}
-            renderTextLayer={false}
-            renderAnnotationLayer={false}
-          />
-        </Document>
+        <ErrorBoundary className={styles.document}>
+          <Document
+            file={pdfLink}
+            className={styles.document}
+            onLoadSuccess={onDocumentLoadSuccess}
+            onLoadError={onDocumentLoadError}
+            loading={<LoadingLayout message="Loading PDF document..." />}
+            error={<LoadingLayout message="Loading PDF document..." />}
+            key={retryCount} // Force re-render on retry
+          >
+            <Page
+              pageNumber={pageNumber}
+              className={styles.page}
+              renderTextLayer={false}
+              renderAnnotationLayer={false}
+            />
+          </Document>
+        </ErrorBoundary>
       </Flex>
     </Flex>
   );

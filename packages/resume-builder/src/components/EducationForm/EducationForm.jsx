@@ -173,7 +173,10 @@ const EducationForm = ({ onComplete, required = false }) => {
       message.error(`Failed to update education details: ${error.message}`);
     }
   };
-
+  const handleSaveAndCompile = () => {
+    handleFinish();
+    onComplete?.(true);
+  };
   const handleSaveAndNext = () => {
     handleFinish();
     onComplete?.();
@@ -211,7 +214,7 @@ const EducationForm = ({ onComplete, required = false }) => {
           <Button
             type="primary"
             block
-            onClick={handleFinish}
+            onClick={handleSaveAndCompile}
             disabled={isLoading}
           >
             Save and Compile
