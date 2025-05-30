@@ -3,6 +3,7 @@ import {
   GithubOutlined,
   LinkedinOutlined,
   CodeOutlined,
+  CloseOutlined,
 } from '@ant-design/icons';
 import {
   Form,
@@ -264,6 +265,44 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
     form.setFieldsValue(updatedFormData);
   };
 
+  const handleRemoveProfile = (indexToRemove) => {
+    // Get current form values
+    const currentFormValues = form.getFieldsValue();
+
+    // Get current additionalProfiles array
+    const currentProfiles =
+      formData?.personalInfoAndSocial?.additionalProfiles || [];
+
+    // Remove the profile at the specified index
+    const updatedProfiles = currentProfiles.filter(
+      (_, idx) => idx !== indexToRemove
+    );
+
+    // Create new form data without the removed profile
+    const updatedFormData = {
+      ...formData?.personalInfoAndSocial,
+      ...currentFormValues,
+      additionalProfiles: updatedProfiles,
+    };
+
+    // Remove the profileType and profileUrl fields for the removed profile
+    delete updatedFormData[`profileType${indexToRemove}`];
+    delete updatedFormData[`profileUrl${indexToRemove}`];
+
+    // Update the form state
+    dispatch(
+      updateFormData({
+        formId: FORM_ID,
+        data: {
+          personalInfoAndSocial: updatedFormData,
+        },
+      })
+    );
+
+    // Update form values
+    form.setFieldsValue(updatedFormData);
+  };
+
   const renderAdditionalProfiles = () => {
     const profiles = formData?.personalInfoAndSocial?.additionalProfiles || [];
     const currentFormValues = form.getFieldsValue();
@@ -276,10 +315,10 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
       const availableOptions = getAvailableProfileTypes(currentFormValues, idx);
 
       return (
-        <Flex gap={16} key={idx}>
+        <Flex gap={16} key={idx} align="center">
           <Form.Item
             name={profileTypeKey}
-            style={{ width: '50%' }}
+            style={{ width: '45%' }}
             className={styles.formItem}
           >
             <Select
@@ -289,7 +328,7 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
           </Form.Item>
           <Form.Item
             name={profileUrlKey}
-            style={{ width: '50%' }}
+            style={{ width: '45%' }}
             className={styles.formItem}
             rules={[
               {
@@ -301,6 +340,12 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
           >
             <Input placeholder="Enter Profile URL" />
           </Form.Item>
+          <Button
+            type="text"
+            icon={<CloseOutlined />}
+            onClick={() => handleRemoveProfile(idx)}
+            style={{ marginTop: 4 }}
+          />
         </Flex>
       );
     });
