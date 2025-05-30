@@ -16,8 +16,6 @@ import styles from './PdfPreview.module.scss';
 // Set the worker source for PDF.js
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
-const MAX_RETRY_COUNT = 3;
-
 const MESSAGES = {
   loading: {
     initial: 'Loading your resume preview...',
@@ -50,21 +48,22 @@ const PdfPreview = ({
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [retryCount, setRetryCount] = useState(0);
+  const [isRetrying, setIsRetrying] = useState(false);
 
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);
+    setIsRetrying(false);
+    setRetryCount(0);
   };
 
   const onDocumentLoadError = (error) => {
-    if (retryCount < MAX_RETRY_COUNT) {
-      // eslint-disable-next-line no-undef
-      setTimeout(() => {
-        setRetryCount(retryCount + 1);
-      }, 1000);
-    } else {
-      // eslint-disable-next-line no-undef, no-console
-      console.error('Error while loading pdf! ', error.message);
-    }
+    setIsRetrying(true);
+    // eslint-disable-next-line no-undef
+    setTimeout(() => {
+      setRetryCount(retryCount + 1);
+    }, 1000);
+    // eslint-disable-next-line no-undef, no-console
+    console.error('Error while loading pdf! ', error.message);
   };
 
   const changePage = (offset) => {
@@ -104,7 +103,7 @@ const PdfPreview = ({
   }
 
   // Show loading state for initial load or refetching
-  if (isLoading || isFetching || !pdfLink) {
+  if (isLoading || isFetching || !pdfLink || isRetrying) {
     return (
       <LoadingLayout
         message={
