@@ -62,7 +62,7 @@ const ResumePreview = ({
       {!isLoading && !isFetching && !isError && (
         <Flex vertical>
           <FloatButton.Group shape="square" className={styles.floatButtonGroup}>
-            <Tooltip title={TOOLTIPS.AI_EVALUATOR} placement="right">
+            {/* <Tooltip title={TOOLTIPS.AI_EVALUATOR} placement="right">
               <FloatButton
                 icon={<ExportOutlined />}
                 onClick={() =>
@@ -70,8 +70,7 @@ const ResumePreview = ({
                   window.open('https://google.com', '_blank')
                 }
               />
-            </Tooltip>
-            {/* TODO: Add the functionality for font size */}
+            </Tooltip> */}
             <FontSizeDropdown onFontSizeChange={onFontSizeClick} />
             <Tooltip title={TOOLTIPS.EDIT} placement="right">
               <FloatButton onClick={onEditClick} icon={<EditOutlined />} />

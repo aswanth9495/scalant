@@ -276,8 +276,8 @@
   ],
   "resume_custom_section": {
     "id": 1,
-    "name": null,
-    "description": "<p></p>",
+    "name": "Hello",
+    "description": "<p>Hello</p>",
     "user_id": 984868,
     "created_at": "2025-04-28T11:38:10.000Z",
     "updated_at": "2025-04-28T11:38:10.000Z"

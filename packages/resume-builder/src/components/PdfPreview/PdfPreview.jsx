@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Flex, Button, Empty } from 'antd';
+import { Flex, Button, Empty, message } from 'antd';
 import { Document, Page, pdfjs } from 'react-pdf';
 import {
   LeftOutlined,
@@ -9,13 +9,12 @@ import {
   DownloadOutlined,
 } from '@ant-design/icons';
 import { downloadFile } from '../../utils/downloadUtils';
+import ErrorBoundary from './ErrorBoundary';
 
 import styles from './PdfPreview.module.scss';
 
 // Set the worker source for PDF.js
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
-
-const MAX_RETRY_COUNT = 3;
 
 const MESSAGES = {
   loading: {
@@ -49,21 +48,22 @@ const PdfPreview = ({
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [retryCount, setRetryCount] = useState(0);
+  const [isRetrying, setIsRetrying] = useState(false);
 
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);
+    setIsRetrying(false);
+    setRetryCount(0);
   };
 
   const onDocumentLoadError = (error) => {
-    if (retryCount < MAX_RETRY_COUNT) {
-      // eslint-disable-next-line no-undef
-      setTimeout(() => {
-        setRetryCount(retryCount + 1);
-      }, 1000);
-    } else {
-      // eslint-disable-next-line no-undef
-      console.error('Error while loading pdf! ', error.message);
-    }
+    setIsRetrying(true);
+    // eslint-disable-next-line no-undef
+    setTimeout(() => {
+      setRetryCount(retryCount + 1);
+    }, 1000);
+    // eslint-disable-next-line no-undef, no-console
+    console.error('Error while loading pdf! ', error.message);
   };
 
   const changePage = (offset) => {
@@ -77,7 +77,12 @@ const PdfPreview = ({
   const nextPage = () => changePage(1);
 
   const handleDownload = () => {
-    downloadFile(pdfLink, `resume.pdf`);
+    try {
+      downloadFile(pdfLink, `resume.pdf`);
+      message.success('Resume will be downloaded in a moment');
+    } catch {
+      message.error('Failed to download resume. Please try again.');
+    }
   };
 
   // Show error state if needed
@@ -98,7 +103,7 @@ const PdfPreview = ({
   }
 
   // Show loading state for initial load or refetching
-  if (isLoading || isFetching || !pdfLink) {
+  if (isLoading || isFetching || !pdfLink || isRetrying) {
     return (
       <LoadingLayout
         message={
@@ -146,21 +151,24 @@ const PdfPreview = ({
         </Button>
       </Flex>
       <Flex align="center" justify="center">
-        <Document
-          file={pdfLink}
-          className={styles.document}
-          onLoadSuccess={onDocumentLoadSuccess}
-          onLoadError={onDocumentLoadError}
-          loading={<LoadingLayout message="Loading PDF document..." />}
-          key={retryCount} // Force re-render on retry
-        >
-          <Page
-            pageNumber={pageNumber}
-            className={styles.page}
-            renderTextLayer={false}
-            renderAnnotationLayer={false}
-          />
-        </Document>
+        <ErrorBoundary className={styles.document}>
+          <Document
+            file={pdfLink}
+            className={styles.document}
+            onLoadSuccess={onDocumentLoadSuccess}
+            onLoadError={onDocumentLoadError}
+            loading={<LoadingLayout message="Loading PDF document..." />}
+            error={<LoadingLayout message="Loading PDF document..." />}
+            key={retryCount} // Force re-render on retry
+          >
+            <Page
+              pageNumber={pageNumber}
+              className={styles.page}
+              renderTextLayer={false}
+              renderAnnotationLayer={false}
+            />
+          </Document>
+        </ErrorBoundary>
       </Flex>
     </Flex>
   );

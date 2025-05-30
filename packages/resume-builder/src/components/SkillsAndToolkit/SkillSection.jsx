@@ -11,6 +11,7 @@ const SkillSection = ({
   selectedSkills,
   onSkillClick,
   onExperienceUpdate,
+  formId,
 }) => {
   return (
     <div className={styles.skillSection}>
@@ -32,6 +33,8 @@ const SkillSection = ({
                 onExperienceUpdate(skill, years, months)
               }
               experience={selectedSkill?.proficiency_period}
+              selectedSkills={selectedSkills}
+              formId={formId}
             />
           );
         })}

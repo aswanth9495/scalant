@@ -32,7 +32,7 @@ const ResumeDropdown = ({
     {
       key: 'add',
       label: hasReachedMaxResumes ? (
-        <Tooltip title="Maximum limit of 3 resumes reached">
+        <Tooltip title={`Maximum limit of ${MAX_RESUMES} resumes reached`}>
           <span>Add New Resume</span>
         </Tooltip>
       ) : (
