@@ -26,6 +26,8 @@ const MESSAGES = {
   },
 };
 
+const MAX_RETRY_COUNT = 3;
+
 const LoadingLayout = ({ message = MESSAGES.loading.initial }) => (
   <Flex
     vertical
@@ -48,22 +50,21 @@ const PdfPreview = ({
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [retryCount, setRetryCount] = useState(0);
-  const [isRetrying, setIsRetrying] = useState(false);
 
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);
-    setIsRetrying(false);
-    setRetryCount(0);
   };
 
   const onDocumentLoadError = (error) => {
-    setIsRetrying(true);
-    // eslint-disable-next-line no-undef
-    setTimeout(() => {
-      setRetryCount(retryCount + 1);
-    }, 1000);
-    // eslint-disable-next-line no-undef, no-console
-    console.error('Error while loading pdf! ', error.message);
+    if (retryCount < MAX_RETRY_COUNT) {
+      // eslint-disable-next-line no-undef
+      setTimeout(() => {
+        setRetryCount(retryCount + 1);
+      }, 1000);
+    } else {
+      // eslint-disable-next-line no-console, no-undef
+      console.error('Error while loading pdf! ', error.message);
+    }
   };
 
   const changePage = (offset) => {
@@ -103,7 +104,7 @@ const PdfPreview = ({
   }
 
   // Show loading state for initial load or refetching
-  if (isLoading || isFetching || !pdfLink || isRetrying) {
+  if (isLoading || isFetching || !pdfLink) {
     return (
       <LoadingLayout
         message={
