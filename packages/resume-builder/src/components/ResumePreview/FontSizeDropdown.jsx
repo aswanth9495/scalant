@@ -15,7 +15,6 @@ const FontSizeDropdown = ({ onFontSizeChange }) => {
     (state) => state.scalantResumeBuilder.resumeBuilder.resumeData
   );
   const selectedFontSize = resumeData?.resume_meta?.font_size;
-  console.log('DEBUG: selectedFontSize', selectedFontSize);
   const [fontSize, setFontSize] = useState(
     selectedFontSize || DEFAULT_FONT_SIZE
   );
