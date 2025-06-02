@@ -7,6 +7,7 @@ import {
   LoadingOutlined,
   FileTextTwoTone,
   DownloadOutlined,
+  ReloadOutlined,
 } from '@ant-design/icons';
 import { downloadFile } from '../../utils/downloadUtils';
 import ErrorBoundary from './ErrorBoundary';
@@ -26,7 +27,7 @@ const MESSAGES = {
   },
 };
 
-const MAX_RETRY_COUNT = 3;
+const MAX_RETRY_COUNT = 6;
 
 const LoadingLayout = ({ message = MESSAGES.loading.initial }) => (
   <Flex
@@ -37,6 +38,28 @@ const LoadingLayout = ({ message = MESSAGES.loading.initial }) => (
   >
     <LoadingOutlined className={styles.loader} />
     <span className={styles.loadingText}>{message}</span>
+  </Flex>
+);
+
+const ErrorLayout = ({ onRetry }) => (
+  <Flex
+    vertical
+    align="center"
+    justify="center"
+    className={styles.loadingContainer}
+  >
+    <Empty
+      description={MESSAGES.error.preview}
+      image={Empty.PRESENTED_IMAGE_SIMPLE}
+    />
+    <Button
+      type="primary"
+      icon={<ReloadOutlined />}
+      onClick={onRetry}
+      style={{ marginTop: '16px' }}
+    >
+      Retry Preview
+    </Button>
   </Flex>
 );
 
@@ -67,6 +90,10 @@ const PdfPreview = ({
     }
   };
 
+  const handleRetry = () => {
+    setRetryCount(0);
+  };
+
   const changePage = (offset) => {
     setPageNumber((prevPageNumber) => {
       const newPageNumber = prevPageNumber + offset;
@@ -88,19 +115,7 @@ const PdfPreview = ({
 
   // Show error state if needed
   if (isError) {
-    return (
-      <Flex
-        vertical
-        align="center"
-        justify="center"
-        className={styles.loadingContainer}
-      >
-        <Empty
-          description={MESSAGES.error.preview}
-          image={Empty.PRESENTED_IMAGE_SIMPLE}
-        />
-      </Flex>
-    );
+    return <ErrorLayout onRetry={handleRetry} />;
   }
 
   // Show loading state for initial load or refetching
@@ -159,7 +174,13 @@ const PdfPreview = ({
             onLoadSuccess={onDocumentLoadSuccess}
             onLoadError={onDocumentLoadError}
             loading={<LoadingLayout message="Loading PDF document..." />}
-            error={<LoadingLayout message="Loading PDF document..." />}
+            error={
+              retryCount >= MAX_RETRY_COUNT ? (
+                <ErrorLayout onRetry={handleRetry} />
+              ) : (
+                <LoadingLayout message="Loading PDF document..." />
+              )
+            }
             key={retryCount} // Force re-render on retry
           >
             <Page
