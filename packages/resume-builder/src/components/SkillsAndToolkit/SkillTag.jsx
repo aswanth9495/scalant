@@ -79,10 +79,24 @@ const SkillTag = ({
         Enter your experience with {skill.subtopic} (years and months):
       </Text>
       <Flex gap={4}>
-        <Form.Item name="years">
+        <Form.Item
+          name="years"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
           <InputNumber placeholder="Years" min={0} />
         </Form.Item>
-        <Form.Item name="months">
+        <Form.Item
+          name="months"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
           <InputNumber placeholder="Months" min={0} max={11} />
         </Form.Item>
         <Button type="primary" htmlType="submit">
