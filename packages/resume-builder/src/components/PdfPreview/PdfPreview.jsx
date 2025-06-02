@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Flex, Button, Empty, message } from 'antd';
 import { Document, Page, pdfjs } from 'react-pdf';
 import {
@@ -73,6 +73,10 @@ const PdfPreview = ({
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [retryCount, setRetryCount] = useState(0);
+
+  useEffect(() => {
+    setRetryCount(0);
+  }, [pdfLink]);
 
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);
