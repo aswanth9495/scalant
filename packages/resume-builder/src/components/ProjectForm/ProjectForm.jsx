@@ -7,6 +7,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import ProjectFormItem from './ProjectFormItem';
 
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
+import AiSuggestionBanner from '../AiSuggestionBanner/AiSuggestionBanner';
 
 const FORM_ID = 'projectForm';
 
@@ -146,7 +147,7 @@ const ProjectForm = ({ onComplete, required = false }) => {
 
   return (
     <Flex vertical gap={16}>
-      {/* <AiSuggestionBanner /> */}
+      <AiSuggestionBanner />
       <Space direction="vertical" style={{ width: '100%' }}>
         <Flex vertical gap={16}>
           {(formData?.projectItems || []).map((item, index) => (

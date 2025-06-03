@@ -1,11 +1,13 @@
-import React, { useEffect, useMemo } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Space, Button, Flex, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import WorkExperienceFormItem from './WorkExperienceFormItem';
+import { Button, Flex, message, Space } from 'antd';
+import dayjs from 'dayjs';
+import React, { useEffect, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 import { initializeForm, updateFormData } from '../../store/formStoreSlice';
-import dayjs from 'dayjs';
+import AiSuggestionBanner from '../AiSuggestionBanner/AiSuggestionBanner';
+import WorkExperienceFormItem from './WorkExperienceFormItem';
 
 const FORM_ID = 'workExperienceForm';
 
@@ -180,7 +182,7 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
 
   return (
     <Flex vertical gap={16}>
-      {/* <AiSuggestionBanner /> */}
+      <AiSuggestionBanner />
       <Space direction="vertical" style={{ width: '100%' }}>
         <Flex vertical gap={16}>
           {(formData?.workExperienceItems || []).map((item, index) => (

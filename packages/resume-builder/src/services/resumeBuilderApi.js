@@ -54,6 +54,12 @@ export const resumeBuilderApi = createApi({
       }),
       invalidatesTags: ['ResumeLink'],
     }),
+    getResumeReview: builder.mutation({
+      query: ({ resumeId }) => ({
+        url: `/api/v3/user-resumes/${resumeId}/request_resume_review`,
+        method: 'POST',
+      }),
+    }),
   }),
 });
 
@@ -67,6 +73,7 @@ export const {
   useUpdateResumeDetailsMutation,
   useGetResumeLinkQuery,
   useUpdateResumePreferencesMutation,
+  useGetResumeReviewMutation,
 } = resumeBuilderApi;
 
 export default resumeBuilderApi;
