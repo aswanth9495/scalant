@@ -22,6 +22,7 @@ const TOOLTIPS = {
   EDIT: 'Edit Resume',
   DELETE: 'Delete Resume',
   DELETE_DISABLED: 'Cannot delete default resume',
+  SAMPLE_RESUME: 'View Sample Resume',
 };
 
 const ResumePreview = ({
