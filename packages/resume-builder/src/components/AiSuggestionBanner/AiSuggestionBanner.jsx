@@ -10,7 +10,7 @@ import styles from './AiSuggestionBanner.module.scss';
 const MESSAGES = {
   SUCCESS: 'You will be redirected shortly...',
   ERROR: 'Failed to initiate review. Please try again.',
-  BANNER_TITLE: 'Have a conversation with companion',
+  BANNER_TITLE: 'Have a detailed conversation with companion',
   BANNER_SUBTITLE:
     'to get pointers on how you write your work experience or projects.',
   BUTTON_TEXT: 'Discuss with',
