@@ -67,7 +67,7 @@ const EducationForm = ({ onComplete, required = false }) => {
               },
             })),
           }
-        : initialFormData;
+        : { ...initialFormData };
 
     value.customEducation =
       resumeData?.resume_custom_section &&
@@ -83,7 +83,7 @@ const EducationForm = ({ onComplete, required = false }) => {
           }
         : null;
 
-    return value;
+    return { ...value };
   }, [resumeData?.education, resumeData?.resume_custom_section]);
 
   useEffect(() => {

@@ -5,11 +5,13 @@ import {
   DeleteOutlined,
   ExportOutlined,
   EditOutlined,
+  FilePdfOutlined,
 } from '@ant-design/icons';
 
 import FontSizeDropdown from './FontSizeDropdown';
 import ResumeDropdown from './ResumeDropdown';
 import { useGetResumeLinkQuery } from '../../services/resumeBuilderApi';
+import { getSampleResume } from '../../utils/sampleResumeUtils';
 import PdfPreview from '../PdfPreview';
 
 import styles from './ResumePreview.module.scss';
@@ -20,6 +22,7 @@ const TOOLTIPS = {
   EDIT: 'Edit Resume',
   DELETE: 'Delete Resume',
   DELETE_DISABLED: 'Cannot delete default resume',
+  SAMPLE_RESUME: 'View Sample Resume',
 };
 
 const ResumePreview = ({
@@ -37,10 +40,29 @@ const ResumePreview = ({
   const { data, isLoading, isFetching, isError } = useGetResumeLinkQuery({
     resumeId: resumeData?.resume_details?.id || 1,
   });
+  const resumePersonaData = useSelector(
+    (state) => state.scalantResumeBuilder.formStore.forms.basicQuestions
+  );
+  const program = useSelector(
+    (state) => state.scalantResumeBuilder.resumeBuilder.program
+  );
 
   const isDefaultResume = resumeList.find(
     (resume) => resume.id === resumeData?.resume_details?.id
   )?.default;
+
+  const getSampleResumeLink = () => {
+    if (resumePersonaData) {
+      const { pdfLink } = getSampleResume(
+        resumePersonaData.currentJobRole,
+        resumePersonaData.techExperience,
+        program
+      );
+
+      // eslint-disable-next-line no-undef
+      window.open(pdfLink, '_blank');
+    }
+  };
 
   return (
     <Flex align="flex-start" className={styles.container}>
@@ -86,6 +108,12 @@ const ResumePreview = ({
                 icon={<DeleteOutlined />}
                 disabled={isDefaultResume}
                 className={isDefaultResume ? styles.disabledButton : ''}
+              />
+            </Tooltip>
+            <Tooltip title={TOOLTIPS.SAMPLE_RESUME} placement="right">
+              <FloatButton
+                icon={<FilePdfOutlined />}
+                onClick={() => getSampleResumeLink()}
               />
             </Tooltip>
           </FloatButton.Group>

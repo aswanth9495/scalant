@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector, batch } from 'react-redux';
-import { nextStep } from '../../store/resumeBuilderSlice';
+import { nextStep, previousStep } from '../../store/resumeBuilderSlice';
 import {
   Typography,
   Flex,
@@ -163,7 +163,11 @@ const ResumeBasicQuestions = () => {
             </Form.Item>
 
             <Form.Item
-              label="Total Work Experience in Tech"
+              label={`Total Experience as ${
+                program === 'academy'
+                  ? 'Software Developer'
+                  : 'Data Analyst / Scientist'
+              }`}
               className={styles.formItem}
               required
               tooltip="Total work experience in tech only includes relevant experience in SDE or Data Science/Analytics roles.5"
@@ -229,6 +233,14 @@ const ResumeBasicQuestions = () => {
             loading={isLoading}
           >
             Save & Continue
+          </Button>
+          <Button
+            block
+            type="text"
+            onClick={() => dispatch(previousStep())}
+            className={styles.backButton}
+          >
+            Go Back
           </Button>
         </Form>
       </Flex>
