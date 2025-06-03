@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PageHeader from '../PageHeader';
 import { useDispatch, useSelector } from 'react-redux';
-import { nextStep } from '../../store/resumeBuilderSlice';
+import { nextStep, previousStep } from '../../store/resumeBuilderSlice';
 import { Timeline, Button, Typography } from 'antd';
 import { getResumeTips } from '../../utils/resumeTips';
 const { Paragraph, Text } = Typography;
@@ -61,6 +61,14 @@ const ResumeTips = () => {
         onClick={handleStartBuilding}
       >
         Start Building
+      </Button>
+      <Button
+        block
+        type="text"
+        onClick={() => dispatch(previousStep())}
+        className={styles.backButton}
+      >
+        Go Back
       </Button>
     </div>
   );
