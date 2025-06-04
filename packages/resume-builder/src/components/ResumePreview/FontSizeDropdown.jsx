@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Dropdown, Menu } from 'antd';
 import { FontSizeOutlined } from '@ant-design/icons';
 import { FloatButton } from 'antd';
 
+import { setResumeData } from '../../store/resumeBuilderSlice';
 import { useUpdateResumePreferencesMutation } from '../../services/resumeBuilderApi';
 
 const DEFAULT_FONT_SIZE = 'medium';
 
 const FontSizeDropdown = ({ onFontSizeChange }) => {
+  const dispatch = useDispatch();
   const resumeData = useSelector(
     (state) => state.scalantResumeBuilder.resumeBuilder.resumeData
   );
   const selectedFontSize = resumeData?.resume_meta?.font_size;
-
   const [fontSize, setFontSize] = useState(
     selectedFontSize || DEFAULT_FONT_SIZE
   );
@@ -22,9 +23,18 @@ const FontSizeDropdown = ({ onFontSizeChange }) => {
 
   const handleFontSizeChange = async ({ key }) => {
     setFontSize(key);
+    dispatch(
+      setResumeData({
+        ...resumeData,
+        resume_meta: {
+          ...resumeData?.resume_meta,
+          font_size: key,
+        },
+      })
+    );
     await updateResumePreferences({
-      resume_id: resumeData?.resume_details?.id,
       payload: {
+        resume_id: resumeData?.resume_details?.id,
         scaler_resume_template_font_choice: key,
       },
     });

@@ -99,7 +99,14 @@ const ResumeBuilderContent = ({
     const currentStepData = steps[currentStep];
     switch (currentStepData.component) {
       case RESUME_BUILDER_STEPS.ACKNOWLEDGEMENT.component:
-        return <IntroVideo />;
+        // return <IntroVideo />;
+        return (
+          <img
+            src={PREFERENCE_SETTINGS_IMAGE}
+            className={styles.previewImage}
+            alt="preference-settings"
+          />
+        );
       case RESUME_BUILDER_STEPS.PREFERENCE_SETTINGS.component:
         return (
           <img
@@ -141,19 +148,6 @@ const ResumeBuilderContent = ({
   return (
     <ResumeLayout onBackButtonClick={onBackButtonClick} preview={previewUi()}>
       {renderComponent()}
-      {/* Uncomment this when you want to debug
-       <Space className={styles.navigationButtons}>
-        <Button onClick={handlePrevious} disabled={currentStep === 0}>
-          Previous
-        </Button>
-        <Button
-          type="primary"
-          onClick={handleNext}
-          disabled={currentStep === steps.length - 1}
-        >
-          Next
-        </Button>
-      </Space> */}
     </ResumeLayout>
   );
 };

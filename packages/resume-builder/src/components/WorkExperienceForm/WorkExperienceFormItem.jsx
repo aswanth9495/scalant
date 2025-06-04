@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Form,
@@ -14,14 +14,16 @@ import { DownOutlined, DeleteOutlined, UpOutlined } from '@ant-design/icons';
 import { WORK_EXPERIENCE_FORM_REQUIRED_FIELDS } from '../../utils/constants';
 import { updateFormData } from '../../store/formStoreSlice';
 import RichTextEditor from '../RichTextEditor';
+import DeleteConfirmationModal from '../DeleteConfirmationModal';
 
 const { Text } = Typography;
 
-const WorkExperienceFormItem = ({ item, formId, required = false }) => {
+const WorkExperienceFormItem = ({ item, formId, required = false, index }) => {
   const dispatch = useDispatch();
   const formData = useSelector(
     (state) => state.scalantResumeBuilder.formStore.forms[formId]
   );
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [form] = Form.useForm();
 
   const handleValuesChange = (changedValues, allValues) => {
@@ -29,7 +31,7 @@ const WorkExperienceFormItem = ({ item, formId, required = false }) => {
 
     // If all required fields are filled mark completed
     const updatedItems = currentItems.map((workExperienceItem) =>
-      workExperienceItem.id === item.id
+      workExperienceItem.index === index
         ? {
             ...workExperienceItem,
             formData: allValues,
@@ -53,7 +55,7 @@ const WorkExperienceFormItem = ({ item, formId, required = false }) => {
   const handleExpand = () => {
     const currentItems = formData?.workExperienceItems || [];
     const updatedItems = currentItems.map((workExperienceItem) =>
-      workExperienceItem.id === item.id
+      workExperienceItem.index === index
         ? { ...workExperienceItem, expanded: !workExperienceItem.expanded }
         : workExperienceItem
     );
@@ -67,9 +69,13 @@ const WorkExperienceFormItem = ({ item, formId, required = false }) => {
   };
 
   const handleDelete = () => {
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDeleteModalOk = () => {
     const currentItems = formData?.workExperienceItems || [];
     const updatedItems = currentItems.filter(
-      (workExperienceItem) => workExperienceItem.id !== item.id
+      (workExperienceItem) => workExperienceItem.index !== index
     );
 
     dispatch(
@@ -78,11 +84,16 @@ const WorkExperienceFormItem = ({ item, formId, required = false }) => {
         data: { workExperienceItems: updatedItems },
       })
     );
+    setIsDeleteModalOpen(false);
+  };
+
+  const handleDeleteModalCancel = () => {
+    setIsDeleteModalOpen(false);
   };
 
   if (!item.expanded) {
     return (
-      <Card key={item.id}>
+      <Card key={index} onClick={handleExpand}>
         <Flex justify="space-between" align="center">
           <Flex vertical gap={4}>
             <Text strong>{item.formData?.company}</Text>
@@ -100,17 +111,17 @@ const WorkExperienceFormItem = ({ item, formId, required = false }) => {
                   : '---'}
             </Text>
           </Flex>
-          <DownOutlined onClick={handleExpand} />
+          <DownOutlined />
         </Flex>
       </Card>
     );
   }
 
   return (
-    <Card key={item.id}>
+    <Card key={index}>
       <Flex gap={16} justify="space-between">
         <Flex gap={4}>
-          <Text>Work Experience {item.id}</Text>
+          <Text>Work Experience {index + 1}</Text>
           {(formData?.workExperienceItems || []).length > 1 && (
             <DeleteOutlined onClick={handleDelete} style={{ color: 'red' }} />
           )}
@@ -171,6 +182,14 @@ const WorkExperienceFormItem = ({ item, formId, required = false }) => {
           />
         </Form.Item>
       </Form>
+      <DeleteConfirmationModal
+        open={isDeleteModalOpen}
+        onOk={handleDeleteModalOk}
+        onCancel={handleDeleteModalCancel}
+        title="Delete Work Experience"
+        description="Are you sure you want to delete this work experience?"
+        style={{ top: 20 }}
+      />
     </Card>
   );
 };

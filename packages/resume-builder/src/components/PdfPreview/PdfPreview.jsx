@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Flex, Button, Empty } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Flex, Button, Empty, message } from 'antd';
 import { Document, Page, pdfjs } from 'react-pdf';
 import {
   LeftOutlined,
@@ -7,15 +7,15 @@ import {
   LoadingOutlined,
   FileTextTwoTone,
   DownloadOutlined,
+  ReloadOutlined,
 } from '@ant-design/icons';
 import { downloadFile } from '../../utils/downloadUtils';
+import ErrorBoundary from './ErrorBoundary';
 
 import styles from './PdfPreview.module.scss';
 
 // Set the worker source for PDF.js
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
-
-const MAX_RETRY_COUNT = 3;
 
 const MESSAGES = {
   loading: {
@@ -27,6 +27,8 @@ const MESSAGES = {
   },
 };
 
+const MAX_RETRY_COUNT = 6;
+
 const LoadingLayout = ({ message = MESSAGES.loading.initial }) => (
   <Flex
     vertical
@@ -36,6 +38,28 @@ const LoadingLayout = ({ message = MESSAGES.loading.initial }) => (
   >
     <LoadingOutlined className={styles.loader} />
     <span className={styles.loadingText}>{message}</span>
+  </Flex>
+);
+
+const ErrorLayout = ({ onRetry }) => (
+  <Flex
+    vertical
+    align="center"
+    justify="center"
+    className={styles.loadingContainer}
+  >
+    <Empty
+      description={MESSAGES.error.preview}
+      image={Empty.PRESENTED_IMAGE_SIMPLE}
+    />
+    <Button
+      type="primary"
+      icon={<ReloadOutlined />}
+      onClick={onRetry}
+      style={{ marginTop: '16px' }}
+    >
+      Retry Preview
+    </Button>
   </Flex>
 );
 
@@ -50,6 +74,10 @@ const PdfPreview = ({
   const [pageNumber, setPageNumber] = useState(1);
   const [retryCount, setRetryCount] = useState(0);
 
+  useEffect(() => {
+    setRetryCount(0);
+  }, [pdfLink]);
+
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);
   };
@@ -61,9 +89,13 @@ const PdfPreview = ({
         setRetryCount(retryCount + 1);
       }, 1000);
     } else {
-      // eslint-disable-next-line no-undef
+      // eslint-disable-next-line no-console, no-undef
       console.error('Error while loading pdf! ', error.message);
     }
+  };
+
+  const handleRetry = () => {
+    setRetryCount(0);
   };
 
   const changePage = (offset) => {
@@ -77,24 +109,17 @@ const PdfPreview = ({
   const nextPage = () => changePage(1);
 
   const handleDownload = () => {
-    downloadFile(pdfLink, `resume.pdf`);
+    try {
+      downloadFile(pdfLink, `resume.pdf`);
+      message.success('Resume will be downloaded in a moment');
+    } catch {
+      message.error('Failed to download resume. Please try again.');
+    }
   };
 
   // Show error state if needed
   if (isError) {
-    return (
-      <Flex
-        vertical
-        align="center"
-        justify="center"
-        className={styles.loadingContainer}
-      >
-        <Empty
-          description={MESSAGES.error.preview}
-          image={Empty.PRESENTED_IMAGE_SIMPLE}
-        />
-      </Flex>
-    );
+    return <ErrorLayout onRetry={handleRetry} />;
   }
 
   // Show loading state for initial load or refetching
@@ -146,21 +171,30 @@ const PdfPreview = ({
         </Button>
       </Flex>
       <Flex align="center" justify="center">
-        <Document
-          file={pdfLink}
-          className={styles.document}
-          onLoadSuccess={onDocumentLoadSuccess}
-          onLoadError={onDocumentLoadError}
-          loading={<LoadingLayout message="Loading PDF document..." />}
-          key={retryCount} // Force re-render on retry
-        >
-          <Page
-            pageNumber={pageNumber}
-            className={styles.page}
-            renderTextLayer={false}
-            renderAnnotationLayer={false}
-          />
-        </Document>
+        <ErrorBoundary className={styles.document}>
+          <Document
+            file={pdfLink}
+            className={styles.document}
+            onLoadSuccess={onDocumentLoadSuccess}
+            onLoadError={onDocumentLoadError}
+            loading={<LoadingLayout message="Loading PDF document..." />}
+            error={
+              retryCount >= MAX_RETRY_COUNT ? (
+                <ErrorLayout onRetry={handleRetry} />
+              ) : (
+                <LoadingLayout message="Loading PDF document..." />
+              )
+            }
+            key={retryCount} // Force re-render on retry
+          >
+            <Page
+              pageNumber={pageNumber}
+              className={styles.page}
+              renderTextLayer={false}
+              renderAnnotationLayer={false}
+            />
+          </Document>
+        </ErrorBoundary>
       </Flex>
     </Flex>
   );

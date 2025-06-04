@@ -36,7 +36,7 @@ export const getResumeTips = (resumePersonaData, program) => {
   ) {
     tips = RESUME_PERSONAS.DSML_DATA_SCIENTIST;
   } else {
-    tips = [];
+    tips = RESUME_PERSONAS.DSML_NON_TECH_FRESHER;
   }
 
   return tips;

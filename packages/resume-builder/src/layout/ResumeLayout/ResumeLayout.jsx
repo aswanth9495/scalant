@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Row, Col, Layout, Typography, Flex } from 'antd';
-import { ArrowLeftOutlined } from '@ant-design/icons';
+import { CloseOutlined } from '@ant-design/icons';
 const { Header, Content } = Layout;
 
 const { Text } = Typography;
@@ -31,7 +31,7 @@ const ResumeLayout = ({ onBackButtonClick, children, preview }) => {
               style={{ width: '55%' }}
             >
               <div>
-                <ArrowLeftOutlined
+                <CloseOutlined
                   className={styles.backButton}
                   onClick={onBackButtonClick}
                 />

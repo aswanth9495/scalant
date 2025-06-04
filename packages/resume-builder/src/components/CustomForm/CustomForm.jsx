@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 import { initializeForm } from '../../store/formStoreSlice';
-import AiSuggestionBanner from '../AiSuggestionBanner';
 import CustomFormItem from './CustomFormItem';
 
 const FORM_ID = 'achievementsForm';
@@ -32,7 +31,7 @@ const CustomForm = ({ onComplete }) => {
   const isFormInitialized = useSelector(
     (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
   );
-  const [updateResumeDetails] = useUpdateResumeDetailsMutation();
+  const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
   const initialValues = useMemo(
     () =>
@@ -57,7 +56,7 @@ const CustomForm = ({ onComplete }) => {
     }
   }, [dispatch, isFormInitialized, initialValues]);
 
-  const handleMarkAsCompleted = async () => {
+  const handleFinish = async () => {
     const achievementsItems = formData?.achievementsItems || [];
     const hasUnsavedItems = achievementsItems.some((item) => !item.saved);
 
@@ -69,7 +68,7 @@ const CustomForm = ({ onComplete }) => {
     }
 
     const achievements = achievementsItems.map((item) => ({
-      id: item.id,
+      ...(item.id && { id: item.id }),
       description: item.formData.description,
     }));
 
@@ -79,7 +78,6 @@ const CustomForm = ({ onComplete }) => {
         isPopulated: true,
         achievements: achievements,
       };
-      onComplete?.();
 
       await updateResumeDetails({
         resumeId: resumeData?.resume_details?.id,
@@ -90,6 +88,16 @@ const CustomForm = ({ onComplete }) => {
     } catch (error) {
       message.error(`Failed to update achievements: ${error.message}`);
     }
+  };
+
+  const handleSaveAndNext = () => {
+    handleFinish();
+    onComplete?.();
+  };
+
+  const handleSaveAndCompile = () => {
+    handleFinish();
+    onComplete?.(true);
   };
 
   return (
@@ -113,15 +121,24 @@ const CustomForm = ({ onComplete }) => {
           ))}
         </Flex>
         <Flex gap={16}>
-          <Button type="primary" block onClick={handleMarkAsCompleted}>
+          <Button
+            type="primary"
+            block
+            onClick={handleSaveAndCompile}
+            disabled={isLoading}
+          >
             Save and Compile
           </Button>
-          <Button type="default" onClick={handleMarkAsCompleted} block>
+          <Button
+            type="default"
+            onClick={handleSaveAndNext}
+            block
+            disabled={isLoading}
+          >
             Save and Next
           </Button>
         </Flex>
       </Space>
-      <AiSuggestionBanner />
     </Flex>
   );
 };
