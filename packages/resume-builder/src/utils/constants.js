@@ -518,3 +518,8 @@ export const DEFAULT_TEMPLATE_CONFIG = {
     ],
   },
 };
+
+export const AI_REVIEW_MESSAGES = {
+  SUCCESS: 'You will be redirected shortly...',
+  ERROR: 'Failed to initiate review. Please try again.',
+};

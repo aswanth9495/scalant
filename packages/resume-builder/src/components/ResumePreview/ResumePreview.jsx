@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import { Flex, FloatButton, Tooltip } from 'antd';
+import { Flex, FloatButton, Tooltip, message } from 'antd';
 import {
   DeleteOutlined,
   ExportOutlined,
@@ -12,14 +12,16 @@ import FontSizeDropdown from './FontSizeDropdown';
 import ResumeDropdown from './ResumeDropdown';
 import { useGetResumeLinkQuery } from '../../services/resumeBuilderApi';
 import { getSampleResume } from '../../utils/sampleResumeUtils';
+import { useGetResumeReviewMutation } from '../../services/resumeBuilderApi';
+import { AI_REVIEW_MESSAGES } from '../../utils/constants';
 import PdfPreview from '../PdfPreview';
 
 import styles from './ResumePreview.module.scss';
 
 const TOOLTIPS = {
-  AI_EVALUATOR: 'Use our AI resume evaluator',
+  AI_EVALUATOR: 'AI Resume Review',
   FONT_SIZE: 'Change Font Size',
-  EDIT: 'Edit Resume',
+  EDIT: 'Rename Resume',
   DELETE: 'Delete Resume',
   DELETE_DISABLED: 'Cannot delete default resume',
   SAMPLE_RESUME: 'View Sample Resume',
@@ -51,6 +53,8 @@ const ResumePreview = ({
     (resume) => resume.id === resumeData?.resume_details?.id
   )?.default;
 
+  const [getResumeReview] = useGetResumeReviewMutation();
+
   const getSampleResumeLink = () => {
     if (resumePersonaData) {
       const { pdfLink } = getSampleResume(
@@ -63,6 +67,27 @@ const ResumePreview = ({
       window.open(pdfLink, '_blank');
     }
   };
+
+  const handleAiEvaluatorClick = useCallback(async () => {
+    try {
+      const response = await getResumeReview({
+        resumeId: resumeData?.resume_details?.id,
+      });
+
+      if (response?.data?.url) {
+        message.success(AI_REVIEW_MESSAGES.SUCCESS);
+        // eslint-disable-next-line no-undef
+        setTimeout(() => {
+          // eslint-disable-next-line no-undef
+          window.open(response.data.url, '_blank');
+        }, 2000);
+      } else {
+        message.error(AI_REVIEW_MESSAGES.ERROR);
+      }
+    } catch {
+      message.error(AI_REVIEW_MESSAGES.ERROR);
+    }
+  }, [getResumeReview, resumeData]);
 
   return (
     <Flex align="flex-start" className={styles.container}>
@@ -84,15 +109,12 @@ const ResumePreview = ({
       {!isLoading && !isFetching && !isError && (
         <Flex vertical>
           <FloatButton.Group shape="square" className={styles.floatButtonGroup}>
-            {/* <Tooltip title={TOOLTIPS.AI_EVALUATOR} placement="right">
+            <Tooltip title={TOOLTIPS.AI_EVALUATOR} placement="right">
               <FloatButton
                 icon={<ExportOutlined />}
-                onClick={() =>
-                  // eslint-disable-next-line no-undef
-                  window.open('https://google.com', '_blank')
-                }
+                onClick={handleAiEvaluatorClick}
               />
-            </Tooltip> */}
+            </Tooltip>
             <FontSizeDropdown onFontSizeChange={onFontSizeClick} />
             <Tooltip title={TOOLTIPS.EDIT} placement="right">
               <FloatButton onClick={onEditClick} icon={<EditOutlined />} />

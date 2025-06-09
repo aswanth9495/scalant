@@ -34,7 +34,7 @@ const AiSuggestionBanner = () => {
         // eslint-disable-next-line no-undef
         setTimeout(() => {
           // eslint-disable-next-line no-undef
-          window.location.href = response.data.url;
+          window.open(response.data.url, '_blank');
         }, 2000);
       } else {
         message.error(MESSAGES.ERROR);
