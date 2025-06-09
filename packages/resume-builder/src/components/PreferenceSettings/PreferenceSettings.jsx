@@ -60,8 +60,8 @@ const PreferenceSettings = () => {
     () =>
       preferenceData
         ? {
-            preferredLocations: preferenceData?.preferred_location.split('/'),
-            preferredRoles: preferenceData?.preferred_role.split('/'),
+            preferredLocations: preferenceData?.preferred_location?.split('/'),
+            preferredRoles: preferenceData?.preferred_role?.split('/'),
             ctc: preferenceData?.expected_ctc,
             notice: preferenceData?.notice_period,
             negotiable: preferenceData?.buyout_notice ? 'yes' : 'no',
