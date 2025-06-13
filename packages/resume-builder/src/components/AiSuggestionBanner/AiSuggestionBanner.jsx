@@ -10,11 +10,11 @@ import styles from './AiSuggestionBanner.module.scss';
 const MESSAGES = {
   SUCCESS: 'You will be redirected shortly...',
   ERROR: 'Failed to initiate review. Please try again.',
-  BANNER_TITLE: 'Have a detailed conversation with companion',
+  BANNER_TITLE: '',
   BANNER_SUBTITLE:
-    'to get pointers on how you write your work experience or projects.',
+    'In case you are writing from scratch, you can discuss and get basic pointers by discussing with companion. Make sure you edit before adding on resume.',
   BUTTON_TEXT: 'Discuss with',
-  AI_TEXT: 'AI',
+  AI_TEXT: 'Companion',
 };
 
 const AiSuggestionBanner = () => {
@@ -49,7 +49,7 @@ const AiSuggestionBanner = () => {
   return (
     <Flex justify="space-between" align="center" className={styles.container}>
       <Text className={styles.title}>
-        <span className={styles.bold}>{MESSAGES.BANNER_TITLE} </span>
+        {/* <span className={styles.bold}>{MESSAGES.BANNER_TITLE} </span> */}
         {MESSAGES.BANNER_SUBTITLE}
       </Text>
       <Button
