@@ -1,18 +1,20 @@
-import React, { useEffect, useMemo } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Space, Button, Flex, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import WorkExperienceFormItem from './WorkExperienceFormItem';
+import { Button, Flex, message, Space } from 'antd';
+import dayjs from 'dayjs';
+import React, { useEffect, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 import { initializeForm, updateFormData } from '../../store/formStoreSlice';
-import dayjs from 'dayjs';
+import AiSuggestionBanner from '../AiSuggestionBanner/AiSuggestionBanner';
+import WorkExperienceFormItem from './WorkExperienceFormItem';
 
 const FORM_ID = 'workExperienceForm';
 
 const initialFormData = {
   workExperienceItems: [
     {
-      id: 1,
+      index: 0,
       completed: false,
       expanded: true,
       formData: {
@@ -39,14 +41,15 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
   const isFormInitialized = useSelector(
     (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
   );
-  const [updateResumeDetails] = useUpdateResumeDetailsMutation();
+  const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
   const initialValues = useMemo(
     () =>
-      resumeData?.experience
+      resumeData?.experience && resumeData?.experience.length > 0
         ? {
             workExperienceItems: resumeData.experience.map((item, index) => ({
-              id: index,
+              id: item.id,
+              index: index,
               completed: true,
               expanded: false,
               formData: {
@@ -77,7 +80,7 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
 
   const handleAddWorkExperience = () => {
     const currentItems = formData?.workExperienceItems || [];
-    const newId = currentItems.length + 1;
+    const newIndex = currentItems.length;
 
     // Close all already expanded items
     dispatch(
@@ -87,7 +90,7 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
           workExperienceItems: [
             ...currentItems.map((item) => ({ ...item, expanded: false })),
             {
-              id: newId,
+              index: newIndex,
               completed: false,
               expanded: true,
               formData: {
@@ -108,7 +111,7 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
 
   const createWorkExperiencePayload = (workExperienceItems) => {
     return workExperienceItems.map((item) => ({
-      id: item.id,
+      ...(item.id && { id: item.id }),
       user_id: resumeData?.user_id,
       company: item.formData.company,
       position: item.formData.position,
@@ -134,7 +137,7 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
     }));
   };
 
-  const handleMarkAsCompleted = async () => {
+  const handleFinish = async () => {
     const workExperienceItems = formData?.workExperienceItems || [];
     const hasUncompletedItems = workExperienceItems.some(
       (item) => !item.completed
@@ -156,7 +159,6 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
         isPopulated: true,
         previous_experiences: workExperiencePayload,
       };
-      onComplete?.();
 
       await updateResumeDetails({
         resumeId: resumeData?.resume_details?.id,
@@ -168,13 +170,25 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
     }
   };
 
+  const handleSaveAndCompile = () => {
+    handleFinish();
+    onComplete?.(true);
+  };
+
+  const handleSaveAndNext = () => {
+    handleFinish();
+    onComplete?.();
+  };
+
   return (
     <Flex vertical gap={16}>
+      <AiSuggestionBanner />
       <Space direction="vertical" style={{ width: '100%' }}>
         <Flex vertical gap={16}>
-          {(formData?.workExperienceItems || []).map((item) => (
+          {(formData?.workExperienceItems || []).map((item, index) => (
             <WorkExperienceFormItem
-              key={item.id}
+              index={index}
+              key={index}
               item={item}
               formId={FORM_ID}
               required={required}
@@ -190,10 +204,20 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
           Add another experience
         </Button>
         <Flex gap={16}>
-          <Button type="primary" block onClick={handleMarkAsCompleted}>
+          <Button
+            type="primary"
+            block
+            onClick={handleSaveAndCompile}
+            disabled={isLoading}
+          >
             Save and Compile
           </Button>
-          <Button type="default" onClick={handleMarkAsCompleted} block>
+          <Button
+            type="default"
+            onClick={handleSaveAndNext}
+            block
+            disabled={isLoading}
+          >
             Save and Next
           </Button>
         </Flex>

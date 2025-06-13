@@ -21,6 +21,7 @@ const IntroVideo = () => {
           className={styles.video}
           autoPlay
           muted
+          controls
           poster={VIDEO_THUMBNAIL}
         />
       </div>

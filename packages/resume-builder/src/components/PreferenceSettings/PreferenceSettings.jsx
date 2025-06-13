@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PageHeader from '../PageHeader';
 import { useDispatch, useSelector } from 'react-redux';
 import { nextStep } from '../../store/resumeBuilderSlice';
@@ -46,7 +46,11 @@ const PreferenceSettings = () => {
   const preferredJobLocationValues = useSelector(
     (state) => state.scalantResumeBuilder.metaData.meta.job_locations
   );
-  const [updateResumeDetails] = useUpdateResumeDetailsMutation();
+  const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
+  const [
+    uniquePreferredJobLocationValues,
+    setUniquePreferredJobLocationValues,
+  ] = useState(preferredJobLocationValues);
 
   const { role_types } = useSelector(
     (state) => state.scalantResumeBuilder.metaData.meta
@@ -56,8 +60,8 @@ const PreferenceSettings = () => {
     () =>
       preferenceData
         ? {
-            preferredLocations: preferenceData?.preferred_location.split('/'),
-            preferredRoles: preferenceData?.preferred_role.split('/'),
+            preferredLocations: preferenceData?.preferred_location?.split('/'),
+            preferredRoles: preferenceData?.preferred_role?.split('/'),
             ctc: preferenceData?.expected_ctc,
             notice: preferenceData?.notice_period,
             negotiable: preferenceData?.buyout_notice ? 'yes' : 'no',
@@ -83,6 +87,15 @@ const PreferenceSettings = () => {
     // Initialize form with Redux state
     form.setFieldsValue(formData);
   }, [form, formData]);
+
+  useEffect(() => {
+    setUniquePreferredJobLocationValues(
+      preferredJobLocationValues.filter(
+        (value, index, self) =>
+          self.findIndex((t) => t.value === value.value) === index
+      )
+    );
+  }, [preferredJobLocationValues]);
 
   const createPreferencePayload = () => {
     let preferredRolesTypes = role_types;
@@ -161,11 +174,12 @@ const PreferenceSettings = () => {
           rules={[
             { required: true, message: 'Please select preferred location!' },
           ]}
+          tooltip="Flexibility in your job locations will enable you to be eligible for more opportunities."
         >
           <Select
             mode="multiple"
             allowClear
-            options={preferredJobLocationValues}
+            options={uniquePreferredJobLocationValues}
           />
         </Form.Item>
 
@@ -195,15 +209,19 @@ const PreferenceSettings = () => {
           >
             <Input placeholder="e.g., 3" />
           </Form.Item>
+          {/* // If notice period is 0 then disable negotiable field */}
           <Form.Item
-            label="Negotiable / Buyout available"
+            label="Negotiable / Can Buyout ?"
             name="negotiable"
             rules={[{ required: true, message: 'Please select an option!' }]}
           >
-            <Radio.Group>
-              <Radio value="yes">Yes</Radio>
-              <Radio value="no">No</Radio>
-            </Radio.Group>
+            <Radio.Group
+              options={[
+                { label: 'Yes', value: 'yes' },
+                { label: 'No', value: 'no' },
+              ]}
+              disabled={formData?.notice === '0'}
+            />
           </Form.Item>
         </Flex>
 
@@ -228,6 +246,7 @@ const PreferenceSettings = () => {
             type="primary"
             htmlType="submit"
             block
+            loading={isLoading}
           >
             Save and Continue
           </Button>

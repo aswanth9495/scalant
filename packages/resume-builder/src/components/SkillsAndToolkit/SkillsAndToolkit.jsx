@@ -1,4 +1,4 @@
-import { Space, message } from 'antd';
+import { Button, Flex, Space, message } from 'antd';
 import React, { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -45,7 +45,7 @@ const SkillsAndToolkit = ({ onComplete }) => {
   const { resume_builder_skills: resumeBuilderSkills, skill_data: skillsData } =
     useSelector((state) => state.scalantResumeBuilder.metaData.meta);
 
-  const [updateResumeDetails] = useUpdateResumeDetailsMutation();
+  const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
   const initialValues = useMemo(
     () =>
@@ -58,6 +58,26 @@ const SkillsAndToolkit = ({ onComplete }) => {
         : initialFormData,
     [resumeData?.skills, skillsData]
   );
+
+  const handleFinish = async () => {
+    const selectedSkills = formData?.selectedSkills || [];
+
+    try {
+      const payload = {
+        form_stage: 'skills_details_form',
+        skills: selectedSkills,
+      };
+
+      await updateResumeDetails({
+        resumeId: resumeData?.resume_details?.id,
+        payload,
+      }).unwrap();
+      message.success('Skills and toolkit updated successfully');
+      // eslint-disable-next-line no-unused-vars
+    } catch (error) {
+      message.error('Failed to update skills and toolkit');
+    }
+  };
 
   useEffect(() => {
     if (!isFormInitialized) {
@@ -124,25 +144,14 @@ const SkillsAndToolkit = ({ onComplete }) => {
     }
   };
 
-  const handleMarkAsComplete = async () => {
-    const selectedSkills = formData?.selectedSkills || [];
+  const handleSaveAndCompile = () => {
+    handleFinish();
+    onComplete?.(true);
+  };
 
-    try {
-      const payload = {
-        form_stage: 'skills_details_form',
-        skills: selectedSkills,
-      };
-      onComplete?.();
-
-      await updateResumeDetails({
-        resumeId: resumeData?.resume_details?.id,
-        payload,
-      }).unwrap();
-      message.success('Skills and toolkit updated successfully');
-      // eslint-disable-next-line no-unused-vars
-    } catch (error) {
-      message.error('Failed to update skills and toolkit');
-    }
+  const handleSaveAndNext = () => {
+    handleFinish();
+    onComplete?.();
   };
 
   const renderSkillSection = (section) => {
@@ -160,6 +169,7 @@ const SkillsAndToolkit = ({ onComplete }) => {
         onSkillClick={handleTagClick}
         onExperienceUpdate={handleExperienceUpdate}
         skillExperience={formData?.skillExperience || {}}
+        formId={FORM_ID}
       />
     );
   };
@@ -167,20 +177,24 @@ const SkillsAndToolkit = ({ onComplete }) => {
   return (
     <Space direction="vertical" size={24} className={styles.container}>
       {Object.values(SKILL_SECTIONS).map(renderSkillSection)}
-      <div className={styles.buttonContainer}>
-        <button
-          className={`${styles.button} ${styles.primary}`}
-          onClick={handleMarkAsComplete}
+      <Flex gap={16}>
+        <Button
+          type="primary"
+          block
+          onClick={handleSaveAndCompile}
+          disabled={isLoading}
         >
           Save and Compile
-        </button>
-        <button
-          onClick={handleMarkAsComplete}
-          className={`${styles.button} ${styles.secondary}`}
+        </Button>
+        <Button
+          type="default"
+          block
+          onClick={handleSaveAndNext}
+          disabled={isLoading}
         >
           Save and Next
-        </button>
-      </div>
+        </Button>
+      </Flex>
     </Space>
   );
 };

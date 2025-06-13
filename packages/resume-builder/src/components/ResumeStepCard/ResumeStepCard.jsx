@@ -47,14 +47,12 @@ const ResumeStepCard = ({
               <Flex align="center" gap={8}>
                 <Title level={5} className={styles.title} style={{ margin: 0 }}>
                   {title}
-                  {required && (
-                    <Tooltip title="This step is required to complete your profile">
-                      <ExclamationCircleOutlined
-                        style={{ color: 'red', marginLeft: 4 }}
-                      />
-                    </Tooltip>
-                  )}
                 </Title>
+                {required && status === 'incomplete' && (
+                  <Tooltip title="This step is required to complete your profile">
+                    <span className={styles.required}>*</span>
+                  </Tooltip>
+                )}
                 {status && STATUS_TAGS[status]}
               </Flex>
               <Text type="secondary">{subtitle}</Text>
