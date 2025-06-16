@@ -34,6 +34,15 @@ export const RESUME_BUILDER_STEPS = {
   },
 };
 
+export const ADDITIONAL_PROFILES = [
+  { label: 'LeetCode', value: 'leetcode' },
+  { label: 'Codeforces', value: 'codeforces' },
+  { label: 'Codechef', value: 'codechef' },
+  { label: 'HackerRank', value: 'hackerrank' },
+  { label: 'HackerEarth', value: 'hackerearth' },
+  { label: 'Geeksforgeeks', value: 'geeksforgeeks' },
+];
+
 export const PROJECT_FORM_REQUIRED_FIELDS = [
   'title',
   'project_link',
@@ -68,9 +77,6 @@ export const STEPS_ORDER = [
   RESUME_BUILDER_STEPS.RESUME_TIPS,
   RESUME_BUILDER_STEPS.RESUME_STEPS,
 ];
-
-const RESUME_PREVIEW_BASE_URL =
-  'https://content.interviewbit.com/Resume+Repo+resumes';
 
 export const JOB_ROLES = {
   fresher: 'Fresher',
@@ -131,54 +137,54 @@ export const RESUME_PDF_LINK_KEYS = {
 
 export const RESUME_PDF_LINKS = {
   [RESUME_PDF_LINK_KEYS.DSML_FRESHER]: {
-    preview: `${RESUME_PREVIEW_BASE_URL}/DSML/fresher/preview/preview-after.png`,
+    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/793/original/Fresher_good_resume_%281%29_page-0001.jpg?1748353701`,
     pdfLink:
-      'https://drive.google.com/file/d/1lfjG9TkvhP6tja9reMmsiYYRndlkCJD7/view',
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/678/original/Fresher_good_resume_%281%29.pdf?1748329562',
   },
   [RESUME_PDF_LINK_KEYS.FRESHER]: {
-    preview: `${RESUME_PREVIEW_BASE_URL}/fresher/preview/preview-after.png`,
+    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/793/original/Fresher_good_resume_%281%29_page-0001.jpg?1748353701`,
     pdfLink:
-      'https://drive.google.com/file/d/1lfjG9TkvhP6tja9reMmsiYYRndlkCJD7/view',
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/678/original/Fresher_good_resume_%281%29.pdf?1748329562',
   },
   [RESUME_PDF_LINK_KEYS.JUNIOR_BACKEND]: {
-    preview: `${RESUME_PREVIEW_BASE_URL}/junior-back-end-engineer/preview/preview-after.png`,
+    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/794/original/Junior_backend_developer_good_resume_page-0001.jpg?1748353769`,
     pdfLink:
-      'https://drive.google.com/file/d/1gLFB1Q39J8lta99vE6E8DxE4rR8m4e3U/view',
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/679/original/Junior_backend_developer_good_resume.pdf?1748329607',
   },
   [RESUME_PDF_LINK_KEYS.JUNIOR_FRONTEND]: {
-    preview: `${RESUME_PREVIEW_BASE_URL}/junior-front-end-engineer/preview/preview-after.png`,
+    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/795/original/Junior_frontend_developer_good_resume_page-0001.jpg?1748353816`,
     pdfLink:
-      'https://drive.google.com/file/d/1_1CoX4N76Urh6ykipNeR07wC1SL31MPP/view',
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/680/original/Junior_frontend_developer_good_resume.pdf?1748329639',
   },
   [RESUME_PDF_LINK_KEYS.SENIOR_BACKEND]: {
-    preview: `${RESUME_PREVIEW_BASE_URL}/senior-back-end-engineer/preview/preview-after.png`,
+    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/796/original/Senior_Backend_Developer.jpg?1748353857`,
     pdfLink:
-      'https://drive.google.com/file/d/14uGj3odWbuvO7W7SOWj-3C-x2JOTizF3/view',
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/683/original/Senior_backend_developer_good_resume.pdf?1748329744',
   },
   [RESUME_PDF_LINK_KEYS.NON_TECH]: {
-    preview: `${RESUME_PREVIEW_BASE_URL}/non-tech/preview/preview-after.png`,
+    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/797/original/Non_Tech_good_resume_page-0001.jpg?1748353908`,
     pdfLink:
-      'https://drive.google.com/file/d/10_-rEzjEh3u4sogUZZfuduL5yYsBWby6/view',
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/681/original/Non_Tech_good_resume.pdf?1748329693',
   },
   [RESUME_PDF_LINK_KEYS.ENGG_MANAGER]: {
-    preview: `${RESUME_PREVIEW_BASE_URL}/engg-manager/preview/preview-after.png`,
+    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/798/original/Engineering_Manager_Good_Resume_1_page-0001.jpg?1748353948`,
     pdfLink:
-      'https://drive.google.com/file/d/1arcCU7GOqqjXaFS6JHsTT7_Ss2Gklfez/view',
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/677/original/Engineering_Manager_Good_Resume_1.pdf?1748329511',
   },
   [RESUME_PDF_LINK_KEYS.NON_TECH_BACKGROUND]: {
-    preview: `${RESUME_PREVIEW_BASE_URL}/DSML/non-tech-background/preview/preview-after.png`,
+    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/799/original/Non_Tech_good_resume_%281%29.jpg?1748353990`,
     pdfLink:
-      'https://drive.google.com/file/d/1K-HyDftO9sXsIfOZVzJ2LTPTrpL1vu0R/view',
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/684/original/Non_Tech_good_resume_%281%29.pdf?1748329780',
   },
   [RESUME_PDF_LINK_KEYS.DATA_ANALYST]: {
-    preview: `${RESUME_PREVIEW_BASE_URL}/DSML/data-analyst/preview/preview-after.png`,
+    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/803/original/Data_Analyst_good_resume.jpg?1748354029`,
     pdfLink:
-      'https://drive.google.com/file/d/1lQXurdy_S5hBAWhygUg7-sL_TsB7PRHy/view',
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/675/original/Data_analyst_good_resume.pdf?1748329370',
   },
   [RESUME_PDF_LINK_KEYS.DATA_SCIENTIST]: {
-    preview: `${RESUME_PREVIEW_BASE_URL}/DSML/data-scientist/preview/preview-after.png`,
+    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/804/original/Data_scientist_good_resume_page-0001.jpg?1748354071`,
     pdfLink:
-      'https://drive.google.com/file/d/1cSPlK-xgYhx358mfoKiMzCsPjelObgLN/view',
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/676/original/Data_scientist_good_resume.pdf?1748329448',
   },
 };
 
@@ -275,20 +281,24 @@ const RESUME_TIPS = {
   socialLinks: {
     icon: '🔗',
     title: 'Add Social Links:',
-    description: `Share coding profiles like GitHub, LeetCode, or 
-      Codeforces to show your skills.`,
+    description: `Include links to various Professional social profiles like LinkedIn, 
+      Github, Leetcode, Codeforces, HackerRank, HackerEarth, 
+      CodeChef, GeeksForGeeks, InterviewBit on your profile.`,
   },
   keySkills: {
     icon: '🏆',
     title: 'Highlight Key Skills:',
-    description: `List at least 5 relevant technical skills that align with 
-      the role you're targeting, like languages, tools, or frameworks.`,
+    description: `Include Programming Languages, Frameworks and Tools 
+      in which you have hands-on experience. Include at least 5 skills`,
   },
   projects: {
     icon: '📄',
     title: 'Showcase Projects:',
-    description: `Add 2–3 strong projects with bullet points, 
-    metrics, and links to demos.`,
+    description: `Include 1-2 impactful projects to showcase your technical ability. 
+      Outline each project using 4-6 bullet points. Strengthen your achievements 
+      by incorporating specific metrics like % improvement, cost saved, revenue, 
+      scale handled etc.. Integrate project demo link and / or git repository. 
+      Include details of the Tech Stack.`,
   },
   academicDetails: {
     icon: '🎓',
@@ -299,8 +309,9 @@ const RESUME_TIPS = {
   workExperience: {
     icon: '💼',
     title: 'Add Work Experience:',
-    description: `List previous roles with bullet points, 
-    metrics, and links to demos.`,
+    description: `Include your latest work experience. Outline, using 2-3 bullet points, 
+      your key responsibilities, projects and achievements. 
+      Include Impact metrics like % improvement, cost saved, revenue increased, etc.`,
   },
 };
 
@@ -398,7 +409,7 @@ Include complex / elaborate Projects done outside work if your tech work experie
   },
   engineeringLeadership: {
     imageLink:
-      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/126/276/original/Engineering_Leadership_Resume.png?1747392633',
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/685/original/Engineering_Leadership.png?1748329958',
     recommendation: `Work Experience needs to be the major focus of your resume. 
 
 Include work experiences and promotions from most recent to oldest. 
@@ -506,4 +517,9 @@ export const DEFAULT_TEMPLATE_CONFIG = {
       },
     ],
   },
+};
+
+export const AI_REVIEW_MESSAGES = {
+  SUCCESS: 'You will be redirected shortly...',
+  ERROR: 'Failed to initiate review. Please try again.',
 };

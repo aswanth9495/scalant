@@ -8,6 +8,14 @@ const dynamicBaseQuery = async (args, api, extraOptions) => {
     baseUrl,
     prepareHeaders: (headers) => {
       headers.set('Content-Type', 'application/json');
+      // Add CSRF token if available
+      if (typeof window !== 'undefined') {
+        // eslint-disable-next-line no-undef
+        const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+        if (csrfMeta) {
+          headers.set('X-CSRF-Token', csrfMeta.content);
+        }
+      }
       return headers;
     },
   });
@@ -37,15 +45,20 @@ export const resumeBuilderApi = createApi({
       ],
     }),
     updateResumePreferences: builder.mutation({
-      query: ({ resumeId, payload }) => ({
+      query: ({ payload }) => ({
         url: `/resume/preferences/update`,
         method: 'PATCH',
         body: {
-          resume_id: resumeId,
           ...payload,
         },
       }),
       invalidatesTags: ['ResumeLink'],
+    }),
+    getResumeReview: builder.mutation({
+      query: ({ resumeId }) => ({
+        url: `/api/v3/user-resumes/${resumeId}/request_resume_review`,
+        method: 'POST',
+      }),
     }),
   }),
 });
@@ -60,6 +73,7 @@ export const {
   useUpdateResumeDetailsMutation,
   useGetResumeLinkQuery,
   useUpdateResumePreferencesMutation,
+  useGetResumeReviewMutation,
 } = resumeBuilderApi;
 
 export default resumeBuilderApi;

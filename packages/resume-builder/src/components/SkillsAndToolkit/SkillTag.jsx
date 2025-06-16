@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import {
   Tag,
   Popover,
@@ -9,6 +8,8 @@ import {
   Typography,
   Flex,
 } from 'antd';
+import { useDispatch } from 'react-redux';
+import { updateFormData } from '../../store/formStoreSlice';
 import { CloseOutlined } from '@ant-design/icons';
 import { formatExperience } from '../../utils/resumeUtils';
 
@@ -22,9 +23,12 @@ const SkillTag = ({
   onClick,
   onExperienceUpdate,
   experience,
+  selectedSkills,
+  formId,
 }) => {
   const [open, setOpen] = useState(false);
   const [form] = Form.useForm();
+  const dispatch = useDispatch();
 
   // Set initial form values if experience exists
   useEffect(() => {
@@ -47,6 +51,21 @@ const SkillTag = ({
     onClick();
   };
 
+  const handleClose = () => {
+    // Remove the skill from the form data
+    const updatedFormData = selectedSkills.filter(
+      (item) => item.skill_id !== skill.subtopic_id
+    );
+    dispatch(
+      updateFormData({
+        formId,
+        data: {
+          selectedSkills: updatedFormData,
+        },
+      })
+    );
+  };
+
   const PopoverContent = () => (
     <Form
       form={form}
@@ -60,10 +79,24 @@ const SkillTag = ({
         Enter your experience with {skill.subtopic} (years and months):
       </Text>
       <Flex gap={4}>
-        <Form.Item name="years">
+        <Form.Item
+          name="years"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
           <InputNumber placeholder="Years" min={0} />
         </Form.Item>
-        <Form.Item name="months">
+        <Form.Item
+          name="months"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
           <InputNumber placeholder="Months" min={0} max={11} />
         </Form.Item>
         <Button type="primary" htmlType="submit">
@@ -84,7 +117,9 @@ const SkillTag = ({
       <Tag
         className={`${styles.skillTag} ${isSelected ? styles.selected : ''}`}
         onClick={() => {
-          setOpen(true);
+          if (!isSelected) {
+            setOpen(true);
+          }
         }}
       >
         <span>
@@ -94,10 +129,7 @@ const SkillTag = ({
             ` ${formatExperience(experience.years, experience.months, true)}`}
         </span>
         {isSelected && (
-          <CloseOutlined
-            className={styles.closeIcon}
-            onClick={() => onClick()}
-          />
+          <CloseOutlined className={styles.closeIcon} onClick={handleClose} />
         )}
       </Tag>
     </Popover>

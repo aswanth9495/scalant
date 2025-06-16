@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Card,
@@ -16,20 +16,22 @@ import { updateFormData } from '../../store/formStoreSlice';
 import { EDUCATION_FORM_REQUIRED_FIELDS } from '../../utils/constants';
 import styles from './EducationForm.module.scss';
 import RichTextEditor from '../RichTextEditor/RichTextEditor';
+import DeleteConfirmationModal from '../DeleteConfirmationModal';
 
 const { Text } = Typography;
 
-const EducationFormItem = ({ item, formId, required = false }) => {
+const EducationFormItem = ({ item, formId, required = false, index }) => {
   const dispatch = useDispatch();
   const formData = useSelector(
     (state) => state.scalantResumeBuilder.formStore.forms[formId]
   );
   const [form] = Form.useForm();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const handleValuesChange = (changedValues, allValues) => {
     const currentItems = formData?.educationItems || [];
     const updatedItems = currentItems.map((educationItem) =>
-      educationItem.id === item.id
+      educationItem.index === index
         ? {
             ...educationItem,
             formData: allValues,
@@ -53,7 +55,7 @@ const EducationFormItem = ({ item, formId, required = false }) => {
   const handleExpand = () => {
     const currentItems = formData?.educationItems || [];
     const updatedItems = currentItems.map((educationItem) =>
-      educationItem.id === item.id
+      educationItem.index === index
         ? {
             ...educationItem,
             expanded: !educationItem.expanded,
@@ -72,9 +74,13 @@ const EducationFormItem = ({ item, formId, required = false }) => {
   };
 
   const handleDelete = () => {
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDeleteModalOk = () => {
     const currentItems = formData?.educationItems || [];
     const updatedItems = currentItems.filter(
-      (educationItem) => educationItem.id !== item.id
+      (educationItem) => educationItem.index !== index
     );
 
     dispatch(
@@ -85,6 +91,11 @@ const EducationFormItem = ({ item, formId, required = false }) => {
         },
       })
     );
+    setIsDeleteModalOpen(false);
+  };
+
+  const handleDeleteModalCancel = () => {
+    setIsDeleteModalOpen(false);
   };
 
   const selectAfter = (
@@ -100,7 +111,7 @@ const EducationFormItem = ({ item, formId, required = false }) => {
 
   if (!item.expanded) {
     return (
-      <Card key={item.id}>
+      <Card key={index} onClick={handleExpand}>
         <Flex justify="space-between" align="center">
           <Flex vertical gap={4}>
             <Text strong>
@@ -114,17 +125,17 @@ const EducationFormItem = ({ item, formId, required = false }) => {
                 : '---'}
             </Text>
           </Flex>
-          <DownOutlined onClick={handleExpand} />
+          <DownOutlined />
         </Flex>
       </Card>
     );
   }
 
   return (
-    <Card key={item.id}>
+    <Card key={index}>
       <Flex gap={16} justify="space-between">
         <Flex gap={4}>
-          <Text strong>Education {item.id}</Text>
+          <Text strong>Education {index + 1}</Text>
           {(formData?.educationItems || []).length > 1 && (
             <DeleteOutlined onClick={handleDelete} />
           )}
@@ -243,6 +254,14 @@ const EducationFormItem = ({ item, formId, required = false }) => {
           />
         </Form.Item>
       </Form>
+      <DeleteConfirmationModal
+        open={isDeleteModalOpen}
+        onOk={handleDeleteModalOk}
+        onCancel={handleDeleteModalCancel}
+        title="Delete Education"
+        description="Are you sure you want to delete this education item?"
+        style={{ top: 20 }}
+      />
     </Card>
   );
 };

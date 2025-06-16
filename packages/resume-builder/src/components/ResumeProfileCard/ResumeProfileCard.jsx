@@ -22,7 +22,7 @@ const ResumeProfileCard = ({ resumePersonaData }) => {
     dispatch(
       setCurrentStep(
         STEPS_ORDER.findIndex(
-          (step) => step.key === RESUME_BUILDER_STEPS.RESUME_BASIC_QUESTIONS.key
+          (step) => step.key === RESUME_BUILDER_STEPS.PREFERENCE_SETTINGS.key
         )
       )
     );
@@ -56,7 +56,7 @@ const ResumeProfileCard = ({ resumePersonaData }) => {
             </Text>
           </Flex>
         </Flex>
-        <Button onClick={handleEditProfile}>Edit Profile</Button>
+        <Button onClick={handleEditProfile}>Edit Preferences</Button>
       </Flex>
     </Card>
   );

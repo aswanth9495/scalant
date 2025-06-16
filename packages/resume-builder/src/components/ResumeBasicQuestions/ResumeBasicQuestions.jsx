@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector, batch } from 'react-redux';
-import { nextStep } from '../../store/resumeBuilderSlice';
+import { nextStep, previousStep } from '../../store/resumeBuilderSlice';
 import {
   Typography,
   Flex,
@@ -45,7 +45,7 @@ const ResumeBasicQuestions = () => {
     (state) => state.scalantResumeBuilder.formStore.forms[FORM_ID]
   );
 
-  const [updateResumeDetails] = useUpdateResumeDetailsMutation();
+  const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
   useEffect(() => {
     // Initialize form with Redux state
@@ -88,15 +88,6 @@ const ResumeBasicQuestions = () => {
     }
 
     batch(() => {
-      // dispatch(
-      //   setResumePersonaData({
-      //     totalExperience,
-      //     techExperience,
-      //     currentJobRole: values?.currentJobRole,
-      //     program: 'academy',
-      //   })
-      // );
-
       const formData = {
         totalExperience,
         techExperience,
@@ -133,6 +124,7 @@ const ResumeBasicQuestions = () => {
             <Form.Item
               label="Total Work Experience"
               className={styles.formItem}
+              required
             >
               <Flex gap={16} align="center">
                 <Flex gap={4} vertical>
@@ -171,8 +163,14 @@ const ResumeBasicQuestions = () => {
             </Form.Item>
 
             <Form.Item
-              label="Total Work Experience in Tech"
+              label={`Total Experience as ${
+                program === 'academy'
+                  ? 'Software Developer'
+                  : 'Data Analyst / Scientist'
+              }`}
               className={styles.formItem}
+              required
+              tooltip="Total work experience in tech only includes relevant experience in SDE or Data Science/Analytics roles.5"
             >
               <Flex gap={16} align="center">
                 <Flex gap={4} vertical>
@@ -232,8 +230,17 @@ const ResumeBasicQuestions = () => {
             block
             htmlType="submit"
             className={styles.button}
+            loading={isLoading}
           >
             Save & Continue
+          </Button>
+          <Button
+            block
+            type="text"
+            onClick={() => dispatch(previousStep())}
+            className={styles.backButton}
+          >
+            Go Back
           </Button>
         </Form>
       </Flex>

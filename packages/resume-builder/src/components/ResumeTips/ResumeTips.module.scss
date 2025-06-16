@@ -9,3 +9,12 @@
 .button {
   margin-top: 2.4rem;
 }
+
+.backButton {
+  margin-top: 8px;
+  color: #1677ff;
+
+  &:hover {
+    color: #1677ff !important;
+  }
+}

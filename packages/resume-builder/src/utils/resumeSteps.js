@@ -233,7 +233,7 @@ const getFormOrderDetails = (program, currentJobRole) => {
       'Data Scientist / Machine Learning Engineer',
     ].includes(currentJobRole)
   ) {
-    return STEP_ORDERS.DSML_DATA_ANALYST_ML_ENGINEER;
+    return STEP_ORDERS.DSML_DATA_ML_ENGINEER;
   } else {
     return STEP_ORDERS.DSML_FRESHER;
   }

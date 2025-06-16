@@ -11,9 +11,9 @@ const Acknowledgement = () => {
   const dispatch = useDispatch();
   const [checked1, setChecked1] = useState(false);
   const [checked2, setChecked2] = useState(false);
-
+  const [checked3, setChecked3] = useState(false);
   const handleContinue = () => {
-    if (checked1 && checked2) {
+    if (checked1 && checked2 && checked3) {
       dispatch(nextStep());
     }
   };
@@ -48,12 +48,21 @@ const Acknowledgement = () => {
         opportunities
       </Checkbox>
 
+      <Checkbox
+        className={styles.checkbox}
+        checked={checked3}
+        onChange={(e) => setChecked3(e.target.checked)}
+      >
+        Adding incorrect information on your resume can lower your chances of
+        getting shortlisted as recruiters will do a thorough validation check
+      </Checkbox>
+
       <div className={styles.buttonsContainer}>
         <Button
           type="primary"
           block
           className={styles.continueBtn}
-          disabled={!(checked1 && checked2)}
+          disabled={!(checked1 && checked2 && checked3)}
           onClick={handleContinue}
         >
           I Understand, Continue

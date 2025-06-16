@@ -7,13 +7,14 @@ import { PlusOutlined } from '@ant-design/icons';
 import ProjectFormItem from './ProjectFormItem';
 
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
+import AiSuggestionBanner from '../AiSuggestionBanner/AiSuggestionBanner';
 
 const FORM_ID = 'projectForm';
 
 const initialFormData = {
   projectItems: [
     {
-      id: 1,
+      index: 0,
       completed: false,
       expanded: true,
       formData: {
@@ -37,14 +38,15 @@ const ProjectForm = ({ onComplete, required = false }) => {
   const isFormInitialized = useSelector(
     (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
   );
-  const [updateResumeDetails] = useUpdateResumeDetailsMutation();
+  const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
   const initialValues = useMemo(
     () =>
-      resumeData?.projects
+      resumeData?.projects && resumeData?.projects.length > 0
         ? {
             projectItems: resumeData.projects.map((item, index) => ({
-              id: index,
+              id: item.id,
+              index: index,
               completed: true,
               expanded: false,
               formData: {
@@ -71,8 +73,7 @@ const ProjectForm = ({ onComplete, required = false }) => {
 
   const handleAddProject = () => {
     const currentItems = formData?.projectItems || [];
-    const newId = currentItems.length + 1;
-
+    const newIndex = currentItems.length;
     dispatch(
       updateFormData({
         formId: FORM_ID,
@@ -80,7 +81,7 @@ const ProjectForm = ({ onComplete, required = false }) => {
           projectItems: [
             ...currentItems.map((item) => ({ ...item, expanded: false })),
             {
-              id: newId,
+              index: newIndex,
               completed: false,
               expanded: true,
               formData: {
@@ -97,7 +98,7 @@ const ProjectForm = ({ onComplete, required = false }) => {
 
   const createProjectsPayload = (projectItems) => {
     return projectItems.map((item) => ({
-      id: item.id,
+      ...(item.id && { id: item.id }),
       title: item.formData.title,
       description: item.formData.description,
       project_link: item.formData.project_link,
@@ -105,7 +106,7 @@ const ProjectForm = ({ onComplete, required = false }) => {
     }));
   };
 
-  const handleMarkAsCompleted = async () => {
+  const handleFinish = async () => {
     const projectItems = formData?.projectItems || [];
     const hasUncompletedItems = projectItems.some((item) => !item.completed);
 
@@ -129,19 +130,30 @@ const ProjectForm = ({ onComplete, required = false }) => {
         payload,
       }).unwrap();
       message.success('Projects updated successfully');
-      onComplete?.();
     } catch (error) {
       message.error(`Failed to update projects: ${error.message}`);
     }
   };
 
+  const handleSaveAndCompile = () => {
+    handleFinish();
+    onComplete?.(true);
+  };
+
+  const handleSaveAndNext = () => {
+    handleFinish();
+    onComplete?.();
+  };
+
   return (
     <Flex vertical gap={16}>
+      <AiSuggestionBanner />
       <Space direction="vertical" style={{ width: '100%' }}>
         <Flex vertical gap={16}>
-          {(formData?.projectItems || []).map((item) => (
+          {(formData?.projectItems || []).map((item, index) => (
             <ProjectFormItem
-              key={item.id}
+              index={index}
+              key={index}
               item={item}
               formId={FORM_ID}
               required={required}
@@ -157,10 +169,20 @@ const ProjectForm = ({ onComplete, required = false }) => {
           Add Project
         </Button>
         <Flex gap={16}>
-          <Button type="primary" block onClick={handleMarkAsCompleted}>
+          <Button
+            type="primary"
+            block
+            onClick={handleSaveAndCompile}
+            disabled={isLoading}
+          >
             Save and Compile
           </Button>
-          <Button type="default" onClick={handleMarkAsCompleted} block>
+          <Button
+            type="default"
+            onClick={handleSaveAndNext}
+            block
+            disabled={isLoading}
+          >
             Save and Next
           </Button>
         </Flex>
