@@ -17,7 +17,7 @@ const MESSAGES = {
   AI_TEXT: 'Companion',
 };
 
-const AiSuggestionBanner = () => {
+const AiSuggestionBanner = ({ onClick }) => {
   const resumeData = useSelector(
     (state) => state.scalantResumeBuilder.resumeBuilder.resumeData
   );
@@ -25,6 +25,7 @@ const AiSuggestionBanner = () => {
 
   const handleClick = useCallback(async () => {
     try {
+      onClick?.();
       const response = await getResumeReview({
         resumeId: resumeData?.resume_details?.id,
       });
@@ -42,7 +43,7 @@ const AiSuggestionBanner = () => {
     } catch {
       message.error(MESSAGES.ERROR);
     }
-  }, [getResumeReview, resumeData]);
+  }, [getResumeReview, onClick, resumeData]);
 
   // Handle successful data fetch
 

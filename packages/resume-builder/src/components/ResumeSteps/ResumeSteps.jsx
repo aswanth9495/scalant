@@ -15,8 +15,7 @@ import {
 } from '../../store/resumeFormsSlice';
 import { useBasicQuestionsForm } from '../../hooks/useBasicQuestionsForm';
 import ResumeProfileCard from '../ResumeProfileCard';
-
-const ResumeTimeline = () => {
+const ResumeTimeline = ({ onAiSuggestionClick }) => {
   const dispatch = useDispatch();
   const program = useSelector(
     (state) => state.scalantResumeBuilder.resumeBuilder.program
@@ -104,11 +103,18 @@ const ResumeTimeline = () => {
         resumePersonaData,
         incompleteForms,
         handleFormCompletion,
-        program
+        program,
+        onAiSuggestionClick
       );
       setSteps(formSteps);
     }
-  }, [resumePersonaData, incompleteForms, handleFormCompletion, program]);
+  }, [
+    resumePersonaData,
+    incompleteForms,
+    handleFormCompletion,
+    program,
+    onAiSuggestionClick,
+  ]);
 
   return (
     <div className={styles.container}>
