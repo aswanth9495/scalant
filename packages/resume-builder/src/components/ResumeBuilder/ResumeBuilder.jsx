@@ -29,7 +29,7 @@ import ResumePreview from '../ResumePreview';
 import SampleResumePreview from '../SampleResumePreview';
 import ResumeHighlightPreview from '../ResumeHighlightPreview';
 import styles from './ResumeBuilder.module.scss';
-import IntroVideo from '../IntroVideo';
+
 const ResumeBuilderContent = ({
   isOnboarding = true,
   resumeData,
@@ -165,6 +165,7 @@ const ResumeBuilder = ({
   onEditClick,
   onDeleteClick,
   isLoading = false,
+  onAiSuggestionClick,
 }) => {
   return (
     <ResumeBuilderContent
@@ -179,6 +180,7 @@ const ResumeBuilder = ({
       onEditClick={onEditClick}
       onDeleteClick={onDeleteClick}
       isLoading={isLoading}
+      onAiSuggestionClick={onAiSuggestionClick}
     />
   );
 };
