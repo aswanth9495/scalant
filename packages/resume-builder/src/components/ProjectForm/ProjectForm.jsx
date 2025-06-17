@@ -3,11 +3,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { initializeForm, updateFormData } from '../../store/formStoreSlice';
 
 import { Space, Button, Flex, message } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, ExclamationCircleFilled } from '@ant-design/icons';
 import ProjectFormItem from './ProjectFormItem';
 
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 import AiSuggestionBanner from '../AiSuggestionBanner/AiSuggestionBanner';
+import SectionFeedback from '../SectionFeedback/SectionFeedback';
 
 const FORM_ID = 'projectForm';
 
@@ -148,6 +149,20 @@ const ProjectForm = ({ onComplete, required = false }) => {
   return (
     <Flex vertical gap={16}>
       <AiSuggestionBanner />
+      <SectionFeedback
+        icon={
+          <ExclamationCircleFilled
+            style={{ color: '#faad14', fontSize: '1.6rem' }}
+          />
+        }
+        feedbackData={[
+          {
+            id: 1,
+            title: 'Section Feedback',
+            description: ['Hello World1', 'Hello World2'],
+          },
+        ]}
+      />
       <Space direction="vertical" style={{ width: '100%' }}>
         <Flex vertical gap={16}>
           {(formData?.projectItems || []).map((item, index) => (

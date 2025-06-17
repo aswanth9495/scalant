@@ -523,3 +523,7 @@ export const AI_REVIEW_MESSAGES = {
   SUCCESS: 'You will be redirected shortly...',
   ERROR: 'Failed to initiate review. Please try again.',
 };
+
+export const MODAL_NAMES = {
+  RESUME_REVIEW: 'resumeReview',
+};
