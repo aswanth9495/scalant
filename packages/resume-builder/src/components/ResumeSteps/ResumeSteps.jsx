@@ -15,7 +15,7 @@ import {
 } from '../../store/resumeFormsSlice';
 import { useBasicQuestionsForm } from '../../hooks/useBasicQuestionsForm';
 import ResumeProfileCard from '../ResumeProfileCard';
-
+import ResumeReviewOverallSummary from '../ResumeReviewOverallSummary';
 const ResumeTimeline = () => {
   const dispatch = useDispatch();
   const program = useSelector(
@@ -112,18 +112,16 @@ const ResumeTimeline = () => {
 
   return (
     <div className={styles.container}>
+      <ResumeReviewOverallSummary />
+      <ResumeProfileCard
+        className={styles.profileCard}
+        resumePersonaData={resumePersonaData}
+      />
       {steps && steps.length > 0 ? (
         <Timeline
           mode="left"
+          pending={false}
           items={[
-            {
-              dot: <CheckCircleOutlined className={styles.completeIcon} />,
-              children: (
-                <div>
-                  <ResumeProfileCard resumePersonaData={resumePersonaData} />
-                </div>
-              ),
-            },
             ...steps.map((step) => {
               let dotIcon;
               if (step.key === expandedStep) {

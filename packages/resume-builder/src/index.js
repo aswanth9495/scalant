@@ -10,3 +10,10 @@ export { default as resumeBuilderApi } from './services/resumeBuilderApi';
 
 // Store
 export { default as store } from './store';
+
+// actions
+export {
+  setIsLoading,
+  setIsError,
+  setReviewData,
+} from './store/resumeReviewSlice';
