@@ -1,6 +1,7 @@
 import React from 'react';
 
 import styles from './ResumeReviewOverallSummary.module.scss';
+import { useSelector } from 'react-redux';
 
 const BACKGROUND_IMAGE_URL = {
   success:
@@ -21,6 +22,10 @@ const ResumeReviewOverallSummary = ({
   type = TYPE_MAP.success,
   summaryText = DEFAULT_SUMMARY_TEXT,
 }) => {
+  const { reviewData } = useSelector(
+    (state) => state.scalantResumeBuilder.resumeReview
+  );
+  console.log('reviewData', reviewData);
   return (
     <div
       className={styles.container}
