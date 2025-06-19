@@ -16,6 +16,7 @@ import {
 import { useBasicQuestionsForm } from '../../hooks/useBasicQuestionsForm';
 import ResumeProfileCard from '../ResumeProfileCard';
 import ResumeReviewOverallSummary from '../ResumeReviewOverallSummary';
+
 const ResumeTimeline = () => {
   const dispatch = useDispatch();
   const program = useSelector(
@@ -36,6 +37,12 @@ const ResumeTimeline = () => {
   const [mounted, setMounted] = useState(false);
   const resumePersonaData = useSelector(
     (state) => state.scalantResumeBuilder.formStore.forms.basicQuestions
+  );
+  const reviewData = useSelector(
+    (state) => state.scalantResumeBuilder.resumeReview.reviewData
+  );
+  const isReviewLoading = useSelector(
+    (state) => state.scalantResumeBuilder.resumeReview.isLoading
   );
 
   // Initialize form values when resumeData is loaded
@@ -104,15 +111,27 @@ const ResumeTimeline = () => {
         resumePersonaData,
         incompleteForms,
         handleFormCompletion,
-        program
+        program,
+        reviewData,
+        isReviewLoading
       );
       setSteps(formSteps);
     }
-  }, [resumePersonaData, incompleteForms, handleFormCompletion, program]);
+  }, [
+    resumePersonaData,
+    incompleteForms,
+    handleFormCompletion,
+    program,
+    reviewData,
+    isReviewLoading,
+  ]);
 
   return (
     <div className={styles.container}>
-      <ResumeReviewOverallSummary />
+      <ResumeReviewOverallSummary
+        reviewData={reviewData}
+        isReviewLoading={isReviewLoading}
+      />
       <ResumeProfileCard
         className={styles.profileCard}
         resumePersonaData={resumePersonaData}
@@ -126,7 +145,10 @@ const ResumeTimeline = () => {
               let dotIcon;
               if (step.key === expandedStep) {
                 dotIcon = <LoadingOutlined className={styles.activeIcon} />;
-              } else if (step.status === 'complete') {
+              } else if (
+                step.status === 'complete' ||
+                step.status === 'looks_good'
+              ) {
                 dotIcon = (
                   <CheckCircleOutlined className={styles.completeIcon} />
                 );

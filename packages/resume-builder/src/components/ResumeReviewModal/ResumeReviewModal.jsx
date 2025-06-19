@@ -40,15 +40,6 @@ const ResumeReviewModal = () => {
       buttonIcon: <StarOutlined />,
       onButtonClick: handleReviewResume,
     },
-    REVIEW_LOADING: {
-      title: 'This might take a minute!',
-      description:
-        'Please wait — your resume is being evaluated by AI. Feedback will be ready in about a minute.',
-      isButtonDisabled: true,
-      buttonText: 'Review Resume.',
-      buttonIcon: <StarOutlined />,
-      onButtonClick: () => {},
-    },
     RESUME_PASSED: {
       title: 'Congratulations! Your resume looks good',
       description:

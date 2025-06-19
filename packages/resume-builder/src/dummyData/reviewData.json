@@ -23,12 +23,12 @@
           ]
         }, 
       "section_scores": {
-        "skills": 1,
-        "work_experience": 2,
-        "projects": 2,
+        "skills": 3,
+        "work_experience": 3,
+        "projects": 3,
         "accuracy_and_presentation": 3
       },
-      "overall_resume_score": 2
-    },
-  "evaluation_state": "ongoing"
+    "overall_resume_score": 2
+  },
+  "evaluation_state": "failed"
 }

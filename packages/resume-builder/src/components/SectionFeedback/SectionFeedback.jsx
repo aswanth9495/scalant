@@ -1,8 +1,14 @@
 import React from 'react';
 import { Flex } from 'antd';
 import styles from './SectionFeedback.module.scss';
+import { ExclamationCircleFilled } from '@ant-design/icons';
 
-const SectionFeedback = ({ icon, feedbackData = [] }) => {
+const SectionFeedback = ({
+  icon = (
+    <ExclamationCircleFilled style={{ color: '#faad14', fontSize: '1.6rem' }} />
+  ),
+  feedbackData = [],
+}) => {
   return (
     <>
       {feedbackData.length > 0 ? (
@@ -14,16 +20,14 @@ const SectionFeedback = ({ icon, feedbackData = [] }) => {
         >
           {icon}
           <Flex vertical>
-            {feedbackData.map((feedback) => (
-              <div key={feedback.id}>
-                <div className={styles.feedbackText}>{feedback.title}</div>
-                <ul className={styles.feedbackDescription}>
-                  {feedback.description.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+            <div>
+              <div className={styles.feedbackText}>Section Feedback</div>
+              <ul className={styles.feedbackDescription}>
+                {feedbackData.map((feedback, index) => (
+                  <li key={index}>{feedback}</li>
+                ))}
+              </ul>
+            </div>
           </Flex>
         </Flex>
       ) : null}

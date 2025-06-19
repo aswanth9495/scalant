@@ -27,7 +27,11 @@ export const WithReviewData = () => {
   useEffect(() => {
     setTimeout(() => {
       dispatch(setReviewData(reviewData));
-      dispatch(setIsLoading(false));
+      if (reviewData.evaluation_state === 'ongoing') {
+        dispatch(setIsLoading(true));
+      } else {
+        dispatch(setIsLoading(false));
+      }
     }, TIMEOUT_FOR_REVIEW_DATA);
   }, []);
 

@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Row, Col, Layout, Typography, Flex, Button } from 'antd';
+import { Row, Col, Layout, Typography, Flex, Button, Tooltip } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
 import { setModal } from '../../store/modalsSlice';
 import { MODAL_NAMES } from '../../utils/constants';
 import ResumeReviewModal from '../../components/ResumeReviewModal/ResumeReviewModal';
+import { useGetResumeFeedbackMutation } from '../../services/resumeBuilderApi';
+import { setIsLoading } from '../../store/resumeReviewSlice';
 
 const { Header, Content } = Layout;
 
@@ -17,17 +19,40 @@ const LOGO_URL =
 
 const ResumeLayout = ({ onBackButtonClick, children, preview }) => {
   const dispatch = useDispatch();
+  const [getResumeFeedback] = useGetResumeFeedbackMutation();
+  const resumeData = useSelector(
+    (state) => state.scalantResumeBuilder.resumeBuilder.resumeData
+  );
   const { currentStep } = useSelector(
     (state) => state.scalantResumeBuilder.resumeBuilder
+  );
+  const { isLoading: isReviewLoading } = useSelector(
+    (state) => state.scalantResumeBuilder.resumeReview
   );
 
   const incompleteForms = useSelector(
     (state) => state.scalantResumeBuilder.resumeForms.incompleteForms
   );
 
-  const onReviewResumeClick = () => {
-    dispatch(setModal({ modalName: MODAL_NAMES.RESUME_REVIEW, isOpen: true }));
+  const onReviewResumeClick = async () => {
+    try {
+      dispatch(setIsLoading(true));
+      await getResumeFeedback({
+        resumeId: resumeData?.resume_details?.id,
+      }).unwrap();
+    } catch (error) {
+      // TODO: Handle error
+    }
   };
+
+  const reviewTooltipTitle = useMemo(() => {
+    if (incompleteForms.length > 0) {
+      return 'Complete all sections in resume to start review and get feedback';
+    } else if (isReviewLoading) {
+      return 'Reviewing your resume...';
+    }
+    return '';
+  }, [incompleteForms, isReviewLoading]);
 
   return (
     <Row>
@@ -55,13 +80,15 @@ const ResumeLayout = ({ onBackButtonClick, children, preview }) => {
                 )}
               </Flex>
               {currentStep === 4 && (
-                <Button
-                  type="primary"
-                  onClick={onReviewResumeClick}
-                  disabled={incompleteForms.length > 0}
-                >
-                  Review Resume
-                </Button>
+                <Tooltip title={reviewTooltipTitle}>
+                  <Button
+                    type="primary"
+                    onClick={onReviewResumeClick}
+                    disabled={incompleteForms.length > 0 || isReviewLoading}
+                  >
+                    Review Resume
+                  </Button>
+                </Tooltip>
               )}
             </Flex>
           </Header>
