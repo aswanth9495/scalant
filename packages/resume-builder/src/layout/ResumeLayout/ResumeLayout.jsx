@@ -1,7 +1,13 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { Row, Col, Layout, Typography, Flex } from 'antd';
+import React, { useMemo } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { Row, Col, Layout, Typography, Flex, Button, Tooltip } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
+import { setModal } from '../../store/modalsSlice';
+import { MODAL_NAMES } from '../../utils/constants';
+import ResumeReviewModal from '../../components/ResumeReviewModal/ResumeReviewModal';
+import { useGetResumeFeedbackMutation } from '../../services/resumeBuilderApi';
+import { setIsLoading } from '../../store/resumeReviewSlice';
+
 const { Header, Content } = Layout;
 
 const { Text } = Typography;
@@ -12,13 +18,41 @@ const LOGO_URL =
   'https://assets.fp.scaler.com/seo/_next/static/media/scaler-light.6def257e.svg';
 
 const ResumeLayout = ({ onBackButtonClick, children, preview }) => {
+  const dispatch = useDispatch();
+  const [getResumeFeedback] = useGetResumeFeedbackMutation();
+  const resumeData = useSelector(
+    (state) => state.scalantResumeBuilder.resumeBuilder.resumeData
+  );
   const { currentStep } = useSelector(
     (state) => state.scalantResumeBuilder.resumeBuilder
+  );
+  const { isLoading: isReviewLoading } = useSelector(
+    (state) => state.scalantResumeBuilder.resumeReview
   );
 
   const incompleteForms = useSelector(
     (state) => state.scalantResumeBuilder.resumeForms.incompleteForms
   );
+
+  const onReviewResumeClick = async () => {
+    try {
+      dispatch(setIsLoading(true));
+      await getResumeFeedback({
+        resumeId: resumeData?.resume_details?.id,
+      }).unwrap();
+    } catch (error) {
+      // TODO: Handle error
+    }
+  };
+
+  const reviewTooltipTitle = useMemo(() => {
+    if (incompleteForms.length > 0) {
+      return 'Complete all sections in resume to start review and get feedback';
+    } else if (isReviewLoading) {
+      return 'Reviewing your resume...';
+    }
+    return '';
+  }, [incompleteForms, isReviewLoading]);
 
   return (
     <Row>
@@ -28,7 +62,7 @@ const ResumeLayout = ({ onBackButtonClick, children, preview }) => {
             <Flex
               justify="space-between"
               align="center"
-              style={{ width: '55%' }}
+              style={{ width: '100%' }}
             >
               <div>
                 <CloseOutlined
@@ -37,11 +71,26 @@ const ResumeLayout = ({ onBackButtonClick, children, preview }) => {
                 />
                 <img className={styles.logo} src={LOGO_URL} alt="logo" />
               </div>
-              {currentStep >= 2 && <Text>Resume Builder</Text>}
+              <Flex vertical justify="center" align="center">
+                {currentStep >= 2 && <Text>Resume Builder</Text>}
+                {currentStep === 4 && (
+                  <Text>
+                    {6 - incompleteForms.length} of 6 sections completed
+                  </Text>
+                )}
+              </Flex>
+              {currentStep === 4 && (
+                <Tooltip title={reviewTooltipTitle}>
+                  <Button
+                    type="primary"
+                    onClick={onReviewResumeClick}
+                    disabled={incompleteForms.length > 0 || isReviewLoading}
+                  >
+                    Review Resume
+                  </Button>
+                </Tooltip>
+              )}
             </Flex>
-            {currentStep === 4 && (
-              <Text>{6 - incompleteForms.length} of 6 sections completed</Text>
-            )}
           </Header>
           <Content className={styles.content}>
             {' '}
@@ -52,6 +101,7 @@ const ResumeLayout = ({ onBackButtonClick, children, preview }) => {
       <Col className={styles.right} span={12}>
         {preview}
       </Col>
+      <ResumeReviewModal />
     </Row>
   );
 };

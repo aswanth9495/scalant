@@ -6,6 +6,7 @@ import {
   setProgram,
   resetSteps,
 } from '../../store/resumeBuilderSlice';
+import { setReviewData, setIsLoading } from '../../store/resumeReviewSlice';
 import { resetAllForms } from '../../store/formStoreSlice';
 import { getResumeProgram } from '../../utils/resumeUtils';
 import { LoadingOutlined } from '@ant-design/icons';
@@ -52,10 +53,19 @@ const ResumeBuilderContent = ({
     if (resumeData) {
       const resumeId = resumeData?.resume_details?.id;
 
+      const resumeEvaluationDetails = resumeData?.resume_evaluation_details;
+
       dispatch(setResumeData(resumeData));
       dispatch(setProgram(getResumeProgram(courseProduct)));
       dispatch(resetSteps());
       dispatch(resetAllForms());
+      dispatch(setReviewData(resumeEvaluationDetails));
+
+      if (resumeEvaluationDetails?.evaluation_state === 'ongoing') {
+        dispatch(setIsLoading(true));
+      } else {
+        dispatch(setIsLoading(false));
+      }
 
       const shouldShow = isOnboarding ? shouldShowOnboarding(resumeId) : false;
       if (!shouldShow) {
