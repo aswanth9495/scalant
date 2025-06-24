@@ -31,6 +31,7 @@ import SampleResumePreview from '../SampleResumePreview';
 import ResumeHighlightPreview from '../ResumeHighlightPreview';
 import styles from './ResumeBuilder.module.scss';
 import IntroVideo from '../IntroVideo';
+
 const ResumeBuilderContent = ({
   isOnboarding = true,
   resumeData,
@@ -109,14 +110,8 @@ const ResumeBuilderContent = ({
     const currentStepData = steps[currentStep];
     switch (currentStepData.component) {
       case RESUME_BUILDER_STEPS.ACKNOWLEDGEMENT.component:
-        // return <IntroVideo />;
-        return (
-          <img
-            src={PREFERENCE_SETTINGS_IMAGE}
-            className={styles.previewImage}
-            alt="preference-settings"
-          />
-        );
+        return <IntroVideo />;
+
       case RESUME_BUILDER_STEPS.PREFERENCE_SETTINGS.component:
         return (
           <img
