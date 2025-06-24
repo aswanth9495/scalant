@@ -270,7 +270,7 @@ const getFormStatus = (
     reviewData?.resume_evaluation_result?.overall_resume_score;
 
   const sectionScore =
-    reviewData?.resume_evaluation_result?.section_scores[
+    reviewData?.resume_evaluation_result?.section_scores?.[
       FORM_AI_FEEDBACK_SECTIONS[formKey]
     ];
 
