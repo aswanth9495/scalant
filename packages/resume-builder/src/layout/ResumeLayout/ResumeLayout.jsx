@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Row, Col, Layout, Typography, Flex, Button, Tooltip } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
@@ -19,10 +19,6 @@ const LOGO_URL =
 
 const ResumeLayout = ({ onBackButtonClick, children, preview }) => {
   const dispatch = useDispatch();
-  const [getResumeFeedback] = useGetResumeFeedbackMutation();
-  const resumeData = useSelector(
-    (state) => state.scalantResumeBuilder.resumeBuilder.resumeData
-  );
   const { currentStep } = useSelector(
     (state) => state.scalantResumeBuilder.resumeBuilder
   );
@@ -34,16 +30,9 @@ const ResumeLayout = ({ onBackButtonClick, children, preview }) => {
     (state) => state.scalantResumeBuilder.resumeForms.incompleteForms
   );
 
-  const onReviewResumeClick = async () => {
-    try {
-      dispatch(setIsLoading(true));
-      await getResumeFeedback({
-        resumeId: resumeData?.resume_details?.id,
-      }).unwrap();
-    } catch (error) {
-      // TODO: Handle error
-    }
-  };
+  const onReviewResumeClick = useCallback(() => {
+    dispatch(setModal({ modalName: MODAL_NAMES.RESUME_REVIEW, isOpen: true }));
+  }, [dispatch]);
 
   const reviewTooltipTitle = useMemo(() => {
     if (incompleteForms.length > 0) {

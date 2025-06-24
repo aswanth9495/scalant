@@ -1,33 +1,48 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Modal, Flex, Typography, Button } from 'antd';
+import { Modal, Flex, Typography, Button, message } from 'antd';
 import { StarOutlined, DownloadOutlined } from '@ant-design/icons';
 import styles from './ResumeReviewModal.module.scss';
 import resumeImg from '../../assets/sample_resume_mockup.svg';
 import { setModal } from '../../store/modalsSlice';
 import { MODAL_NAMES } from '../../utils/constants';
+import { useGetResumeFeedbackMutation } from '../../services/resumeBuilderApi';
+import { setIsLoading } from '../../store/resumeReviewSlice';
 
 const { Title, Text } = Typography;
 
 const ResumeReviewModal = () => {
   const [modalState, setModalState] = useState('INITIATE_REVIEW');
   const dispatch = useDispatch();
+  const [getResumeFeedback] = useGetResumeFeedbackMutation();
   const isModalOpen = useSelector(
     (state) => state.scalantResumeBuilder.modals[MODAL_NAMES.RESUME_REVIEW]
   );
+  const resumeData = useSelector(
+    (state) => state.scalantResumeBuilder.resumeBuilder.resumeData
+  );
 
-  const handleReviewResume = () => {
-    console.log('handleReviewResume');
-  };
+  const handleCloseModal = useCallback(() => {
+    dispatch(setModal({ modalName: MODAL_NAMES.RESUME_REVIEW, isOpen: false }));
+  }, [dispatch]);
 
-  const handleDownloadResume = () => {
+  const handleReviewResume = useCallback(async () => {
+    try {
+      await getResumeFeedback({
+        resumeId: resumeData?.resume_details?.id,
+      }).unwrap();
+      message.success('Reviewing your resume...');
+      handleCloseModal();
+      dispatch(setIsLoading(true));
+    } catch {
+      message.error('Error getting resume feedback');
+    }
+  }, [dispatch, getResumeFeedback, resumeData, handleCloseModal]);
+
+  const handleDownloadResume = useCallback(() => {
     // Implement download logic here
     console.log('Downloading resume...');
-  };
-
-  const handleDoItLater = () => {
-    dispatch(setModal({ modalName: MODAL_NAMES.RESUME_REVIEW, isOpen: false }));
-  };
+  }, []);
 
   const MODAL_STATES = {
     INITIATE_REVIEW: {
@@ -91,7 +106,7 @@ const ResumeReviewModal = () => {
             type="text"
             className={styles.doItLaterButton}
             disabled={currentState.isButtonDisabled}
-            onClick={handleDoItLater}
+            onClick={handleCloseModal}
           >
             Do it Later
           </Button>
