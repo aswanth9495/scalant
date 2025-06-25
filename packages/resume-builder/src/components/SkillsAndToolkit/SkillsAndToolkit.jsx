@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 import { initializeForm, updateFormData } from '../../store/formStoreSlice';
 import SkillSection from './SkillSection';
+import SectionFeedback from '../SectionFeedback/SectionFeedback';
 
 import styles from './SkillsAndToolkit.module.scss';
 
@@ -41,6 +42,12 @@ const SkillsAndToolkit = ({ onComplete }) => {
   const isFormInitialized = useSelector(
     (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
   );
+  const reviewData = useSelector(
+    (state) => state.scalantResumeBuilder.resumeReview.reviewData
+  );
+  const skillsFeedback = useMemo(() => {
+    return reviewData?.resume_evaluation_result?.section_feedback?.skills || [];
+  }, [reviewData]);
 
   const { resume_builder_skills: resumeBuilderSkills, skill_data: skillsData } =
     useSelector((state) => state.scalantResumeBuilder.metaData.meta);
@@ -176,6 +183,7 @@ const SkillsAndToolkit = ({ onComplete }) => {
 
   return (
     <Space direction="vertical" size={24} className={styles.container}>
+      <SectionFeedback feedbackData={skillsFeedback} />
       {Object.values(SKILL_SECTIONS).map(renderSkillSection)}
       <Flex gap={16}>
         <Button

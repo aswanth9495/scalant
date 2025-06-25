@@ -5,6 +5,8 @@ import {
   MinusOutlined,
   CheckCircleOutlined,
   ExclamationCircleOutlined,
+  SyncOutlined,
+  CloseCircleOutlined,
 } from '@ant-design/icons';
 import styles from './ResumeStepCard.module.scss';
 
@@ -17,8 +19,28 @@ const STATUS_TAGS = {
     </Tag>
   ),
   incomplete: (
-    <Tag color="gold" bordered={true} icon={<ExclamationCircleOutlined />}>
+    <Tag color="red" bordered={true} icon={<CloseCircleOutlined />}>
       Incomplete
+    </Tag>
+  ),
+  looks_good: (
+    <Tag color="green" bordered={true} icon={<CheckCircleOutlined />}>
+      Looks Good
+    </Tag>
+  ),
+  needs_work: (
+    <Tag color="gold" bordered={true} icon={<SyncOutlined />}>
+      Needs Work
+    </Tag>
+  ),
+  needs_review: (
+    <Tag color="blue" bordered={true} icon={<SyncOutlined />}>
+      Needs Review
+    </Tag>
+  ),
+  under_review: (
+    <Tag color="blue" bordered={true} icon={<SyncOutlined spin />}>
+      Under Review
     </Tag>
   ),
 };

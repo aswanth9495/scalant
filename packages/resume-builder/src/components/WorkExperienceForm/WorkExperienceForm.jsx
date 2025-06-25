@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 import { initializeForm, updateFormData } from '../../store/formStoreSlice';
 import AiSuggestionBanner from '../AiSuggestionBanner/AiSuggestionBanner';
+import SectionFeedback from '../SectionFeedback/SectionFeedback';
 import WorkExperienceFormItem from './WorkExperienceFormItem';
 
 const FORM_ID = 'workExperienceForm';
@@ -41,6 +42,15 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
   const isFormInitialized = useSelector(
     (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
   );
+  const reviewData = useSelector(
+    (state) => state.scalantResumeBuilder.resumeReview.reviewData
+  );
+  const workExperienceFeedback = useMemo(() => {
+    return (
+      reviewData?.resume_evaluation_result?.section_feedback?.work_experience ||
+      []
+    );
+  }, [reviewData]);
   const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
   const initialValues = useMemo(
@@ -183,6 +193,7 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
   return (
     <Flex vertical gap={16}>
       <AiSuggestionBanner />
+      <SectionFeedback feedbackData={workExperienceFeedback} />
       <Space direction="vertical" style={{ width: '100%' }}>
         <Flex vertical gap={16}>
           {(formData?.workExperienceItems || []).map((item, index) => (

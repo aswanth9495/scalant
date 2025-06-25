@@ -6,6 +6,7 @@ import {
   setProgram,
   resetSteps,
 } from '../../store/resumeBuilderSlice';
+import { setReviewData, setIsLoading } from '../../store/resumeReviewSlice';
 import { resetAllForms } from '../../store/formStoreSlice';
 import { getResumeProgram } from '../../utils/resumeUtils';
 import { LoadingOutlined } from '@ant-design/icons';
@@ -30,6 +31,7 @@ import SampleResumePreview from '../SampleResumePreview';
 import ResumeHighlightPreview from '../ResumeHighlightPreview';
 import styles from './ResumeBuilder.module.scss';
 import IntroVideo from '../IntroVideo';
+
 const ResumeBuilderContent = ({
   isOnboarding = true,
   resumeData,
@@ -52,10 +54,19 @@ const ResumeBuilderContent = ({
     if (resumeData) {
       const resumeId = resumeData?.resume_details?.id;
 
+      const resumeEvaluationDetails = resumeData?.resume_evaluation_details;
+
       dispatch(setResumeData(resumeData));
       dispatch(setProgram(getResumeProgram(courseProduct)));
       dispatch(resetSteps());
       dispatch(resetAllForms());
+      dispatch(setReviewData(resumeEvaluationDetails));
+
+      if (resumeEvaluationDetails?.evaluation_state === 'ongoing') {
+        dispatch(setIsLoading(true));
+      } else {
+        dispatch(setIsLoading(false));
+      }
 
       const shouldShow = isOnboarding ? shouldShowOnboarding(resumeId) : false;
       if (!shouldShow) {
@@ -99,14 +110,8 @@ const ResumeBuilderContent = ({
     const currentStepData = steps[currentStep];
     switch (currentStepData.component) {
       case RESUME_BUILDER_STEPS.ACKNOWLEDGEMENT.component:
-        // return <IntroVideo />;
-        return (
-          <img
-            src={PREFERENCE_SETTINGS_IMAGE}
-            className={styles.previewImage}
-            alt="preference-settings"
-          />
-        );
+        return <IntroVideo />;
+
       case RESUME_BUILDER_STEPS.PREFERENCE_SETTINGS.component:
         return (
           <img
