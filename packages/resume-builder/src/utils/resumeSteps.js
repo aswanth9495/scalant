@@ -320,7 +320,8 @@ export const getFormSteps = (
   resumePersonaData,
   incompleteForms,
   onComplete,
-  program
+  program,
+  onAiSuggestionClick
 ) => {
   if (!resumePersonaData) return [];
 
@@ -350,6 +351,7 @@ export const getFormSteps = (
         component: React.createElement(step.component, {
           onComplete,
           required: isRequired,
+          onAiSuggestionClick,
         }),
       };
     })

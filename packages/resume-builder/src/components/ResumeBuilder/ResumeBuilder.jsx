@@ -29,7 +29,7 @@ import ResumePreview from '../ResumePreview';
 import SampleResumePreview from '../SampleResumePreview';
 import ResumeHighlightPreview from '../ResumeHighlightPreview';
 import styles from './ResumeBuilder.module.scss';
-import IntroVideo from '../IntroVideo';
+
 const ResumeBuilderContent = ({
   isOnboarding = true,
   resumeData,
@@ -40,6 +40,7 @@ const ResumeBuilderContent = ({
   onManageResumesClick,
   onEditClick,
   onDeleteClick,
+  onAiSuggestionClick,
   courseProduct,
   isLoading = false,
 }) => {
@@ -89,7 +90,7 @@ const ResumeBuilderContent = ({
       case RESUME_BUILDER_STEPS.RESUME_TIPS.component:
         return <ResumeTips />;
       case RESUME_BUILDER_STEPS.RESUME_STEPS.component:
-        return <ResumeSteps />;
+        return <ResumeSteps onAiSuggestionClick={onAiSuggestionClick} />;
       default:
         return null;
     }
@@ -164,6 +165,7 @@ const ResumeBuilder = ({
   onEditClick,
   onDeleteClick,
   isLoading = false,
+  onAiSuggestionClick,
 }) => {
   return (
     <ResumeBuilderContent
@@ -178,6 +180,7 @@ const ResumeBuilder = ({
       onEditClick={onEditClick}
       onDeleteClick={onDeleteClick}
       isLoading={isLoading}
+      onAiSuggestionClick={onAiSuggestionClick}
     />
   );
 };

@@ -26,7 +26,7 @@ const initialFormData = {
   ],
 };
 
-const ProjectForm = ({ onComplete, required = false }) => {
+const ProjectForm = ({ onComplete, required = false, onAiSuggestionClick }) => {
   const dispatch = useDispatch();
   const resumeData = useSelector(
     (state) => state.scalantResumeBuilder.resumeBuilder.resumeData
@@ -147,7 +147,7 @@ const ProjectForm = ({ onComplete, required = false }) => {
 
   return (
     <Flex vertical gap={16}>
-      <AiSuggestionBanner />
+      <AiSuggestionBanner onClick={onAiSuggestionClick} />
       <Space direction="vertical" style={{ width: '100%' }}>
         <Flex vertical gap={16}>
           {(formData?.projectItems || []).map((item, index) => (
