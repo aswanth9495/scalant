@@ -142,6 +142,7 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
         github: values.github,
         portfolio: values.personalWebsite,
         isPopulated: true,
+        upgrade: true,
       };
 
       // Add additional profiles to payload

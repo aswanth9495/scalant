@@ -160,6 +160,7 @@ const EducationForm = ({ onComplete, required = false }) => {
       const payload = {
         form_stage: 'education_details_form',
         isPopulated: true,
+        upgrade: true,
         educations: educationPayload,
         resume_custom_section: customEducation,
       };

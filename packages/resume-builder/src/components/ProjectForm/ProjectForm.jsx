@@ -122,7 +122,7 @@ const ProjectForm = ({ onComplete, required = false, onAiSuggestionClick }) => {
         form_stage: 'project_details_form',
         isPopulated: true,
         projects: projectsPayload,
-        upgrade: false,
+        upgrade: true,
       };
 
       await updateResumeDetails({

@@ -125,6 +125,7 @@ const PreferenceSettings = () => {
       buyout_notice: form.getFieldsValue().negotiable === 'yes',
       rpo_consent: 'true',
       isPopulated: true,
+      upgrade: true,
       preferred_role_types: preferredRolesTypes,
       relevancy_alert: form.getFieldsValue().acknowledge,
     };
