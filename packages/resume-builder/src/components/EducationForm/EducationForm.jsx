@@ -43,6 +43,9 @@ const EducationForm = ({ onComplete, required = false }) => {
   const isFormInitialized = useSelector(
     (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
   );
+  const incompleteForms = useSelector(
+    (state) => state.scalantResumeBuilder.resumeForms.incompleteForms
+  );
   const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
   const initialValues = useMemo(() => {
@@ -160,7 +163,7 @@ const EducationForm = ({ onComplete, required = false }) => {
       const payload = {
         form_stage: 'education_details_form',
         isPopulated: true,
-        upgrade: true,
+        mark_complete: incompleteForms.length === 0,
         educations: educationPayload,
         resume_custom_section: customEducation,
       };

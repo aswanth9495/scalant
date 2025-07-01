@@ -31,6 +31,9 @@ const CustomForm = ({ onComplete }) => {
   const isFormInitialized = useSelector(
     (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
   );
+  const incompleteForms = useSelector(
+    (state) => state.scalantResumeBuilder.resumeForms.incompleteForms
+  );
   const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
   const initialValues = useMemo(
@@ -77,6 +80,7 @@ const CustomForm = ({ onComplete }) => {
         form_stage: 'achievement_details_form',
         isPopulated: true,
         achievements: achievements,
+        mark_complete: incompleteForms.length === 0,
       };
 
       await updateResumeDetails({

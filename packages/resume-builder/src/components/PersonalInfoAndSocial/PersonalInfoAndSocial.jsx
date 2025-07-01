@@ -64,6 +64,9 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
   const isFormInitialized = useSelector(
     (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
   );
+  const incompleteForms = useSelector(
+    (state) => state.scalantResumeBuilder.resumeForms.incompleteForms
+  );
   const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
   const [form] = Form.useForm();
@@ -142,7 +145,7 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
         github: values.github,
         portfolio: values.personalWebsite,
         isPopulated: true,
-        upgrade: true,
+        mark_complete: incompleteForms.length === 0,
       };
 
       // Add additional profiles to payload
