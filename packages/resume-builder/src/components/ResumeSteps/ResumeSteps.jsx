@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch, batch } from 'react-redux';
-import { Timeline, Spin } from 'antd';
+import { Timeline, Spin, message } from 'antd';
 import {
   CheckCircleOutlined,
   ClockCircleOutlined,
@@ -97,10 +97,23 @@ const ResumeTimeline = ({ onAiSuggestionClick }) => {
       if (incompleteForms.length === 0 && resumeData.application_stage !== 4) {
         // if the form is complete and the application stage is not 4,
         // then reload the page as the status will be updated to active after reload
-        // window.location.reload();
+        message.success(
+          'Resume completed successfully. Redirecting to career hub...'
+        );
+        // eslint-disable-next-line no-undef
+        setTimeout(() => {
+          // eslint-disable-next-line no-undef
+          window.location.reload();
+        }, 5000); // 5 seconds delay to ensure the status is updated
       }
     },
-    [incompleteForms, currentIncompleteForm, dispatch, expandedStep]
+    [
+      incompleteForms,
+      currentIncompleteForm,
+      resumeData?.application_stage,
+      dispatch,
+      expandedStep,
+    ]
   );
 
   useEffect(() => {

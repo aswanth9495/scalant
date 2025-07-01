@@ -125,7 +125,7 @@ const ProjectForm = ({ onComplete, required = false, onAiSuggestionClick }) => {
         form_stage: 'project_details_form',
         isPopulated: true,
         projects: projectsPayload,
-        mark_complete: incompleteForms.length <= 1,
+        mark_complete: incompleteForms.length === 0,
       };
 
       await updateResumeDetails({
@@ -139,13 +139,13 @@ const ProjectForm = ({ onComplete, required = false, onAiSuggestionClick }) => {
   };
 
   const handleSaveAndCompile = () => {
-    handleFinish();
     onComplete?.(true);
+    handleFinish();
   };
 
   const handleSaveAndNext = () => {
-    handleFinish();
     onComplete?.();
+    handleFinish();
   };
 
   return (

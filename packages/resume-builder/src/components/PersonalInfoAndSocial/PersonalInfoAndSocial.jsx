@@ -145,7 +145,7 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
         github: values.github,
         portfolio: values.personalWebsite,
         isPopulated: true,
-        mark_complete: incompleteForms.length <= 1,
+        mark_complete: incompleteForms.length === 0,
       };
 
       // Add additional profiles to payload
@@ -163,13 +163,13 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
     }
   };
   const handleSaveAndCompile = () => {
-    handleFinish();
     onComplete?.(true);
+    handleFinish();
   };
 
   const handleSaveAndNext = () => {
-    handleFinish();
     onComplete?.();
+    handleFinish();
   };
 
   const handleValuesChange = (changedValues, allValues) => {

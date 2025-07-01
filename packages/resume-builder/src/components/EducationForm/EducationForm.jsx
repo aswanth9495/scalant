@@ -163,7 +163,7 @@ const EducationForm = ({ onComplete, required = false }) => {
       const payload = {
         form_stage: 'education_details_form',
         isPopulated: true,
-        mark_complete: incompleteForms.length <= 1,
+        mark_complete: incompleteForms.length === 0,
         educations: educationPayload,
         resume_custom_section: customEducation,
       };
@@ -178,12 +178,12 @@ const EducationForm = ({ onComplete, required = false }) => {
     }
   };
   const handleSaveAndCompile = () => {
-    handleFinish();
     onComplete?.(true);
+    handleFinish();
   };
   const handleSaveAndNext = () => {
-    handleFinish();
     onComplete?.();
+    handleFinish();
   };
 
   return (

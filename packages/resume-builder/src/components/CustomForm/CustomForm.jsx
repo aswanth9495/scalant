@@ -80,7 +80,7 @@ const CustomForm = ({ onComplete }) => {
         form_stage: 'achievement_details_form',
         isPopulated: true,
         achievements: achievements,
-        mark_complete: incompleteForms.length <= 1,
+        mark_complete: incompleteForms.length === 0,
       };
 
       await updateResumeDetails({
@@ -95,13 +95,13 @@ const CustomForm = ({ onComplete }) => {
   };
 
   const handleSaveAndNext = () => {
-    handleFinish();
     onComplete?.();
+    handleFinish();
   };
 
   const handleSaveAndCompile = () => {
-    handleFinish();
     onComplete?.(true);
+    handleFinish();
   };
 
   return (

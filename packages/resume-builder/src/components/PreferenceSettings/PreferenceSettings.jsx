@@ -42,9 +42,6 @@ const PreferenceSettings = () => {
   const isFormInitialized = useSelector(
     (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
   );
-  const incompleteForms = useSelector(
-    (state) => state.scalantResumeBuilder.resumeForms.incompleteForms
-  );
   const preferenceData = resumeData?.user_company_profile;
   const preferredJobLocationValues = useSelector(
     (state) => state.scalantResumeBuilder.metaData.meta.job_locations
@@ -128,7 +125,6 @@ const PreferenceSettings = () => {
       buyout_notice: form.getFieldsValue().negotiable === 'yes',
       rpo_consent: 'true',
       isPopulated: true,
-      mark_complete: incompleteForms.length <= 1,
       preferred_role_types: preferredRolesTypes,
       relevancy_alert: form.getFieldsValue().acknowledge,
     };

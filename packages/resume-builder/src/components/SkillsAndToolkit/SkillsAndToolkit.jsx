@@ -68,7 +68,7 @@ const SkillsAndToolkit = ({ onComplete }) => {
       const payload = {
         form_stage: 'skills_details_form',
         skills: selectedSkills,
-        mark_complete: incompleteForms.length <= 1,
+        mark_complete: incompleteForms.length === 0,
       };
 
       await updateResumeDetails({
@@ -148,13 +148,13 @@ const SkillsAndToolkit = ({ onComplete }) => {
   };
 
   const handleSaveAndCompile = () => {
-    handleFinish();
     onComplete?.(true);
+    handleFinish();
   };
 
   const handleSaveAndNext = () => {
-    handleFinish();
     onComplete?.();
+    handleFinish();
   };
 
   const renderSkillSection = (section) => {
