@@ -163,7 +163,7 @@ const EducationForm = ({ onComplete, required = false }) => {
       const payload = {
         form_stage: 'education_details_form',
         isPopulated: true,
-        mark_complete: incompleteForms.length === 0,
+        mark_complete: incompleteForms.length <= 1,
         educations: educationPayload,
         resume_custom_section: customEducation,
       };

@@ -145,7 +145,7 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
         github: values.github,
         portfolio: values.personalWebsite,
         isPopulated: true,
-        mark_complete: incompleteForms.length === 0,
+        mark_complete: incompleteForms.length <= 1,
       };
 
       // Add additional profiles to payload

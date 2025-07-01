@@ -125,7 +125,7 @@ const ProjectForm = ({ onComplete, required = false, onAiSuggestionClick }) => {
         form_stage: 'project_details_form',
         isPopulated: true,
         projects: projectsPayload,
-        mark_complete: incompleteForms.length === 0,
+        mark_complete: incompleteForms.length <= 1,
       };
 
       await updateResumeDetails({

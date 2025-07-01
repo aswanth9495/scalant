@@ -128,7 +128,7 @@ const PreferenceSettings = () => {
       buyout_notice: form.getFieldsValue().negotiable === 'yes',
       rpo_consent: 'true',
       isPopulated: true,
-      mark_complete: incompleteForms.length === 0,
+      mark_complete: incompleteForms.length <= 1,
       preferred_role_types: preferredRolesTypes,
       relevancy_alert: form.getFieldsValue().acknowledge,
     };

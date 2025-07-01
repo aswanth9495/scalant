@@ -160,7 +160,7 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
       const payload = {
         form_stage: 'work_experience_details_form',
         isPopulated: true,
-        mark_complete: incompleteForms.length === 0,
+        mark_complete: incompleteForms.length <= 1,
         previous_experiences: workExperiencePayload,
       };
 

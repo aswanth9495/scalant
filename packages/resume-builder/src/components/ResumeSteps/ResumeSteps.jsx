@@ -97,8 +97,7 @@ const ResumeTimeline = ({ onAiSuggestionClick }) => {
       if (incompleteForms.length === 0 && resumeData.application_stage !== 4) {
         // if the form is complete and the application stage is not 4,
         // then reload the page as the status will be updated to active after reload
-        // eslint-disable-next-line no-undef
-        window.location.reload();
+        // window.location.reload();
       }
     },
     [incompleteForms, currentIncompleteForm, dispatch, expandedStep]

@@ -80,7 +80,7 @@ const CustomForm = ({ onComplete }) => {
         form_stage: 'achievement_details_form',
         isPopulated: true,
         achievements: achievements,
-        mark_complete: incompleteForms.length === 0,
+        mark_complete: incompleteForms.length <= 1,
       };
 
       await updateResumeDetails({
