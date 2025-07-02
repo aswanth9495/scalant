@@ -5,6 +5,7 @@ import {
   DeleteOutlined,
   EditOutlined,
   FilePdfOutlined,
+  LikeOutlined,
 } from '@ant-design/icons';
 
 import FontSizeDropdown from './FontSizeDropdown';
@@ -22,6 +23,7 @@ const TOOLTIPS = {
   DELETE: 'Delete Resume',
   DELETE_DISABLED: 'Cannot delete default resume',
   SAMPLE_RESUME: 'View Sample Resume',
+  FEEDBACK: 'Share Feedback',
 };
 
 const ResumePreview = ({
@@ -36,6 +38,7 @@ const ResumePreview = ({
   const resumeData = useSelector(
     (state) => state.scalantResumeBuilder.resumeBuilder.resumeData
   );
+  const userEmail = resumeData?.personal_details?.email;
   const { data, isLoading, isFetching, isError } = useGetResumeLinkQuery({
     resumeId: resumeData?.resume_details?.id || 1,
   });
@@ -125,6 +128,13 @@ const ResumePreview = ({
               <FloatButton
                 icon={<FilePdfOutlined />}
                 onClick={() => getSampleResumeLink()}
+              />
+            </Tooltip>
+            <Tooltip title={TOOLTIPS.FEEDBACK} placement="right">
+              <FloatButton
+                icon={<LikeOutlined />}
+                href={`https://interviewbit.typeform.com/to/MTZOE7Pt?email=${userEmail}`}
+                target="_blank"
               />
             </Tooltip>
           </FloatButton.Group>

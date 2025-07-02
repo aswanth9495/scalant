@@ -31,10 +31,12 @@ const ResumeLayout = ({ onBackButtonClick, children, preview }) => {
               style={{ width: '55%' }}
             >
               <div>
-                <CloseOutlined
-                  className={styles.backButton}
-                  onClick={onBackButtonClick}
-                />
+                {onBackButtonClick && (
+                  <CloseOutlined
+                    className={styles.backButton}
+                    onClick={onBackButtonClick}
+                  />
+                )}
                 <img className={styles.logo} src={LOGO_URL} alt="logo" />
               </div>
               {currentStep >= 2 && <Text>Resume Builder</Text>}
