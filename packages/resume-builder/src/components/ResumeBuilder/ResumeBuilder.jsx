@@ -165,6 +165,7 @@ const ResumeBuilder = ({
   onEditClick,
   onDeleteClick,
   isLoading = false,
+  courseProduct,
   onAiSuggestionClick,
 }) => {
   return (
@@ -181,6 +182,7 @@ const ResumeBuilder = ({
       onDeleteClick={onDeleteClick}
       isLoading={isLoading}
       onAiSuggestionClick={onAiSuggestionClick}
+      courseProduct={courseProduct}
     />
   );
 };
