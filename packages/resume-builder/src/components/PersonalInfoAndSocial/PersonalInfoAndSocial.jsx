@@ -19,8 +19,8 @@ import {
 } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
+import { FORM_KEYS } from '../../utils/constants';
 import { initializeForm, updateFormData } from '../../store/formStoreSlice';
-
 import { ADDITIONAL_PROFILES } from '../../utils/constants';
 import {
   getAdditionalProfileUrl,
@@ -64,9 +64,13 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
   const isFormInitialized = useSelector(
     (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
   );
-  const { completed: completedForm } = useSelector(
+  const { incompleteForms, currentIncompleteForm } = useSelector(
     (state) => state.scalantResumeBuilder.resumeForms
   );
+  const markComplete =
+    incompleteForms.length <= 1 &&
+    currentIncompleteForm === FORM_KEYS.personal_details;
+
   const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
   const [form] = Form.useForm();
@@ -144,7 +148,7 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
         github: values.github,
         portfolio: values.personalWebsite,
         isPopulated: true,
-        mark_complete: completedForm,
+        mark_complete: markComplete,
       };
 
       // Add additional profiles to payload

@@ -8,6 +8,7 @@ import ProjectFormItem from './ProjectFormItem';
 
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 import AiSuggestionBanner from '../AiSuggestionBanner/AiSuggestionBanner';
+import { FORM_KEYS } from '../../utils/constants';
 
 const FORM_ID = 'projectForm';
 
@@ -38,9 +39,11 @@ const ProjectForm = ({ onComplete, required = false, onAiSuggestionClick }) => {
   const isFormInitialized = useSelector(
     (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
   );
-  const { completed: completedForm } = useSelector(
+  const { incompleteForms, currentIncompleteForm } = useSelector(
     (state) => state.scalantResumeBuilder.resumeForms
   );
+  const markComplete =
+    incompleteForms.length <= 1 && currentIncompleteForm === FORM_KEYS.projects;
   const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
   const initialValues = useMemo(
@@ -125,7 +128,7 @@ const ProjectForm = ({ onComplete, required = false, onAiSuggestionClick }) => {
         form_stage: 'project_details_form',
         isPopulated: true,
         projects: projectsPayload,
-        mark_complete: completedForm,
+        mark_complete: markComplete,
       };
 
       await updateResumeDetails({

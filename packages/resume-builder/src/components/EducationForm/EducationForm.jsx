@@ -7,6 +7,7 @@ import CustomEducationFormItem from './CustomEducationFormItem';
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 import { initializeForm, updateFormData } from '../../store/formStoreSlice';
 import dayjs from 'dayjs';
+import { FORM_KEYS } from '../../utils/constants';
 
 const FORM_ID = 'educationForm';
 
@@ -43,10 +44,12 @@ const EducationForm = ({ onComplete, required = false }) => {
   const isFormInitialized = useSelector(
     (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
   );
-  const { completed: completedForm } = useSelector(
+  const { incompleteForms, currentIncompleteForm } = useSelector(
     (state) => state.scalantResumeBuilder.resumeForms
   );
-
+  const markComplete =
+    incompleteForms.length <= 1 &&
+    currentIncompleteForm === FORM_KEYS.education;
   const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
   const initialValues = useMemo(() => {
@@ -164,7 +167,7 @@ const EducationForm = ({ onComplete, required = false }) => {
       const payload = {
         form_stage: 'education_details_form',
         isPopulated: true,
-        mark_complete: completedForm,
+        mark_complete: markComplete,
         educations: educationPayload,
         resume_custom_section: customEducation,
       };

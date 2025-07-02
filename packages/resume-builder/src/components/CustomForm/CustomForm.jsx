@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 import { initializeForm } from '../../store/formStoreSlice';
 import CustomFormItem from './CustomFormItem';
+import { FORM_KEYS } from '../../utils/constants';
 
 const FORM_ID = 'achievementsForm';
 
@@ -31,9 +32,12 @@ const CustomForm = ({ onComplete }) => {
   const isFormInitialized = useSelector(
     (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
   );
-  const { completed: completedForm } = useSelector(
+  const { incompleteForms, currentIncompleteForm } = useSelector(
     (state) => state.scalantResumeBuilder.resumeForms
   );
+  const markComplete =
+    incompleteForms.length <= 1 &&
+    currentIncompleteForm === FORM_KEYS.achievements;
   const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
   const initialValues = useMemo(
@@ -80,7 +84,7 @@ const CustomForm = ({ onComplete }) => {
         form_stage: 'achievement_details_form',
         isPopulated: true,
         achievements: achievements,
-        mark_complete: completedForm,
+        mark_complete: markComplete,
       };
 
       await updateResumeDetails({

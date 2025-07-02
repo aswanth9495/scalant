@@ -523,3 +523,12 @@ export const AI_REVIEW_MESSAGES = {
   SUCCESS: 'You will be redirected shortly...',
   ERROR: 'Failed to initiate review. Please try again.',
 };
+
+export const FORM_KEYS = {
+  personal_details: 'personalDetails',
+  projects: 'projects',
+  experience: 'experience',
+  education: 'education',
+  skills: 'skills',
+  achievements: 'achievements',
+};
