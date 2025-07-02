@@ -41,8 +41,8 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
   const isFormInitialized = useSelector(
     (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
   );
-  const incompleteForms = useSelector(
-    (state) => state.scalantResumeBuilder.resumeForms.incompleteForms
+  const { completed: completedForm } = useSelector(
+    (state) => state.scalantResumeBuilder.resumeForms
   );
   const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
@@ -160,7 +160,7 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
       const payload = {
         form_stage: 'work_experience_details_form',
         isPopulated: true,
-        mark_complete: incompleteForms.length === 0,
+        mark_complete: completedForm,
         previous_experiences: workExperiencePayload,
       };
 

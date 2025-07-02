@@ -12,6 +12,7 @@ import { getAllIncompleteForms, getFormSteps } from '../../utils/resumeSteps';
 import {
   setIncompleteForms,
   setCurrentIncompleteForm,
+  setCompleted,
 } from '../../store/resumeFormsSlice';
 import { useBasicQuestionsForm } from '../../hooks/useBasicQuestionsForm';
 import ResumeProfileCard from '../ResumeProfileCard';
@@ -100,6 +101,7 @@ const ResumeTimeline = ({ onAiSuggestionClick }) => {
       ) {
         // if the form is complete and the application stage is not 4,
         // then reload the page as the status will be updated to active after reload
+        dispatch(setCompleted(true));
         message.success(
           'Resume completed successfully. Redirecting to career hub...'
         );

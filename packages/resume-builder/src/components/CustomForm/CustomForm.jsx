@@ -31,8 +31,8 @@ const CustomForm = ({ onComplete }) => {
   const isFormInitialized = useSelector(
     (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
   );
-  const incompleteForms = useSelector(
-    (state) => state.scalantResumeBuilder.resumeForms.incompleteForms
+  const { completed: completedForm } = useSelector(
+    (state) => state.scalantResumeBuilder.resumeForms
   );
   const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
@@ -80,7 +80,7 @@ const CustomForm = ({ onComplete }) => {
         form_stage: 'achievement_details_form',
         isPopulated: true,
         achievements: achievements,
-        mark_complete: incompleteForms.length === 0,
+        mark_complete: completedForm,
       };
 
       await updateResumeDetails({

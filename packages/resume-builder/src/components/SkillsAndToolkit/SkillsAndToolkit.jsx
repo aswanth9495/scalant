@@ -41,8 +41,8 @@ const SkillsAndToolkit = ({ onComplete }) => {
   const isFormInitialized = useSelector(
     (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
   );
-  const incompleteForms = useSelector(
-    (state) => state.scalantResumeBuilder.resumeForms.incompleteForms
+  const { completed: completedForm } = useSelector(
+    (state) => state.scalantResumeBuilder.resumeForms
   );
   const { resume_builder_skills: resumeBuilderSkills, skill_data: skillsData } =
     useSelector((state) => state.scalantResumeBuilder.metaData.meta);
@@ -68,7 +68,7 @@ const SkillsAndToolkit = ({ onComplete }) => {
       const payload = {
         form_stage: 'skills_details_form',
         skills: selectedSkills,
-        mark_complete: incompleteForms.length === 0,
+        mark_complete: completedForm,
       };
 
       await updateResumeDetails({

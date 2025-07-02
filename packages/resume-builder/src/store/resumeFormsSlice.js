@@ -6,6 +6,7 @@ const initialState = {
   nextIncompleteForm: '',
   allForms: STEPS_ORDER,
   incompleteForms: [],
+  completed: false,
 };
 
 const resumeFormsSlice = createSlice({
@@ -21,6 +22,9 @@ const resumeFormsSlice = createSlice({
     setIncompleteForms: (state, action) => {
       state.incompleteForms = action.payload;
     },
+    setCompleted: (state, action) => {
+      state.completed = action.payload;
+    },
   },
 });
 
@@ -28,5 +32,6 @@ export const {
   setCurrentIncompleteForm,
   setNextIncompleteForm,
   setIncompleteForms,
+  setCompleted,
 } = resumeFormsSlice.actions;
 export default resumeFormsSlice.reducer;
