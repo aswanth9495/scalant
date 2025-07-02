@@ -26,6 +26,7 @@ import ResumeBasicQuestions from '../ResumeBasicQuestions';
 import ResumeTips from '../ResumeTips';
 import ResumeSteps from '../ResumeSteps';
 import ResumePreview from '../ResumePreview';
+import IntroVideo from '../IntroVideo';
 import SampleResumePreview from '../SampleResumePreview';
 import ResumeHighlightPreview from '../ResumeHighlightPreview';
 import styles from './ResumeBuilder.module.scss';
@@ -100,14 +101,14 @@ const ResumeBuilderContent = ({
     const currentStepData = steps[currentStep];
     switch (currentStepData.component) {
       case RESUME_BUILDER_STEPS.ACKNOWLEDGEMENT.component:
-        // return <IntroVideo />;
-        return (
-          <img
-            src={PREFERENCE_SETTINGS_IMAGE}
-            className={styles.previewImage}
-            alt="preference-settings"
-          />
-        );
+        return <IntroVideo />;
+      // return (
+      //   <img
+      //     src={PREFERENCE_SETTINGS_IMAGE}
+      //     className={styles.previewImage}
+      //     alt="preference-settings"
+      //   />
+      // );
       case RESUME_BUILDER_STEPS.PREFERENCE_SETTINGS.component:
         return (
           <img
