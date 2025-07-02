@@ -84,10 +84,9 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
     // Create a flat object with all form values including profileType0, profileUrl0, etc.
     const formValues = {
       fullName: resumeData.personal_details.name,
-      contactNumber: resumeData.personal_details.phone_number.replace(
-        '+91-',
-        ''
-      ),
+      contactNumber: resumeData.personal_details.phone_number
+        ? resumeData.personal_details.phone_number.replace('+91-', '')
+        : '',
       emailAddress: resumeData.personal_details.email,
       gender: resumeData.personal_details.gender,
       currentCity: resumeData.personal_details.city,
