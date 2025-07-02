@@ -48,8 +48,9 @@ const EducationForm = ({ onComplete, required = false }) => {
     (state) => state.scalantResumeBuilder.resumeForms
   );
   const markComplete =
-    incompleteForms.length <= 1 &&
-    currentIncompleteForm === FORM_KEYS.education;
+    incompleteForms.length === 0 ||
+    (incompleteForms.length <= 1 &&
+      currentIncompleteForm === FORM_KEYS.education);
   const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
   const initialValues = useMemo(() => {

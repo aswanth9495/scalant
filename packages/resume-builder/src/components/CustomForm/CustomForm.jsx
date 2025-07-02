@@ -36,8 +36,9 @@ const CustomForm = ({ onComplete }) => {
     (state) => state.scalantResumeBuilder.resumeForms
   );
   const markComplete =
-    incompleteForms.length <= 1 &&
-    currentIncompleteForm === FORM_KEYS.achievements;
+    incompleteForms.length === 0 ||
+    (incompleteForms.length <= 1 &&
+      currentIncompleteForm === FORM_KEYS.achievements);
   const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
   const initialValues = useMemo(

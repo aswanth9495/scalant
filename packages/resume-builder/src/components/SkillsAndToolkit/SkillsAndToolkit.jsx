@@ -46,7 +46,8 @@ const SkillsAndToolkit = ({ onComplete }) => {
     (state) => state.scalantResumeBuilder.resumeForms
   );
   const markComplete =
-    incompleteForms.length <= 1 && currentIncompleteForm === FORM_KEYS.skills;
+    incompleteForms.length === 0 ||
+    (incompleteForms.length <= 1 && currentIncompleteForm === FORM_KEYS.skills);
   const { resume_builder_skills: resumeBuilderSkills, skill_data: skillsData } =
     useSelector((state) => state.scalantResumeBuilder.metaData.meta);
 

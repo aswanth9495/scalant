@@ -46,8 +46,9 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
     (state) => state.scalantResumeBuilder.resumeForms
   );
   const markComplete =
-    incompleteForms.length <= 1 &&
-    currentIncompleteForm === FORM_KEYS.experience;
+    incompleteForms.length === 0 ||
+    (incompleteForms.length <= 1 &&
+      currentIncompleteForm === FORM_KEYS.experience);
   const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
   const initialValues = useMemo(

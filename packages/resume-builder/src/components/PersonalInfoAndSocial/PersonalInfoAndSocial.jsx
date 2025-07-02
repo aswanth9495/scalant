@@ -68,8 +68,9 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
     (state) => state.scalantResumeBuilder.resumeForms
   );
   const markComplete =
-    incompleteForms.length <= 1 &&
-    currentIncompleteForm === FORM_KEYS.personal_details;
+    incompleteForms.length === 0 ||
+    (incompleteForms.length <= 1 &&
+      currentIncompleteForm === FORM_KEYS.personal_details);
 
   const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 

@@ -43,7 +43,9 @@ const ProjectForm = ({ onComplete, required = false, onAiSuggestionClick }) => {
     (state) => state.scalantResumeBuilder.resumeForms
   );
   const markComplete =
-    incompleteForms.length <= 1 && currentIncompleteForm === FORM_KEYS.projects;
+    incompleteForms.length === 0 ||
+    (incompleteForms.length <= 1 &&
+      currentIncompleteForm === FORM_KEYS.projects);
   const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
   const initialValues = useMemo(
