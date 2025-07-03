@@ -43,12 +43,29 @@ const getDsmlSampleResume = (jobRole) => {
   }
 };
 
+const getDevOpsSampleResume = (jobRole) => {
+  switch (jobRole) {
+    case JOB_ROLES.fresher:
+      return RESUME_PDF_LINK_KEYS.FRESHER;
+    case JOB_ROLES.nonTech:
+      return RESUME_PDF_LINK_KEYS.NON_TECH;
+    case JOB_ROLES.dataAnalystOrBusinessAnalyst:
+      return RESUME_PDF_LINK_KEYS.DATA_ANALYST;
+    case JOB_ROLES.dataScientistOrMachineLearningEngineer:
+      return RESUME_PDF_LINK_KEYS.DATA_SCIENTIST;
+    default:
+      return RESUME_PDF_LINK_KEYS.FRESHER;
+  }
+};
+
 export const getSampleResume = (jobRole, techExperience, program) => {
   let sampleResumeType = null;
   if (program === PROGRAM_TYPES.ACADEMY) {
     sampleResumeType = getAcademySampleResume(jobRole, techExperience);
   } else if (program === PROGRAM_TYPES.DSML) {
     sampleResumeType = getDsmlSampleResume(jobRole);
+  } else if (program === PROGRAM_TYPES.DEVOPS) {
+    sampleResumeType = getDevOpsSampleResume(jobRole);
   }
   const sampleResume = RESUME_PDF_LINKS[sampleResumeType];
 

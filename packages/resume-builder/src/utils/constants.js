@@ -1,6 +1,7 @@
 export const PROGRAM_TYPES = {
   ACADEMY: 'academy',
   DSML: 'dsml',
+  DEVOPS: 'devops',
 };
 
 export const PREFERENCE_SETTINGS_IMAGE =
@@ -95,6 +96,8 @@ export const JOB_ROLES = {
   dataAnalystOrBusinessAnalyst: 'Data Analyst / Business Analyst',
   dataScientistOrMachineLearningEngineer:
     'Data Scientist / Machine Learning Engineer',
+  techAdjacent: 'Tech Adjacent',
+  current: 'Current',
 };
 
 export const JOB_ROLES_BY_PROGRAM = {
@@ -271,10 +274,42 @@ export const DSML_JOB_ROLES = [
   },
 ];
 
+export const DEV_OPS_JOB_ROLES = [
+  {
+    value: JOB_ROLES.fresher,
+    label: JOB_ROLES.fresher,
+  },
+  {
+    value: JOB_ROLES.nonTech,
+    label: JOB_ROLES.nonTech,
+  },
+  {
+    value: JOB_ROLES.dataAnalystOrBusinessAnalyst,
+    label: JOB_ROLES.dataAnalystOrBusinessAnalyst,
+  },
+  {
+    value: JOB_ROLES.dataScientistOrMachineLearningEngineer,
+    label: JOB_ROLES.dataScientistOrMachineLearningEngineer,
+  },
+  {
+    value: JOB_ROLES.developer,
+    label: JOB_ROLES.developer,
+  },
+  {
+    value: JOB_ROLES.techAdjacent,
+    label: JOB_ROLES.techAdjacent,
+  },
+  {
+    value: JOB_ROLES.current,
+    label: JOB_ROLES.current,
+  },
+];
+
 // Program to job roles mapping
 export const PROGRAM_JOB_ROLES = {
   academy: ACADEMY_JOB_ROLES,
   dsml: DSML_JOB_ROLES,
+  devops: DEV_OPS_JOB_ROLES,
 };
 
 const RESUME_TIPS = {
