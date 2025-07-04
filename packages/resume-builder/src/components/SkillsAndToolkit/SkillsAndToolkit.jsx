@@ -1,5 +1,5 @@
-import { Button, Flex, Space, message } from 'antd';
-import React, { useEffect, useMemo } from 'react';
+import { Button, Flex, Space, message, Modal } from 'antd';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
@@ -8,6 +8,7 @@ import SkillSection from './SkillSection';
 
 import styles from './SkillsAndToolkit.module.scss';
 import { FORM_KEYS } from '../../utils/constants';
+import SkillDemoVideoModal from './SkillDemoVideoModal';
 
 const FORM_ID = 'skillsForm';
 
@@ -183,6 +184,7 @@ const SkillsAndToolkit = ({ onComplete }) => {
 
   return (
     <Space direction="vertical" size={24} className={styles.container}>
+      <SkillDemoVideoModal />
       {Object.values(SKILL_SECTIONS).map(renderSkillSection)}
       <Flex gap={16}>
         <Button
