@@ -582,11 +582,11 @@ Include complex / elaborate Projects done outside work if your tech work experie
   devopsDataEngineer: {
     imageLink:
       'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/126/274/original/Resume_Builder_All_Except_Engineering_Leadership.png?1747392602',
-    recommendation: `"Include key and impactful tasks / projects with numbers across your work experience with the Programming languages, frameworks and tools used. 
+    recommendation: `Include key and impactful tasks / projects with numbers across your work experience with the Programming languages, frameworks and tools used. 
 
 In the Skills section, include popular Programming languages, libraries and tools used hands-on at work. 
 
-Include complex / elaborate Projects done outside work if your tech work experience is under 2 years and you do not have enough impactful work-related items."`,
+Include complex / elaborate Projects done outside work if your tech work experience is under 2 years and you do not have enough impactful work-related items.`,
   },
   devopsDataAnalyst: {
     imageLink:
