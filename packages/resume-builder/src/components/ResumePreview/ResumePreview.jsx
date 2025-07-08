@@ -1,15 +1,11 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Flex, FloatButton, Tooltip } from 'antd';
-import {
-  DeleteOutlined,
-  EditOutlined,
-  FilePdfOutlined,
-  LikeOutlined,
-} from '@ant-design/icons';
+import { EditOutlined, FilePdfOutlined, LikeOutlined } from '@ant-design/icons';
 
 import FontSizeDropdown from './FontSizeDropdown';
 import ResumeDropdown from './ResumeDropdown';
+import ChangeTemplate from './ChangeTemplate';
 import { useGetResumeLinkQuery } from '../../services/resumeBuilderApi';
 import { getSampleResume } from '../../utils/sampleResumeUtils';
 import PdfPreview from '../PdfPreview';
@@ -29,7 +25,6 @@ const TOOLTIPS = {
 const ResumePreview = ({
   onFontSizeClick,
   onEditClick,
-  onDeleteClick,
   onAddResumeClick,
   onManageResumesClick,
   resumeList,
@@ -48,10 +43,6 @@ const ResumePreview = ({
   const program = useSelector(
     (state) => state.scalantResumeBuilder.resumeBuilder.program
   );
-
-  const isDefaultResume = resumeList.find(
-    (resume) => resume.id === resumeData?.resume_details?.id
-  )?.default;
 
   const getSampleResumeLink = () => {
     if (resumePersonaData) {
@@ -107,22 +98,10 @@ const ResumePreview = ({
       {!isLoading && !isFetching && !isError && (
         <Flex vertical>
           <FloatButton.Group shape="square" className={styles.floatButtonGroup}>
+            <ChangeTemplate />
             <FontSizeDropdown onFontSizeChange={onFontSizeClick} />
             <Tooltip title={TOOLTIPS.EDIT} placement="right">
               <FloatButton onClick={onEditClick} icon={<EditOutlined />} />
-            </Tooltip>
-            <Tooltip
-              title={
-                isDefaultResume ? TOOLTIPS.DELETE_DISABLED : TOOLTIPS.DELETE
-              }
-              placement="right"
-            >
-              <FloatButton
-                onClick={onDeleteClick}
-                icon={<DeleteOutlined />}
-                disabled={isDefaultResume}
-                className={isDefaultResume ? styles.disabledButton : ''}
-              />
             </Tooltip>
             <Tooltip title={TOOLTIPS.SAMPLE_RESUME} placement="right">
               <FloatButton
