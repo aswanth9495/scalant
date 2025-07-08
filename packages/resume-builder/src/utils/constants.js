@@ -1,6 +1,7 @@
 export const PROGRAM_TYPES = {
   ACADEMY: 'academy',
   DSML: 'dsml',
+  DEVOPS: 'devops',
 };
 
 export const PREFERENCE_SETTINGS_IMAGE =
@@ -95,6 +96,8 @@ export const JOB_ROLES = {
   dataAnalystOrBusinessAnalyst: 'Data Analyst / Business Analyst',
   dataScientistOrMachineLearningEngineer:
     'Data Scientist / Machine Learning Engineer',
+  devops: 'DevOps/ Cloud Computing/ Platform/ Infrastructure Engineer',
+  techAdjacent: 'Tech Adjacent, Non DevOps/Cloud Computing',
 };
 
 export const JOB_ROLES_BY_PROGRAM = {
@@ -133,6 +136,12 @@ export const RESUME_PDF_LINK_KEYS = {
   DATA_ANALYST: 'data-analyst',
   DATA_SCIENTIST: 'data-scientist',
   DSML_FRESHER: 'dsml-fresher',
+  DEVOPS_FRESHER: 'devops-fresher',
+  DEVOPS_NON_TECH: 'devops-non-tech',
+  DEVOPS_DATA_ANALYST: 'devops-data-analyst',
+  DEVOPS_DEVELOPER: 'devops-developer',
+  DEVOPS_TECH_ADJACENT: 'devops-tech-adjacent',
+  DEVOPS_ENGINEER: 'devops-engineer',
 };
 
 export const RESUME_PDF_LINKS = {
@@ -185,6 +194,36 @@ export const RESUME_PDF_LINKS = {
     preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/136/699/original/Data_Scientist_Page_1.jpg`,
     pdfLink:
       'https://drive.google.com/file/d/109gY_ZyyTSnwMXATNsdrMSDGkCoKy0RN/view?usp=drive_link',
+  },
+  [RESUME_PDF_LINK_KEYS.DEVOPS_FRESHER]: {
+    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/137/590/original/Fresher_DevOps_Page_1.jpg`,
+    pdfLink:
+      'https://drive.google.com/file/d/1iqH56mnOiPc4fdIOAQ3HEoQQXBK_pwSf/view?usp=sharing',
+  },
+  [RESUME_PDF_LINK_KEYS.DEVOPS_NON_TECH]: {
+    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/137/591/original/Nontech_DevOps_Entry_Level_Page_1.jpg`,
+    pdfLink:
+      'https://drive.google.com/file/d/1notwaB1Yfk7Dt9zgGENX-eWOAbmM2CzE/view?usp=drive_link',
+  },
+  [RESUME_PDF_LINK_KEYS.DEVOPS_DATA_ANALYST]: {
+    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/137/588/original/Data_Analyst_DevOps_Page.jpg`,
+    pdfLink:
+      'https://drive.google.com/file/d/1t1-l1skXOgt1gwCc8kCIxZawRQQ7yT9_/view?usp=drive_link',
+  },
+  [RESUME_PDF_LINK_KEYS.DEVOPS_DEVELOPER]: {
+    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/137/588/original/Data_Analyst_DevOps_Page.jpg`,
+    pdfLink:
+      'https://drive.google.com/file/d/1t1QnzKHU3q6kjBlyt80dx5BrtpXHAKCq/view?usp=drive_link',
+  },
+  [RESUME_PDF_LINK_KEYS.DEVOPS_TECH_ADJACENT]: {
+    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/137/592/original/Tech_Adjacent_DevOps_Page_1.jpg?1751619225`,
+    pdfLink:
+      'https://drive.google.com/file/d/1Gnni3zhn4Nsy4xAleZCa2daVBfNUpZx3/view?usp=drive_link',
+  },
+  [RESUME_PDF_LINK_KEYS.DEVOPS_ENGINEER]: {
+    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/137/593/original/DevOps_Engineer_Page_1.jpg?1751619237`,
+    pdfLink:
+      'https://drive.google.com/file/d/13sXRONuT-MOSp_4diDA_ttudcNdT8BFi/view?usp=drive_link',
   },
 };
 
@@ -271,10 +310,46 @@ export const DSML_JOB_ROLES = [
   },
 ];
 
+export const DEV_OPS_JOB_ROLES = [
+  {
+    value: JOB_ROLES.fresher,
+    label: JOB_ROLES.fresher,
+  },
+  {
+    value: JOB_ROLES.nonTech,
+    label: JOB_ROLES.nonTech,
+  },
+  {
+    value: JOB_ROLES.devops,
+    label: JOB_ROLES.devops,
+  },
+  {
+    value: JOB_ROLES.techAdjacent,
+    label: JOB_ROLES.techAdjacent,
+  },
+  {
+    value: JOB_ROLES.developer,
+    label: JOB_ROLES.developer,
+  },
+  {
+    value: JOB_ROLES.dataEngineer,
+    label: JOB_ROLES.dataEngineer,
+  },
+  {
+    value: JOB_ROLES.dataAnalystOrBusinessAnalyst,
+    label: JOB_ROLES.dataAnalystOrBusinessAnalyst,
+  },
+  {
+    value: JOB_ROLES.embeddedSystemsEngineer,
+    label: JOB_ROLES.embeddedSystemsEngineer,
+  },
+];
+
 // Program to job roles mapping
 export const PROGRAM_JOB_ROLES = {
   academy: ACADEMY_JOB_ROLES,
   dsml: DSML_JOB_ROLES,
+  devops: DEV_OPS_JOB_ROLES,
 };
 
 const RESUME_TIPS = {
@@ -466,6 +541,66 @@ In the Skills section, include popular Programming languages, libraries and tool
 
 Include elaborate Projects or Business Cases done outside work if your tech work experience is under 2 years and you do not have enough impactful work-related items.
 `,
+  },
+  devopsEngineer: {
+    imageLink:
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/685/original/Engineering_Leadership.png?1748329958',
+    recommendation: `Include key and impactful tasks / projects with numbers across your work experience with the Programming languages, frameworks and tools used. 
+
+In the Skills section, include popular Programming languages, libraries and tools used hands-on at work. 
+
+Include complex / elaborate Projects done outside work if your tech work experience is under 2 years and you do not have enough impactful work-related items.`,
+  },
+  devopsTechAdjacent: {
+    imageLink:
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/685/original/Engineering_Leadership.png?1748329958',
+    recommendation: `Curate your work experience in a manner that it dictates and validates the key DevOps skills if possible. If you do not have work experience adjancent to devops tools , heavily focus on projects that you add. Make sure you add the tech stack after experience and projects highlighting and validating key skills `,
+  },
+  devopsNonTech: {
+    imageLink:
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/126/273/original/Quality_Assurance_Resume_Builder.png?1747392566',
+    recommendation: `The Projects section needs to be the main focus of your resume. Build and Include 2-3 impactful projects to showcase your skills.
+
+Securing an internship can significantly enhance your chances of getting shortlisted`,
+  },
+  devopsFresher: {
+    imageLink:
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/126/273/original/Quality_Assurance_Resume_Builder.png?1747392566',
+    recommendation: `The Projects section needs to be the main focus of your resume. Build and Include 2-3 impactful projects to showcase your skills.
+
+Securing an internship can significantly enhance your chances of getting shortlisted`,
+  },
+  devopsDeveloper: {
+    imageLink:
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/685/original/Engineering_Leadership.png?1748329958',
+    recommendation: `Include key and impactful tasks / projects with numbers across your work experience with the Programming languages, frameworks and tools used. 
+
+In the Skills section, include popular Programming languages, libraries and tools used hands-on at work. 
+
+Include complex / elaborate Projects done outside work if your tech work experience is under 2 years and you do not have enough impactful work-related items.`,
+  },
+  devopsDataEngineer: {
+    imageLink:
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/685/original/Engineering_Leadership.png?1748329958',
+    recommendation: `Include key and impactful tasks / projects with numbers across your work experience with the Programming languages, frameworks and tools used. 
+
+In the Skills section, include popular Programming languages, libraries and tools used hands-on at work. 
+
+Include complex / elaborate Projects done outside work if your tech work experience is under 2 years and you do not have enough impactful work-related items.`,
+  },
+  devopsDataAnalyst: {
+    imageLink:
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/685/original/Engineering_Leadership.png?1748329958',
+    recommendation: `Curate your work experience in a manner that it dictates and validates the key DevOps skills if possible. If you do not have work experience adjancent to devops tools , heavily focus on projects that you add. Make sure you add the tech stack after experience and projects highlighting and validating key skills `,
+  },
+  embeddedSystemsEngineer: {
+    imageLink:
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/685/original/Engineering_Leadership.png?1748329958',
+    recommendation: `Include key and impactful tasks / projects with numbers across your work experience with the Programming languages, frameworks and tools used. 
+
+In the Skills section, include popular Programming languages, libraries and tools used hands-on at work. 
+
+Include complex / elaborate Projects done outside work if your tech work experience is under 2 years and you do not have enough impactful work-related items.`,
   },
 };
 

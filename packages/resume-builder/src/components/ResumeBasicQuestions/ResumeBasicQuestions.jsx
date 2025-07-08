@@ -19,6 +19,7 @@ import {
 } from '../../utils/constants';
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 import { useBasicQuestionsForm } from '../../hooks/useBasicQuestionsForm';
+import { PROGRAM_TYPES } from '../../utils/constants';
 
 const { Text } = Typography;
 
@@ -164,9 +165,9 @@ const ResumeBasicQuestions = () => {
 
             <Form.Item
               label={`Total Experience as ${
-                program === 'academy'
-                  ? 'Software Developer'
-                  : 'Data Analyst / Scientist'
+                program === PROGRAM_TYPES.DSML
+                  ? 'Data Analyst / Scientist'
+                  : 'Software Developer'
               }`}
               className={styles.formItem}
               required
