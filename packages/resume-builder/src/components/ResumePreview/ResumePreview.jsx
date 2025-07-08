@@ -29,6 +29,7 @@ const ResumePreview = ({
   onManageResumesClick,
   resumeList,
   onResumeClick,
+  resumeTemplateChangeClicksConfig,
 }) => {
   const resumeData = useSelector(
     (state) => state.scalantResumeBuilder.resumeBuilder.resumeData
@@ -98,7 +99,11 @@ const ResumePreview = ({
       {!isLoading && !isFetching && !isError && (
         <Flex vertical>
           <FloatButton.Group shape="square" className={styles.floatButtonGroup}>
-            <ChangeTemplate />
+            <ChangeTemplate
+              resumeTemplateChangeClicksConfig={
+                resumeTemplateChangeClicksConfig
+              }
+            />
             <FontSizeDropdown onFontSizeChange={onFontSizeClick} />
             <Tooltip title={TOOLTIPS.EDIT} placement="right">
               <FloatButton onClick={onEditClick} icon={<EditOutlined />} />

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Carousel, FloatButton, Modal, Tooltip } from 'antd';
 import { BgColorsOutlined } from '@ant-design/icons';
@@ -13,7 +13,7 @@ import {
 } from '../../utils/onboardingUtils';
 import styles from './ChangeTemplate.module.scss';
 
-const ChangeTemplate = () => {
+const ChangeTemplate = ({ resumeTemplateChangeClicksConfig }) => {
   const [open, setOpen] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [shouldShowNudge, setShouldShowNudge] = useState(false);
@@ -23,13 +23,23 @@ const ChangeTemplate = () => {
   const [updateResumePreferences, { isLoading }] =
     useUpdateResumePreferencesMutation();
 
-  const openModal = () => {
+  const openModal = useCallback(() => {
     setOpen(true);
     markResumeTemplatesVisited();
-  };
+    resumeTemplateChangeClicksConfig?.onModalOpen?.(
+      resumeData?.resume_details?.id
+    );
+  }, [resumeTemplateChangeClicksConfig, resumeData]);
 
   const closeModal = () => {
     setOpen(false);
+  };
+
+  const handleIconClick = () => {
+    openModal();
+    resumeTemplateChangeClicksConfig?.onIconClick?.(
+      resumeData?.resume_details?.id
+    );
   };
 
   const handleSelectTemplate = async (templateKey) => {
@@ -41,6 +51,10 @@ const ChangeTemplate = () => {
         },
       },
     });
+    resumeTemplateChangeClicksConfig?.onTemplateChangeClick?.(
+      templateKey,
+      resumeData?.resume_details?.id
+    );
   };
 
   useEffect(() => {
@@ -54,7 +68,7 @@ const ChangeTemplate = () => {
       openModal();
       markResumeTemplatesVisited();
     }
-  }, []);
+  }, [openModal]);
 
   useEffect(() => {
     setShouldShowNudge(shouldShowResumeTemplateNudge());
@@ -68,7 +82,7 @@ const ChangeTemplate = () => {
         title="Templates"
         placement="right"
       >
-        <FloatButton icon={<BgColorsOutlined />} onClick={openModal} />
+        <FloatButton icon={<BgColorsOutlined />} onClick={handleIconClick} />
       </Tooltip>
       <Modal
         classNames={{
