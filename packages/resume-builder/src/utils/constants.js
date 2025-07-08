@@ -544,7 +544,7 @@ Include elaborate Projects or Business Cases done outside work if your tech work
   },
   devopsEngineer: {
     imageLink:
-      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/126/274/original/Resume_Builder_All_Except_Engineering_Leadership.png?1747392602',
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/685/original/Engineering_Leadership.png?1748329958',
     recommendation: `Include key and impactful tasks / projects with numbers across your work experience with the Programming languages, frameworks and tools used. 
 
 In the Skills section, include popular Programming languages, libraries and tools used hands-on at work. 
@@ -553,26 +553,26 @@ Include complex / elaborate Projects done outside work if your tech work experie
   },
   devopsTechAdjacent: {
     imageLink:
-      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/126/274/original/Resume_Builder_All_Except_Engineering_Leadership.png?1747392602',
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/685/original/Engineering_Leadership.png?1748329958',
     recommendation: `Curate your work experience in a manner that it dictates and validates the key DevOps skills if possible. If you do not have work experience adjancent to devops tools , heavily focus on projects that you add. Make sure you add the tech stack after experience and projects highlighting and validating key skills `,
   },
   devopsNonTech: {
     imageLink:
-      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/126/274/original/Resume_Builder_All_Except_Engineering_Leadership.png?1747392602',
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/126/273/original/Quality_Assurance_Resume_Builder.png?1747392566',
     recommendation: `The Projects section needs to be the main focus of your resume. Build and Include 2-3 impactful projects to showcase your skills.
 
 Securing an internship can significantly enhance your chances of getting shortlisted`,
   },
   devopsFresher: {
     imageLink:
-      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/126/274/original/Resume_Builder_All_Except_Engineering_Leadership.png?1747392602',
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/126/273/original/Quality_Assurance_Resume_Builder.png?1747392566',
     recommendation: `The Projects section needs to be the main focus of your resume. Build and Include 2-3 impactful projects to showcase your skills.
 
 Securing an internship can significantly enhance your chances of getting shortlisted`,
   },
   devopsDeveloper: {
     imageLink:
-      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/126/274/original/Resume_Builder_All_Except_Engineering_Leadership.png?1747392602',
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/685/original/Engineering_Leadership.png?1748329958',
     recommendation: `Include key and impactful tasks / projects with numbers across your work experience with the Programming languages, frameworks and tools used. 
 
 In the Skills section, include popular Programming languages, libraries and tools used hands-on at work. 
@@ -581,7 +581,7 @@ Include complex / elaborate Projects done outside work if your tech work experie
   },
   devopsDataEngineer: {
     imageLink:
-      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/126/274/original/Resume_Builder_All_Except_Engineering_Leadership.png?1747392602',
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/685/original/Engineering_Leadership.png?1748329958',
     recommendation: `Include key and impactful tasks / projects with numbers across your work experience with the Programming languages, frameworks and tools used. 
 
 In the Skills section, include popular Programming languages, libraries and tools used hands-on at work. 
@@ -590,12 +590,12 @@ Include complex / elaborate Projects done outside work if your tech work experie
   },
   devopsDataAnalyst: {
     imageLink:
-      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/126/274/original/Resume_Builder_All_Except_Engineering_Leadership.png?1747392602',
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/685/original/Engineering_Leadership.png?1748329958',
     recommendation: `Curate your work experience in a manner that it dictates and validates the key DevOps skills if possible. If you do not have work experience adjancent to devops tools , heavily focus on projects that you add. Make sure you add the tech stack after experience and projects highlighting and validating key skills `,
   },
   embeddedSystemsEngineer: {
     imageLink:
-      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/126/274/original/Resume_Builder_All_Except_Engineering_Leadership.png?1747392602',
+      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/685/original/Engineering_Leadership.png?1748329958',
     recommendation: `Include key and impactful tasks / projects with numbers across your work experience with the Programming languages, frameworks and tools used. 
 
 In the Skills section, include popular Programming languages, libraries and tools used hands-on at work. 
