@@ -36,7 +36,7 @@ const ChangeTemplate = () => {
     updateResumePreferences({
       payload: {
         resume_id: resumeData?.resume_details?.id,
-        scaler_resume_template_font_choice: {
+        scaler_resume_template_structure: {
           [templateKey]: TEMPLATE_CONFIG[templateKey],
         },
       },
