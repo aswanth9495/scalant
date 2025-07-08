@@ -13,11 +13,13 @@ import EducationForm from '../components/EducationForm';
 import WorkExperienceForm from '../components/WorkExperienceForm';
 import CustomForm from '../components/CustomForm';
 import React from 'react';
+import { isHtmlEmpty } from './formattingUtils';
 import {
   PROJECT_FORM_REQUIRED_FIELDS,
   PERSONAL_DETAILS_FORM_REQUIRED_FIELDS,
   WORK_EXPERIENCE_FORM_REQUIRED_FIELDS,
   EDUCATION_FORM_REQUIRED_FIELDS,
+  ACHIEVEMENTS_FORM_REQUIRED_FIELDS,
 } from './constants';
 
 const ALL_FORMS_KEYS = {
@@ -249,6 +251,8 @@ const getRequiredFields = (formKey) => {
       return WORK_EXPERIENCE_FORM_REQUIRED_FIELDS;
     case 'education':
       return EDUCATION_FORM_REQUIRED_FIELDS;
+    case 'achievements':
+      return ACHIEVEMENTS_FORM_REQUIRED_FIELDS;
     default:
       return [];
   }
@@ -284,6 +288,7 @@ export const getAllIncompleteForms = (resumeData) => {
             value === null ||
             value === undefined ||
             value === '' ||
+            isHtmlEmpty(value) ||
             (Array.isArray(value) && value.length === 0) ||
             (typeof value === 'object' && Object.keys(value).length === 0)
           );
@@ -302,6 +307,7 @@ export const getAllIncompleteForms = (resumeData) => {
           value === null ||
           value === undefined ||
           value === '' ||
+          isHtmlEmpty(value) ||
           (Array.isArray(value) && value.length === 0) ||
           (typeof value === 'object' && Object.keys(value).length === 0)
         );
