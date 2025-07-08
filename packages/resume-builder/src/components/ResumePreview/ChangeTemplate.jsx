@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Carousel, FloatButton, Modal, Tooltip } from 'antd';
 import { BgColorsOutlined } from '@ant-design/icons';
 
 import { Button } from '@components';
 import { TEMPLATE_CONFIG, TEMPLATE_VS_IMG } from './constants';
+import { setResumeData } from '../../store/resumeBuilderSlice';
 import { useUpdateResumePreferencesMutation } from '../../services/resumeBuilderApi';
 import {
   areResumeTemplatesVisited,
@@ -14,6 +15,7 @@ import {
 import styles from './ChangeTemplate.module.scss';
 
 const ChangeTemplate = ({ resumeTemplateChangeClicksConfig }) => {
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [shouldShowNudge, setShouldShowNudge] = useState(false);
@@ -44,12 +46,19 @@ const ChangeTemplate = ({ resumeTemplateChangeClicksConfig }) => {
 
   const handleSelectTemplate = async (templateKey) => {
     setSelectedTemplate(templateKey);
+    const newTemplateStructure = {
+      [templateKey]: TEMPLATE_CONFIG[templateKey],
+    };
+    dispatch(
+      setResumeData({
+        ...resumeData,
+        scaler_resume_template_structure: newTemplateStructure,
+      })
+    );
     updateResumePreferences({
       payload: {
         resume_id: resumeData?.resume_details?.id,
-        scaler_resume_template_structure: {
-          [templateKey]: TEMPLATE_CONFIG[templateKey],
-        },
+        scaler_resume_template_structure: newTemplateStructure,
       },
     });
     resumeTemplateChangeClicksConfig?.onTemplateChangeClick?.(
