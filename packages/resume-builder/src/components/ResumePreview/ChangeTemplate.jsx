@@ -11,7 +11,6 @@ import {
   markResumeTemplatesVisited,
   shouldShowResumeTemplateNudge,
 } from '../../utils/onboardingUtils';
-
 import styles from './ChangeTemplate.module.scss';
 
 const ChangeTemplate = () => {
