@@ -43,6 +43,7 @@ const ChangeTemplate = ({ resumeTemplateChangeClicksConfig }) => {
   };
 
   const handleSelectTemplate = async (templateKey) => {
+    setSelectedTemplate(templateKey);
     updateResumePreferences({
       payload: {
         resume_id: resumeData?.resume_details?.id,
@@ -79,7 +80,7 @@ const ChangeTemplate = ({ resumeTemplateChangeClicksConfig }) => {
       <Tooltip
         open={shouldShowNudge}
         onOpenChange={setShouldShowNudge}
-        title="Templates"
+        title="Change Template"
         placement="right"
       >
         <FloatButton icon={<BgColorsOutlined />} onClick={handleIconClick} />
@@ -94,7 +95,7 @@ const ChangeTemplate = ({ resumeTemplateChangeClicksConfig }) => {
         footer={null}
       >
         <div className={styles.modalTitle}>
-          Pick a résumé look that’s all you
+          Please select a resume template!
         </div>
         <Carousel arrows infinite={false}>
           {Object.keys(TEMPLATE_CONFIG).reduce((acc, key, index) => {

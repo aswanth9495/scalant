@@ -1,51 +1,4 @@
 export const TEMPLATE_CONFIG = {
-  fresher: {
-    sections: [
-      {
-        name: 'PersonalDetails',
-        config: {
-          view: 'view1',
-        },
-      },
-      {
-        name: 'Skills',
-        config: {
-          view: 'view1',
-        },
-      },
-      {
-        name: 'Experience',
-        config: {
-          view: 'view1',
-        },
-      },
-      {
-        name: 'Projects',
-        config: {
-          view: 'view1',
-        },
-      },
-      {
-        name: 'Achievements',
-        config: {
-          view: 'view1',
-        },
-      },
-      {
-        name: 'Education',
-        config: {
-          view: 'view1',
-        },
-      },
-      {
-        name: 'CustomSection',
-        config: {
-          view: 'view1',
-        },
-        page: 1,
-      },
-    ],
-  },
   renderCv: {
     sections: [
       {
@@ -209,6 +162,53 @@ export const TEMPLATE_CONFIG = {
       },
       {
         name: 'Experience',
+        config: {
+          view: 'view1',
+        },
+      },
+      {
+        name: 'Achievements',
+        config: {
+          view: 'view1',
+        },
+      },
+      {
+        name: 'Education',
+        config: {
+          view: 'view1',
+        },
+      },
+      {
+        name: 'CustomSection',
+        config: {
+          view: 'view1',
+        },
+        page: 1,
+      },
+    ],
+  },
+  fresher: {
+    sections: [
+      {
+        name: 'PersonalDetails',
+        config: {
+          view: 'view1',
+        },
+      },
+      {
+        name: 'Skills',
+        config: {
+          view: 'view1',
+        },
+      },
+      {
+        name: 'Experience',
+        config: {
+          view: 'view1',
+        },
+      },
+      {
+        name: 'Projects',
         config: {
           view: 'view1',
         },
