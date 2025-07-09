@@ -14,7 +14,7 @@ import {
 } from '../../utils/onboardingUtils';
 import styles from './ChangeTemplate.module.scss';
 
-const ChangeTemplate = ({ resumeTemplateChangeClicksConfig }) => {
+const ChangeTemplate = ({ resumeTemplateConfig }) => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
@@ -28,10 +28,8 @@ const ChangeTemplate = ({ resumeTemplateChangeClicksConfig }) => {
   const openModal = useCallback(() => {
     setOpen(true);
     markResumeTemplatesVisited();
-    resumeTemplateChangeClicksConfig?.onModalOpen?.(
-      resumeData?.resume_details?.id
-    );
-  }, [resumeTemplateChangeClicksConfig, resumeData]);
+    resumeTemplateConfig?.onModalOpen?.(resumeData?.resume_details?.id);
+  }, [resumeTemplateConfig, resumeData]);
 
   const closeModal = () => {
     setOpen(false);
@@ -39,9 +37,7 @@ const ChangeTemplate = ({ resumeTemplateChangeClicksConfig }) => {
 
   const handleIconClick = () => {
     openModal();
-    resumeTemplateChangeClicksConfig?.onIconClick?.(
-      resumeData?.resume_details?.id
-    );
+    resumeTemplateConfig?.onIconClick?.(resumeData?.resume_details?.id);
   };
 
   const handleSelectTemplate = async (templateKey) => {
@@ -55,13 +51,13 @@ const ChangeTemplate = ({ resumeTemplateChangeClicksConfig }) => {
         scaler_resume_template_structure: newTemplateStructure,
       })
     );
-    updateResumePreferences({
+    await updateResumePreferences({
       payload: {
         resume_id: resumeData?.resume_details?.id,
         scaler_resume_template_structure: newTemplateStructure,
       },
     });
-    resumeTemplateChangeClicksConfig?.onTemplateChangeClick?.(
+    resumeTemplateConfig?.onTemplateChangeClick?.(
       templateKey,
       resumeData?.resume_details?.id
     );

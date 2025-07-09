@@ -17,8 +17,8 @@ $modal-bg-url: 'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/1
 
 .modalTitle {
   text-align: center;
-  color: white;
-  font-size: 2rem;
+  color: $colors-neutral-color-white;
+  font-size: $h4-size;
   font-weight: 600;
   line-height: 2.8rem;
   padding-top: 1.2rem;
@@ -42,7 +42,7 @@ $modal-bg-url: 'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/1
   width: 16rem;
   height: 21rem;
   border-radius: 0.4rem;
-  border: 0.4rem solid #ffffff80;
+  border: 0.4rem solid $colors-neutral-color-muted-white;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

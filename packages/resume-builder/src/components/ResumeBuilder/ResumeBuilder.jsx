@@ -42,7 +42,7 @@ const ResumeBuilderContent = ({
   onEditClick,
   onDeleteClick,
   onAiSuggestionClick,
-  resumeTemplateChangeClicksConfig,
+  resumeTemplateConfig,
   courseProduct,
   isLoading = false,
 }) => {
@@ -132,7 +132,7 @@ const ResumeBuilderContent = ({
             onManageResumesClick={onManageResumesClick}
             onEditClick={onEditClick}
             onDeleteClick={onDeleteClick}
-            resumeTemplateChangeClicksConfig={resumeTemplateChangeClicksConfig}
+            resumeTemplateConfig={resumeTemplateConfig}
           />
         );
       default:
@@ -170,7 +170,7 @@ const ResumeBuilder = ({
   isLoading = false,
   courseProduct,
   onAiSuggestionClick,
-  resumeTemplateChangeClicksConfig,
+  resumeTemplateConfig,
 }) => {
   return (
     <ResumeBuilderContent
@@ -187,7 +187,7 @@ const ResumeBuilder = ({
       isLoading={isLoading}
       onAiSuggestionClick={onAiSuggestionClick}
       courseProduct={courseProduct}
-      resumeTemplateChangeClicksConfig={resumeTemplateChangeClicksConfig}
+      resumeTemplateConfig={resumeTemplateConfig}
     />
   );
 };
