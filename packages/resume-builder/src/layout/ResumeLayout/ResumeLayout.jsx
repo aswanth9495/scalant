@@ -5,8 +5,6 @@ import { CloseOutlined } from '@ant-design/icons';
 import { setModal } from '../../store/modalsSlice';
 import { MODAL_NAMES } from '../../utils/constants';
 import ResumeReviewModal from '../../components/ResumeReviewModal/ResumeReviewModal';
-import { useGetResumeFeedbackMutation } from '../../services/resumeBuilderApi';
-import { setIsLoading } from '../../store/resumeReviewSlice';
 
 const { Header, Content } = Layout;
 
@@ -17,7 +15,12 @@ import styles from './ResumeLayout.module.scss';
 const LOGO_URL =
   'https://assets.fp.scaler.com/seo/_next/static/media/scaler-light.6def257e.svg';
 
-const ResumeLayout = ({ onBackButtonClick, children, preview }) => {
+const ResumeLayout = ({
+  onBackButtonClick,
+  children,
+  preview,
+  enableResumeReview,
+}) => {
   const dispatch = useDispatch();
   const { currentStep } = useSelector(
     (state) => state.scalantResumeBuilder.resumeBuilder
@@ -51,7 +54,7 @@ const ResumeLayout = ({ onBackButtonClick, children, preview }) => {
             <Flex
               justify="space-between"
               align="center"
-              style={{ width: '100%' }}
+              style={{ width: '100%', position: 'relative' }}
             >
               <div>
                 {onBackButtonClick && (
@@ -62,7 +65,19 @@ const ResumeLayout = ({ onBackButtonClick, children, preview }) => {
                 )}
                 <img className={styles.logo} src={LOGO_URL} alt="logo" />
               </div>
-              <Flex vertical justify="center" align="center">
+
+              <Flex
+                vertical
+                justify="center"
+                align="center"
+                style={{
+                  width: '100%',
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                }}
+              >
                 {currentStep >= 2 && <Text>Resume Builder</Text>}
                 {currentStep === 4 && (
                   <Text>
@@ -70,7 +85,8 @@ const ResumeLayout = ({ onBackButtonClick, children, preview }) => {
                   </Text>
                 )}
               </Flex>
-              {currentStep === 4 && (
+
+              {currentStep === 4 && enableResumeReview && (
                 <Tooltip title={reviewTooltipTitle}>
                   <Button
                     type="primary"
