@@ -19,8 +19,8 @@ import {
 } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
+import { FORM_KEYS } from '../../utils/constants';
 import { initializeForm, updateFormData } from '../../store/formStoreSlice';
-
 import { ADDITIONAL_PROFILES } from '../../utils/constants';
 import {
   getAdditionalProfileUrl,
@@ -64,6 +64,14 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
   const isFormInitialized = useSelector(
     (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
   );
+  const { incompleteForms, currentIncompleteForm } = useSelector(
+    (state) => state.scalantResumeBuilder.resumeForms
+  );
+  const markComplete =
+    incompleteForms.length === 0 ||
+    (incompleteForms.length <= 1 &&
+      currentIncompleteForm === FORM_KEYS.personal_details);
+
   const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
   const [form] = Form.useForm();
@@ -81,10 +89,9 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
     // Create a flat object with all form values including profileType0, profileUrl0, etc.
     const formValues = {
       fullName: resumeData.personal_details.name,
-      contactNumber: resumeData.personal_details.phone_number.replace(
-        '+91-',
-        ''
-      ),
+      contactNumber: resumeData.personal_details.phone_number
+        ? resumeData.personal_details.phone_number.replace('+91-', '')
+        : '',
       emailAddress: resumeData.personal_details.email,
       gender: resumeData.personal_details.gender,
       currentCity: resumeData.personal_details.city,
@@ -142,6 +149,7 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
         github: values.github,
         portfolio: values.personalWebsite,
         isPopulated: true,
+        mark_complete: markComplete,
       };
 
       // Add additional profiles to payload
@@ -159,13 +167,13 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
     }
   };
   const handleSaveAndCompile = () => {
-    handleFinish();
     onComplete?.(true);
+    handleFinish();
   };
 
   const handleSaveAndNext = () => {
-    handleFinish();
     onComplete?.();
+    handleFinish();
   };
 
   const handleValuesChange = (changedValues, allValues) => {

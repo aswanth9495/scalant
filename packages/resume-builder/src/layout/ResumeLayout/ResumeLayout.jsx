@@ -54,10 +54,12 @@ const ResumeLayout = ({ onBackButtonClick, children, preview }) => {
               style={{ width: '100%' }}
             >
               <div>
-                <CloseOutlined
-                  className={styles.backButton}
-                  onClick={onBackButtonClick}
-                />
+                {onBackButtonClick && (
+                  <CloseOutlined
+                    className={styles.backButton}
+                    onClick={onBackButtonClick}
+                  />
+                )}
                 <img className={styles.logo} src={LOGO_URL} alt="logo" />
               </div>
               <Flex vertical justify="center" align="center">

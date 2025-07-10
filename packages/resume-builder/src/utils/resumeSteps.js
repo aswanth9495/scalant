@@ -13,11 +13,13 @@ import EducationForm from '../components/EducationForm';
 import WorkExperienceForm from '../components/WorkExperienceForm';
 import CustomForm from '../components/CustomForm';
 import React from 'react';
+import { isHtmlEmpty } from './formattingUtils';
 import {
   PROJECT_FORM_REQUIRED_FIELDS,
   PERSONAL_DETAILS_FORM_REQUIRED_FIELDS,
   WORK_EXPERIENCE_FORM_REQUIRED_FIELDS,
   EDUCATION_FORM_REQUIRED_FIELDS,
+  ACHIEVEMENTS_FORM_REQUIRED_FIELDS,
 } from './constants';
 
 const ALL_FORMS_KEYS = {
@@ -255,6 +257,8 @@ const getRequiredFields = (formKey) => {
       return WORK_EXPERIENCE_FORM_REQUIRED_FIELDS;
     case 'education':
       return EDUCATION_FORM_REQUIRED_FIELDS;
+    case 'achievements':
+      return ACHIEVEMENTS_FORM_REQUIRED_FIELDS;
     default:
       return [];
   }
@@ -399,7 +403,8 @@ export const getFormSteps = (
   onComplete,
   program,
   reviewData,
-  isReviewLoading
+  s,
+  onAiSuggestionClick
 ) => {
   if (!resumePersonaData) return [];
 
@@ -424,16 +429,12 @@ export const getFormSteps = (
       }
       return {
         ...step,
-        status: getFormStatus(
-          key,
-          reviewData,
-          incompleteForms,
-          isReviewLoading
-        ),
+        status: getFormStatus(key, reviewData, incompleteForms, s),
         required: isRequired,
         component: React.createElement(step.component, {
           onComplete,
           required: isRequired,
+          onAiSuggestionClick,
         }),
       };
     })

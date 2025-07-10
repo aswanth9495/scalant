@@ -9,6 +9,7 @@ import { initializeForm, updateFormData } from '../../store/formStoreSlice';
 import AiSuggestionBanner from '../AiSuggestionBanner/AiSuggestionBanner';
 import SectionFeedback from '../SectionFeedback/SectionFeedback';
 import WorkExperienceFormItem from './WorkExperienceFormItem';
+import { FORM_KEYS } from '../../utils/constants';
 
 const FORM_ID = 'workExperienceForm';
 
@@ -31,7 +32,11 @@ const initialFormData = {
   ],
 };
 
-const WorkExperienceForm = ({ onComplete, required = false }) => {
+const WorkExperienceForm = ({
+  onComplete,
+  required = false,
+  onAiSuggestionClick,
+}) => {
   const dispatch = useDispatch();
   const resumeData = useSelector(
     (state) => state.scalantResumeBuilder.resumeBuilder.resumeData
@@ -51,6 +56,13 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
       []
     );
   }, [reviewData]);
+  const { incompleteForms, currentIncompleteForm } = useSelector(
+    (state) => state.scalantResumeBuilder.resumeForms
+  );
+  const markComplete =
+    incompleteForms.length === 0 ||
+    (incompleteForms.length <= 1 &&
+      currentIncompleteForm === FORM_KEYS.experience);
   const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
   const initialValues = useMemo(
@@ -167,6 +179,7 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
       const payload = {
         form_stage: 'work_experience_details_form',
         isPopulated: true,
+        mark_complete: markComplete,
         previous_experiences: workExperiencePayload,
       };
 
@@ -181,18 +194,18 @@ const WorkExperienceForm = ({ onComplete, required = false }) => {
   };
 
   const handleSaveAndCompile = () => {
-    handleFinish();
     onComplete?.(true);
+    handleFinish();
   };
 
   const handleSaveAndNext = () => {
-    handleFinish();
     onComplete?.();
+    handleFinish();
   };
 
   return (
     <Flex vertical gap={16}>
-      <AiSuggestionBanner />
+      <AiSuggestionBanner onClick={onAiSuggestionClick} />
       <SectionFeedback feedbackData={workExperienceFeedback} />
       <Space direction="vertical" style={{ width: '100%' }}>
         <Flex vertical gap={16}>

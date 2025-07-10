@@ -70,6 +70,8 @@ export const EDUCATION_FORM_REQUIRED_FIELDS = [
   'graduation_date',
 ];
 
+export const ACHIEVEMENTS_FORM_REQUIRED_FIELDS = ['description'];
+
 export const STEPS_ORDER = [
   RESUME_BUILDER_STEPS.ACKNOWLEDGEMENT,
   RESUME_BUILDER_STEPS.PREFERENCE_SETTINGS,
@@ -137,34 +139,34 @@ export const RESUME_PDF_LINK_KEYS = {
 
 export const RESUME_PDF_LINKS = {
   [RESUME_PDF_LINK_KEYS.DSML_FRESHER]: {
-    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/793/original/Fresher_good_resume_%281%29_page-0001.jpg?1748353701`,
+    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/136/689/original/DSML_Fresher.jpg`,
     pdfLink:
-      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/678/original/Fresher_good_resume_%281%29.pdf?1748329562',
+      'https://drive.google.com/file/d/1uqBrioldipkhtfGc1mBWUlcLsSrcnAOU/view?usp=drive_link',
   },
   [RESUME_PDF_LINK_KEYS.FRESHER]: {
-    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/793/original/Fresher_good_resume_%281%29_page-0001.jpg?1748353701`,
+    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/136/691/original/Fresher_Good_Resume_Page_1.jpg`,
     pdfLink:
-      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/678/original/Fresher_good_resume_%281%29.pdf?1748329562',
+      'https://drive.google.com/file/d/13uvgO7vh8cCWwiQpLtup01rIwzeuCWWh/view?usp=drive_link',
   },
   [RESUME_PDF_LINK_KEYS.JUNIOR_BACKEND]: {
-    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/794/original/Junior_backend_developer_good_resume_page-0001.jpg?1748353769`,
+    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/136/692/original/Junior_Backend_Developer_Resume.jpg`,
     pdfLink:
-      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/679/original/Junior_backend_developer_good_resume.pdf?1748329607',
+      'https://drive.google.com/file/d/1HIoD2gsjTiEN4dCvqCOItfTKy8HsL1iO/view?usp=drive_link',
   },
   [RESUME_PDF_LINK_KEYS.JUNIOR_FRONTEND]: {
-    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/795/original/Junior_frontend_developer_good_resume_page-0001.jpg?1748353816`,
+    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/136/700/original/Junior_Frontend_Developer_Resume.jpg`,
     pdfLink:
-      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/680/original/Junior_frontend_developer_good_resume.pdf?1748329639',
+      'https://drive.google.com/file/d/1mXud8d-CS1MR6eB9Ab06PNCI_N8Nc6do/view?usp=drive_link',
   },
   [RESUME_PDF_LINK_KEYS.SENIOR_BACKEND]: {
-    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/796/original/Senior_Backend_Developer.jpg?1748353857`,
+    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/136/693/original/Senior_Backend_Developer_Resume.jpg`,
     pdfLink:
-      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/683/original/Senior_backend_developer_good_resume.pdf?1748329744',
+      'https://drive.google.com/file/d/1xsbTDyD0aSZ8C5xabobrnSLSE5bsM9_6/view?usp=drive_link',
   },
   [RESUME_PDF_LINK_KEYS.NON_TECH]: {
-    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/797/original/Non_Tech_good_resume_page-0001.jpg?1748353908`,
+    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/136/695/original/Non-Tech_Good_Resume.jpg`,
     pdfLink:
-      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/681/original/Non_Tech_good_resume.pdf?1748329693',
+      'https://drive.google.com/file/d/1BYMDlHwmHsC1T62_xV0auF0VkgtjRFQE/view?usp=drive_link',
   },
   [RESUME_PDF_LINK_KEYS.ENGG_MANAGER]: {
     preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/798/original/Engineering_Manager_Good_Resume_1_page-0001.jpg?1748353948`,
@@ -172,19 +174,19 @@ export const RESUME_PDF_LINKS = {
       'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/677/original/Engineering_Manager_Good_Resume_1.pdf?1748329511',
   },
   [RESUME_PDF_LINK_KEYS.NON_TECH_BACKGROUND]: {
-    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/799/original/Non_Tech_good_resume_%281%29.jpg?1748353990`,
+    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/136/697/original/Non_Tech_DSML.jpg`,
     pdfLink:
-      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/684/original/Non_Tech_good_resume_%281%29.pdf?1748329780',
+      'https://drive.google.com/file/d/1uqBrioldipkhtfGc1mBWUlcLsSrcnAOU/view?usp=drive_link',
   },
   [RESUME_PDF_LINK_KEYS.DATA_ANALYST]: {
-    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/803/original/Data_Analyst_good_resume.jpg?1748354029`,
+    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/136/698/original/Data_Analyst_Page_1.jpg`,
     pdfLink:
-      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/675/original/Data_analyst_good_resume.pdf?1748329370',
+      'https://drive.google.com/file/d/12W2C4WPkr1ysfuJPQfZGYZF9i90v7VdV/view?usp=drive_link',
   },
   [RESUME_PDF_LINK_KEYS.DATA_SCIENTIST]: {
-    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/804/original/Data_scientist_good_resume_page-0001.jpg?1748354071`,
+    preview: `https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/136/699/original/Data_Scientist_Page_1.jpg`,
     pdfLink:
-      'https://d2beiqkhq929f0.cloudfront.net/public_assets/assets/000/128/676/original/Data_scientist_good_resume.pdf?1748329448',
+      'https://drive.google.com/file/d/109gY_ZyyTSnwMXATNsdrMSDGkCoKy0RN/view?usp=drive_link',
   },
 };
 
@@ -526,4 +528,13 @@ export const AI_REVIEW_MESSAGES = {
 
 export const MODAL_NAMES = {
   RESUME_REVIEW: 'resumeReview',
+};
+
+export const FORM_KEYS = {
+  personal_details: 'personalDetails',
+  projects: 'projects',
+  experience: 'experience',
+  education: 'education',
+  skills: 'skills',
+  achievements: 'achievements',
 };

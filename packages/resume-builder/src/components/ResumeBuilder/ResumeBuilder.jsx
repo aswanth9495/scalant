@@ -27,10 +27,10 @@ import ResumeBasicQuestions from '../ResumeBasicQuestions';
 import ResumeTips from '../ResumeTips';
 import ResumeSteps from '../ResumeSteps';
 import ResumePreview from '../ResumePreview';
+import IntroVideo from '../IntroVideo';
 import SampleResumePreview from '../SampleResumePreview';
 import ResumeHighlightPreview from '../ResumeHighlightPreview';
 import styles from './ResumeBuilder.module.scss';
-import IntroVideo from '../IntroVideo';
 
 const ResumeBuilderContent = ({
   isOnboarding = true,
@@ -42,8 +42,11 @@ const ResumeBuilderContent = ({
   onManageResumesClick,
   onEditClick,
   onDeleteClick,
+  onAiSuggestionClick,
+  resumeTemplateConfig,
   courseProduct,
   isLoading = false,
+  onDownloadClick,
 }) => {
   const dispatch = useDispatch();
   const { currentStep, steps } = useSelector(
@@ -100,7 +103,7 @@ const ResumeBuilderContent = ({
       case RESUME_BUILDER_STEPS.RESUME_TIPS.component:
         return <ResumeTips />;
       case RESUME_BUILDER_STEPS.RESUME_STEPS.component:
-        return <ResumeSteps />;
+        return <ResumeSteps onAiSuggestionClick={onAiSuggestionClick} />;
       default:
         return null;
     }
@@ -111,7 +114,6 @@ const ResumeBuilderContent = ({
     switch (currentStepData.component) {
       case RESUME_BUILDER_STEPS.ACKNOWLEDGEMENT.component:
         return <IntroVideo />;
-
       case RESUME_BUILDER_STEPS.PREFERENCE_SETTINGS.component:
         return (
           <img
@@ -134,6 +136,8 @@ const ResumeBuilderContent = ({
             onManageResumesClick={onManageResumesClick}
             onEditClick={onEditClick}
             onDeleteClick={onDeleteClick}
+            onDownloadClick={onDownloadClick}
+            resumeTemplateConfig={resumeTemplateConfig}
           />
         );
       default:
@@ -169,6 +173,10 @@ const ResumeBuilder = ({
   onEditClick,
   onDeleteClick,
   isLoading = false,
+  courseProduct,
+  onAiSuggestionClick,
+  resumeTemplateConfig,
+  onDownloadClick,
 }) => {
   return (
     <ResumeBuilderContent
@@ -183,6 +191,10 @@ const ResumeBuilder = ({
       onEditClick={onEditClick}
       onDeleteClick={onDeleteClick}
       isLoading={isLoading}
+      onAiSuggestionClick={onAiSuggestionClick}
+      courseProduct={courseProduct}
+      resumeTemplateConfig={resumeTemplateConfig}
+      onDownloadClick={onDownloadClick}
     />
   );
 };
