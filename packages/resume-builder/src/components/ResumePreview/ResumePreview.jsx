@@ -30,6 +30,7 @@ const ResumePreview = ({
   resumeList,
   onResumeClick,
   resumeTemplateConfig,
+  onDownloadClick,
 }) => {
   const resumeData = useSelector(
     (state) => state.scalantResumeBuilder.resumeBuilder.resumeData
@@ -95,15 +96,12 @@ const ResumePreview = ({
         isLoading={isLoading}
         isFetching={isFetching}
         isError={isError}
+        onDownloadClick={onDownloadClick}
       />
       {!isLoading && !isFetching && !isError && (
         <Flex vertical>
           <FloatButton.Group shape="square" className={styles.floatButtonGroup}>
-            <ChangeTemplate
-              resumeTemplateConfig={
-                resumeTemplateConfig
-              }
-            />
+            <ChangeTemplate resumeTemplateConfig={resumeTemplateConfig} />
             <FontSizeDropdown onFontSizeChange={onFontSizeClick} />
             <Tooltip title={TOOLTIPS.EDIT} placement="right">
               <FloatButton onClick={onEditClick} icon={<EditOutlined />} />
