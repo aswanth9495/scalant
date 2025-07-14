@@ -8,6 +8,8 @@ import ProjectFormItem from './ProjectFormItem';
 
 import { useUpdateResumeDetailsMutation } from '../../services/resumeBuilderApi';
 import AiSuggestionBanner from '../AiSuggestionBanner/AiSuggestionBanner';
+import SectionFeedback from '../SectionFeedback/SectionFeedback';
+import { FORM_KEYS } from '../../utils/constants';
 
 const FORM_ID = 'projectForm';
 
@@ -26,7 +28,7 @@ const initialFormData = {
   ],
 };
 
-const ProjectForm = ({ onComplete, required = false }) => {
+const ProjectForm = ({ onComplete, required = false, onAiSuggestionClick }) => {
   const dispatch = useDispatch();
   const resumeData = useSelector(
     (state) => state.scalantResumeBuilder.resumeBuilder.resumeData
@@ -38,6 +40,21 @@ const ProjectForm = ({ onComplete, required = false }) => {
   const isFormInitialized = useSelector(
     (state) => state.scalantResumeBuilder.formStore.initializedForms[FORM_ID]
   );
+  const reviewData = useSelector(
+    (state) => state.scalantResumeBuilder.resumeReview.reviewData
+  );
+  const projectFeedback = useMemo(() => {
+    return (
+      reviewData?.resume_evaluation_result?.section_feedback?.projects || []
+    );
+  }, [reviewData]);
+  const { incompleteForms, currentIncompleteForm } = useSelector(
+    (state) => state.scalantResumeBuilder.resumeForms
+  );
+  const markComplete =
+    incompleteForms.length === 0 ||
+    (incompleteForms.length <= 1 &&
+      currentIncompleteForm === FORM_KEYS.projects);
   const [updateResumeDetails, { isLoading }] = useUpdateResumeDetailsMutation();
 
   const initialValues = useMemo(
@@ -122,7 +139,7 @@ const ProjectForm = ({ onComplete, required = false }) => {
         form_stage: 'project_details_form',
         isPopulated: true,
         projects: projectsPayload,
-        upgrade: false,
+        mark_complete: markComplete,
       };
 
       await updateResumeDetails({
@@ -136,18 +153,19 @@ const ProjectForm = ({ onComplete, required = false }) => {
   };
 
   const handleSaveAndCompile = () => {
-    handleFinish();
     onComplete?.(true);
+    handleFinish();
   };
 
   const handleSaveAndNext = () => {
-    handleFinish();
     onComplete?.();
+    handleFinish();
   };
 
   return (
     <Flex vertical gap={16}>
-      <AiSuggestionBanner />
+      <AiSuggestionBanner onClick={onAiSuggestionClick} />
+      <SectionFeedback feedbackData={projectFeedback} />
       <Space direction="vertical" style={{ width: '100%' }}>
         <Flex vertical gap={16}>
           {(formData?.projectItems || []).map((item, index) => (

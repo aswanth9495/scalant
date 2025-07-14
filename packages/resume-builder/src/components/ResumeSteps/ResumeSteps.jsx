@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch, batch } from 'react-redux';
-import { Timeline, Spin } from 'antd';
+import { Timeline, Spin, message } from 'antd';
 import {
   CheckCircleOutlined,
   ClockCircleOutlined,
@@ -12,11 +12,13 @@ import { getAllIncompleteForms, getFormSteps } from '../../utils/resumeSteps';
 import {
   setIncompleteForms,
   setCurrentIncompleteForm,
+  setCompleted,
 } from '../../store/resumeFormsSlice';
 import { useBasicQuestionsForm } from '../../hooks/useBasicQuestionsForm';
 import ResumeProfileCard from '../ResumeProfileCard';
 import ResumeReviewOverallSummary from '../ResumeReviewOverallSummary';
-const ResumeTimeline = () => {
+
+const ResumeTimeline = ({ onAiSuggestionClick }) => {
   const dispatch = useDispatch();
   const program = useSelector(
     (state) => state.scalantResumeBuilder.resumeBuilder.program
@@ -36,6 +38,12 @@ const ResumeTimeline = () => {
   const [mounted, setMounted] = useState(false);
   const resumePersonaData = useSelector(
     (state) => state.scalantResumeBuilder.formStore.forms.basicQuestions
+  );
+  const reviewData = useSelector(
+    (state) => state.scalantResumeBuilder.resumeReview.reviewData
+  );
+  const isReviewLoading = useSelector(
+    (state) => state.scalantResumeBuilder.resumeReview.isLoading
   );
 
   // Initialize form values when resumeData is loaded
@@ -94,8 +102,31 @@ const ResumeTimeline = () => {
       } else if (!skipNextStep) {
         setExpandedStep(null);
       }
+
+      if (
+        updatedIncompleteForms.length === 0 &&
+        resumeData.application_stage !== 4
+      ) {
+        // if the form is complete and the application stage is not 4,
+        // then reload the page as the status will be updated to active after reload
+        dispatch(setCompleted(true));
+        message.success(
+          'Resume completed successfully. Redirecting to career hub...'
+        );
+        // eslint-disable-next-line no-undef
+        setTimeout(() => {
+          // eslint-disable-next-line no-undef
+          window.location.reload();
+        }, 5000); // 5 seconds delay to ensure the status is updated
+      }
     },
-    [incompleteForms, currentIncompleteForm, dispatch, expandedStep]
+    [
+      incompleteForms,
+      currentIncompleteForm,
+      resumeData?.application_stage,
+      dispatch,
+      expandedStep,
+    ]
   );
 
   useEffect(() => {
@@ -104,15 +135,29 @@ const ResumeTimeline = () => {
         resumePersonaData,
         incompleteForms,
         handleFormCompletion,
-        program
+        program,
+        reviewData,
+        isReviewLoading,
+        onAiSuggestionClick
       );
       setSteps(formSteps);
     }
-  }, [resumePersonaData, incompleteForms, handleFormCompletion, program]);
+  }, [
+    resumePersonaData,
+    incompleteForms,
+    handleFormCompletion,
+    program,
+    reviewData,
+    isReviewLoading,
+    onAiSuggestionClick,
+  ]);
 
   return (
     <div className={styles.container}>
-      <ResumeReviewOverallSummary />
+      <ResumeReviewOverallSummary
+        reviewData={reviewData}
+        isReviewLoading={isReviewLoading}
+      />
       <ResumeProfileCard
         className={styles.profileCard}
         resumePersonaData={resumePersonaData}
@@ -126,7 +171,10 @@ const ResumeTimeline = () => {
               let dotIcon;
               if (step.key === expandedStep) {
                 dotIcon = <LoadingOutlined className={styles.activeIcon} />;
-              } else if (step.status === 'complete') {
+              } else if (
+                step.status === 'complete' ||
+                step.status === 'looks_good'
+              ) {
                 dotIcon = (
                   <CheckCircleOutlined className={styles.completeIcon} />
                 );

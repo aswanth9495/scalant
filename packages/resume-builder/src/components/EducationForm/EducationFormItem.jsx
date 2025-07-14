@@ -168,14 +168,17 @@ const EducationFormItem = ({ item, formId, required = false, index }) => {
             <Select
               placeholder="Select Degree Type"
               options={[
-                { label: 'BE/B.Tech/Bs', value: 'bachelor' },
-                { label: 'ME/M.Tech', value: 'master' },
-                { label: 'Dual Degree - BE + ME', value: 'dual' },
-                { label: 'Ms', value: 'ms' },
-                { label: 'MBA', value: 'mba' },
-                { label: 'MCA/BCA', value: 'mca_bca' },
-                { label: 'BE + MBA', value: 'be_mba' },
-                { label: 'Other', value: 'other' },
+                { label: 'BE/B.Tech/Bs', value: 'BE/B.Tech/Bs' },
+                { label: 'ME/M.Tech', value: 'ME/M.Tech' },
+                {
+                  label: 'Dual Degree - BE + ME',
+                  value: 'Dual Degree - BE + ME',
+                },
+                { label: 'MS', value: 'MS' },
+                { label: 'MBA', value: 'MBA' },
+                { label: 'MCA/BCA', value: 'MCA/BCA' },
+                { label: 'BE + MBA', value: 'BE + MBA' },
+                { label: 'Other', value: 'Other' },
               ]}
             />
           </Form.Item>
