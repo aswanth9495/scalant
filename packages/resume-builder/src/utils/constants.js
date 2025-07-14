@@ -526,6 +526,10 @@ export const AI_REVIEW_MESSAGES = {
   ERROR: 'Failed to initiate review. Please try again.',
 };
 
+export const MODAL_NAMES = {
+  RESUME_REVIEW: 'resumeReview',
+};
+
 export const FORM_KEYS = {
   personal_details: 'personalDetails',
   projects: 'projects',
