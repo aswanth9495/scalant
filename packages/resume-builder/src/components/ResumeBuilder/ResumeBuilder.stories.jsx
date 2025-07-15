@@ -58,6 +58,9 @@ export const WithReviewData = () => {
           console.log('Delete clicked');
         }}
         baseUrl="https://cf1d948b-f96c-4781-8235-53d3293f0a70.mock.pstmn.io"
+        onReviewResumeClick={() => {
+          console.log('Review Resume clicked');
+        }}
       />
     </div>
   );
@@ -95,6 +98,9 @@ export const WithDummyData = () => {
           console.log('Delete clicked');
         }}
         baseUrl="https://cf1d948b-f96c-4781-8235-53d3293f0a70.mock.pstmn.io"
+        onReviewResumeClick={() => {
+          console.log('Review Resume clicked');
+        }}
       />
     </div>
   );
@@ -122,5 +128,8 @@ export const WithDummyData1 = () => (
       console.log('Delete clicked');
     }}
     baseUrl="https://cf1d948b-f96c-4781-8235-53d3293f0a70.mock.pstmn.io"
+    onReviewResumeClick={() => {
+      console.log('Review Resume clicked');
+    }}
   />
 );
