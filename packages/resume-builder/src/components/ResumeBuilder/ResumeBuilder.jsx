@@ -48,6 +48,7 @@ const ResumeBuilderContent = ({
   isLoading = false,
   onDownloadClick,
   enableResumeReview = false,
+  onReviewResumeClick,
 }) => {
   const dispatch = useDispatch();
   const { currentStep, steps } = useSelector(
@@ -160,6 +161,7 @@ const ResumeBuilderContent = ({
       onBackButtonClick={onBackButtonClick}
       preview={previewUi()}
       enableResumeReview={enableResumeReview}
+      onReviewResumeClick={onReviewResumeClick}
     >
       {renderComponent()}
     </ResumeLayout>
@@ -183,6 +185,7 @@ const ResumeBuilder = ({
   resumeTemplateConfig,
   onDownloadClick,
   enableResumeReview = true,
+  onReviewResumeClick,
 }) => {
   return (
     <ResumeBuilderContent
@@ -202,6 +205,7 @@ const ResumeBuilder = ({
       resumeTemplateConfig={resumeTemplateConfig}
       onDownloadClick={onDownloadClick}
       enableResumeReview={enableResumeReview}
+      onReviewResumeClick={onReviewResumeClick}
     />
   );
 };

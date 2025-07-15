@@ -20,6 +20,7 @@ const ResumeLayout = ({
   children,
   preview,
   enableResumeReview,
+  onReviewResumeClick,
 }) => {
   const dispatch = useDispatch();
   const { currentStep } = useSelector(
@@ -33,9 +34,10 @@ const ResumeLayout = ({
     (state) => state.scalantResumeBuilder.resumeForms.incompleteForms
   );
 
-  const onReviewResumeClick = useCallback(() => {
+  const handleReviewResumeClick = useCallback(() => {
     dispatch(setModal({ modalName: MODAL_NAMES.RESUME_REVIEW, isOpen: true }));
-  }, [dispatch]);
+    onReviewResumeClick?.();
+  }, [dispatch, onReviewResumeClick]);
 
   const reviewTooltipTitle = useMemo(() => {
     if (incompleteForms.length > 0) {
@@ -90,7 +92,7 @@ const ResumeLayout = ({
                 <Tooltip title={reviewTooltipTitle}>
                   <Button
                     type="primary"
-                    onClick={onReviewResumeClick}
+                    onClick={handleReviewResumeClick}
                     disabled={incompleteForms.length > 0 || isReviewLoading}
                   >
                     Review Resume
