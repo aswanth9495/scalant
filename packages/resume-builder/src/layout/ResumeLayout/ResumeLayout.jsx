@@ -93,7 +93,7 @@ const ResumeLayout = ({
                   <Button
                     type="primary"
                     onClick={handleReviewResumeClick}
-                    disabled={incompleteForms.length > 0 || isReviewLoading}
+                    disabled={isReviewLoading}
                   >
                     Review Resume
                   </Button>
