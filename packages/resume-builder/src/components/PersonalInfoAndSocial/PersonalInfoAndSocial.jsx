@@ -282,20 +282,41 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
       formData?.personalInfoAndSocial?.additionalProfiles || [];
 
     // Remove the profile at the specified index
-    const updatedProfiles = currentProfiles.filter(
-      (_, idx) => idx !== indexToRemove
-    );
+    const updatedProfiles = currentProfiles.map((item, idx) => {
+      if (idx === indexToRemove) {
+        return {
+          [`profileType${idx}`]: currentProfiles[idx][`profileType${idx}`],
+          [`profileUrl${idx}`]: '',
+        };
+      }
+      return item;
+    });
 
     // Create new form data without the removed profile
     const updatedFormData = {
       ...formData?.personalInfoAndSocial,
       ...currentFormValues,
-      additionalProfiles: updatedProfiles,
+      additionalProfiles: [...updatedProfiles],
     };
 
-    // Remove the profileType and profileUrl fields for the removed profile
-    delete updatedFormData[`profileType${indexToRemove}`];
-    delete updatedFormData[`profileUrl${indexToRemove}`];
+    // Remove all existing profileType and profileUrl fields
+    Object.keys(updatedFormData).forEach((key) => {
+      if (key.startsWith('profileType') || key.startsWith('profileUrl')) {
+        delete updatedFormData[key];
+      }
+    });
+
+    // Re-index the remaining profiles
+    updatedProfiles.forEach((profile, newIndex) => {
+      // Find the original index of this profile
+      const originalIndex = currentProfiles.findIndex((p) => p === profile);
+      if (originalIndex !== -1) {
+        updatedFormData[`profileType${newIndex}`] =
+          currentFormValues[`profileType${originalIndex}`];
+        updatedFormData[`profileUrl${newIndex}`] =
+          currentFormValues[`profileUrl${originalIndex}`];
+      }
+    });
 
     // Update the form state
     dispatch(
@@ -314,11 +335,12 @@ const PersonalInfoAndSocial = ({ onComplete, required = false }) => {
   const renderAdditionalProfiles = () => {
     const profiles = formData?.personalInfoAndSocial?.additionalProfiles || [];
     const currentFormValues = form.getFieldsValue();
-
     return profiles.map((_, idx) => {
       const profileTypeKey = `profileType${idx}`;
       const profileUrlKey = `profileUrl${idx}`;
-
+      if (!profiles[idx][`profileUrl${idx}`]) {
+        return null;
+      }
       // Get available profile types for this dropdown
       const availableOptions = getAvailableProfileTypes(currentFormValues, idx);
 
