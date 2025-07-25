@@ -102,19 +102,30 @@ export const getAvailableProfileTypes = (
 export const createProfilePayload = (formValues, basePayload = {}) => {
   const payload = { ...basePayload };
 
-  Object.keys(formValues)
-    .filter((key) => key.startsWith('profileType'))
-    .forEach((typeKey) => {
-      const index = typeKey.replace('profileType', '');
-      const urlKey = `profileUrl${index}`;
+  // Use additionalProfiles array instead of top-level keys
+  if (
+    formValues.additionalProfiles &&
+    Array.isArray(formValues.additionalProfiles)
+  ) {
+    formValues.additionalProfiles.forEach((profileObj) => {
+      // Find profileType and profileUrl keys in each object
+      const profileTypeKey = Object.keys(profileObj).find((key) =>
+        key.startsWith('profileType')
+      );
+      const profileUrlKey = Object.keys(profileObj).find((key) =>
+        key.startsWith('profileUrl')
+      );
 
-      const profileType = formValues[typeKey];
-      const profileUrl = formValues[urlKey];
+      if (profileTypeKey) {
+        const profileType = profileObj[profileTypeKey];
+        const profileUrl = profileObj[profileUrlKey];
 
-      if (profileType && profileUrl) {
-        payload[profileType] = profileUrl;
+        if (profileType) {
+          payload[profileType] = profileUrl;
+        }
       }
     });
+  }
 
   return payload;
 };
